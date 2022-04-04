@@ -40,7 +40,7 @@ p {
     background: #FAF7FF;
     box-shadow: 3px 3px 7px #e1dee6,
         -3px -3px 7px #ffffff;
-    padding: 15px;
+    padding: 10px;
     font-size: 1.1rem;
     transform: scale(.90);
     opacity: 0;
@@ -51,4 +51,12 @@ p {
 
 .userBtnInput:hover{
     transform: scale(1.03) !important;
+}
+
+.userFieldInput{
+    background-color: #f3f1f9;
+    border-width: 0;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1.1rem;
 }

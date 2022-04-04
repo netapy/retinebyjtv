@@ -1,7 +1,12 @@
+//DEMO PURPOSE
+chatContent = testChatParams;
+
+
 //Initialisation 
 setTimeout(() => {
-    receiveMsg(testChatParams["deb"]);
+    receiveMsg(chatContent["deb"]);
 }, 500);
+
 let feed = document.querySelector('#messageFeed');
 let inputZone = document.querySelector('#inputZone');
 
@@ -17,12 +22,17 @@ function receiveMsg(content) {
     }, 1);
 
     if (answs["type"] == "mc") {
-        console.log('mc');
+
         for (aa in answs['a']) {
-            inputt = inputt.concat("<div class='col-6 p-2'><div class='userBtnInput' onclick='userSend(this)'>###</div></div>".replace("###", answs['a'][aa]));
+            inputt = inputt.concat("<div class='col-6 p-2'><div class='userBtnInput' data-no='[#id#]' onclick='userSend(this.innerHTML, this.dataset.no)'>[#cont#]</div></div>".replace("[#cont#]", answs['a'][aa]).replace("[#id#]", answs['suiv']));
         }
+
     } else if (answs["type"] == "cl") {
+
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...'></div><div data-no='[#id#]' class='col-2 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='img/icons/send-circle.svg' class='h-75'></div></div>".replace("[#id#]", answs['suiv']);
         console.log('cl');
+
+
     } else if (answs["type"] == "5s") {
         console.log('5s');
     }
@@ -41,15 +51,19 @@ function receiveMsg(content) {
 }
 
 
-function userSend(content) {
-    console.log(content);
+function userSend(content, suiv) {
     inputZone.innerHTML = '';
 
-    let toAdd = "<div class='msgUser'>###</div>".replace("###", content.innerHTML);
+    let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
 
     feed.insertAdjacentHTML("beforeend", toAdd);
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
     }, 1);
 
+
+    setTimeout(() => {
+        receiveMsg(chatContent['content'][suiv]);
+    }, 500);
+    
 };
