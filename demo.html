@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/chatStyle.css">
@@ -17,8 +17,10 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body class="d-flex align-content-center flex-column">
-    <div class="p-1 h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px; background-color: #FAF7FF;">
+<body>
+    <div class="container-fluid d-flex align-content-center flex-column h-100 w-100">
+
+    <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px; background-color: #FAF7FF;">
 
         <!--Header-->
         <div style="background-color: transparent;">
@@ -35,6 +37,7 @@
         <div id="inputZone" class="h-auto p-3 row" style="background-color: transparent;"></div>
     </div>
 
+</div>
     <script>
         var testChatParams = {
             "deb": {

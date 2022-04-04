@@ -1,10 +1,8 @@
 body {
     font-family: 'Raleway', sans-serif;
     height: 100vh;
-    width: 100vw;
     overflow: hidden;
     background-color: #FAF7FF;
-    position: fixed;
 }
 
 p {
