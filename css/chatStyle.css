@@ -4,6 +4,7 @@ body {
     width: 100vw;
     overflow: hidden;
     background-color: #FAF7FF;
+    position: fixed;
 }
 
 p {
