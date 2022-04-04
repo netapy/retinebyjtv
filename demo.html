@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatStyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body style="height: 100vh; width: 100vw;" class="d-flex align-content-center flex-column" style="background-color: #FAF7FF;">
+<body class="d-flex align-content-center flex-column" style="background-color: #FAF7FF;">
     <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px; background-color: #FAF7FF;">
 
         <!--Header-->
@@ -28,22 +28,49 @@
         <!--Body-->
         <div class="h-100" style="background-color: transparent;">
             <div id="messageFeed" class="h-100 p-2 d-flex  flex-column justify-content-start">
-                <div class="msgBot">
-                    <p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p>
-                    <p>J'aimerais tes poser quelques questions 😊</p>
-                </div>
-                <div class="msgUser">
-                    <p>Démarrer 🚀</p>
-                </div>
             </div>
         </div>
 
         <!--Input Zone-->
-        <div class="h-auto" style="background-color: blue;">
-
-        </div>
+        <div id="inputZone" class="h-auto p-3 mb-3 align-content-right row" style="background-color: transparent;"></div>
     </div>
 
+    <script>
+        var testChatParams = {
+            "deb": {
+                "q": "<p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p><p>J'aimerais tes poser quelques questions 😊</p>",
+                "a": {
+                    'type': 'mc',
+                    'a': ['Démarrer 🚀']
+                }
+            },
+            "fin": "<p>Merci d'avoir répondu à ce sondage !</p><p>On espère te revoir bientôt 😊</p>",
+            "content": 
+            [
+                {
+                    "q": "Quelle est ta couleur préférée ? ",
+                    "a": {
+                        'type': 'mc',
+                        'a': ['vert', 'bleu', 'jaune', 'rouge']
+                    }
+                },
+                {
+                    "q": "Comment tu t'appelles ?",
+                    "a": {
+                        'type': 'cl',
+                    }
+                },
+                {
+                    "q": "Quelle note attribuerais-tu à cet échange ?",
+                    "a": {
+                        'type': '5s',
+                    }
+                },
+            ]
+        }
+    </script>
+
+    <script src="script/chatScript.js"></script>
 </body>
 
 </html>
