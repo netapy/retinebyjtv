@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, , maximum-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/chatStyle.css">
@@ -20,62 +20,112 @@
 <body>
     <div class="container-fluid d-flex align-content-center flex-column h-100" style="height: -webkit-fill-available;">
 
-    <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px; background-color: #FAF7FF;">
+        <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px; background-color: #FAF7FF;">
 
-        <!--Header-->
-        <div style="background-color: transparent;">
-            <div class="p-3" style="font-family: Lexend Deca; font-size: 1.2rem; font-weight: 600;"><img src="img/favicon.ico" style="height:30px;"> Rétine</div>
-        </div>
+            <!--Header-->
+            <div style="background-color: transparent;">
+                <div class="p-3" style="font-family: Lexend Deca; font-size: 1.2rem; font-weight: 600;"><img src="img/favicon.ico"
+                        style="height:30px;"> Rétine</div>
+            </div>
 
-        <!--Body-->
-        <div class="h-100" style="background-color: transparent;">
-            <div id="messageFeed" class="h-100 p-2 d-flex  flex-column justify-content-start">
+            <div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth;
+            ">
+                <!--Body-->
+                <div style="background-color: transparent;">
+                    <div id="messageFeed" class="h-100 p-2 d-flex  flex-column justify-content-start">
+                    </div>
+                </div>
+
+                <!--Input Zone-->
+                <div id="inputZone" class="h-auto p-3 w-100 row" style="background-color: transparent; min-height: 100px;"></div>
+
             </div>
         </div>
 
-        <!--Input Zone-->
-        <div id="inputZone" class="h-auto p-3 row" style="background-color: transparent;"></div>
     </div>
-
-</div>
     <script>
         var testChatParams = {
             "deb": {
                 "q": "<p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p><p>J'aimerais tes poser quelques questions 😊</p>",
                 "a": {
                     'type': 'mc',
-                    'suiv':0,
+                    'suiv': 0,
                     'a': ['Démarrer 🚀']
                 }
             },
             "fin": "<p>Merci d'avoir répondu à ce sondage !</p><p>On espère te revoir bientôt 😊</p>",
-            "content": 
-            [
-                {
+            "content": [{
                     "q": "Quelle est ta couleur préférée ? ",
                     "a": {
                         'type': 'mc',
-                        'suiv':1,
+                        'suiv': 1,
                         'a': ['Vert 🟢', 'Bleu 🔵', 'Jaune 🟡', 'Rouge 🔴']
                     }
                 },
                 {
                     "q": "Comment tu t'appelles ?",
                     "a": {
-                        'suiv':2,
+                        'suiv': 2,
                         'type': 'cl',
+                    }
+                },
+                {
+                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "a": {
+                        'type': 'mc',
+                        'suiv': 3,
+                        'a': ['Yes 🚀', 'Go 🥸']
+                    }
+                },
+                {
+                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "a": {
+                        'type': 'mc',
+                        'suiv': 4,
+                        'a': ['Yes 🚀', 'Go 🥸']
+                    }
+                },
+                {
+                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "a": {
+                        'type': 'mc',
+                        'suiv': 5,
+                        'a': ['Yes 🚀', 'Go 🥸']
+                    }
+                },
+                {
+                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "a": {
+                        'type': 'mc',
+                        'suiv': 6,
+                        'a': ['Yes 🚀', 'Go 🥸']
+                    }
+                },
+                {
+                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "a": {
+                        'type': 'mc',
+                        'suiv': 7,
+                        'a': ['Yes 🚀', 'Go 🥸']
                     }
                 },
                 {
                     "q": "Quelle note attribuerais-tu à cet échange ?",
                     "a": {
-                        'suiv':'end',
+                        'suiv': 'end',
                         'type': 'mc',
-                        'a' : ["The end, pour l'instant"]
+                        'a': ["The end, pour l'instant"]
                     }
                 },
             ]
         }
+    </script>
+
+    <script>
+        window.onresize = function () {
+            document.body.height = window.innerHeight;
+        }
+        window.onresize();
     </script>
 
     <script src="script/chatScript.js"></script>

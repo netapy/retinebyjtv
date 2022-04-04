@@ -9,10 +9,11 @@ setTimeout(() => {
 
 let feed = document.querySelector('#messageFeed');
 let inputZone = document.querySelector('#inputZone');
+let scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
 
 //Fonctions gestion sondage
 function receiveMsg(content) {
-    let toAdd = "<div class='msgBot'>###</div>".replace("###", content['q']);
+    let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", content['q']);
     let answs = content['a'];
     let inputt = '';
 
@@ -40,7 +41,7 @@ function receiveMsg(content) {
     inputZone.insertAdjacentHTML('afterbegin', inputt);
     let btns = document.getElementsByClassName("userBtnInput"),
         ibtns;
-
+    scrollZone.scrollTop = scrollZone.scrollHeight;
     setTimeout(() => {
         for (ibtns = 0; ibtns < btns.length; ++ibtns) {
             btns[ibtns].style.transform = "scale(1)";
@@ -56,6 +57,8 @@ function userSend(content, suiv) {
 
     let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
 
+    scrollZone.scrollTop = scrollZone.scrollHeight;
+    
     feed.insertAdjacentHTML("beforeend", toAdd);
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
