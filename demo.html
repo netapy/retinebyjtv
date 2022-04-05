@@ -37,7 +37,9 @@
                 </div>
 
                 <!--Input Zone-->
-                <div id="inputZone" class="h-auto p-3 w-100 row" style="background-color: transparent; min-height: 100px;"></div>
+                <div class="w-100">
+                    <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"></div>
+                </div>
 
             </div>
         </div>
@@ -48,7 +50,7 @@
             "deb": {
                 "q": "<p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p><p>J'aimerais tes poser quelques questions 😊</p>",
                 "a": {
-                    'type': 'mc',
+                    'type': '1c',
                     'suiv': 0,
                     'a': ['Démarrer 🚀']
                 }
@@ -57,7 +59,7 @@
             "content": [{
                     "q": "Quelle est ta couleur préférée ? ",
                     "a": {
-                        'type': 'mc',
+                        'type': '1c',
                         'suiv': 1,
                         'a': ['Vert 🟢', 'Bleu 🔵', 'Jaune 🟡', 'Rouge 🔴']
                     }
@@ -70,17 +72,17 @@
                     }
                 },
                 {
-                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
+                    "q": "Quels films as-tu vu récemment ? ",
                     "a": {
                         'type': 'mc',
                         'suiv': 3,
-                        'a': ['Yes 🚀', 'Go 🥸']
+                        'a': ['Pirate des caraibes', 'Terminator', 'Amélie Poulain', 'Hercules Poirot', 'Ratatouille']
                     }
                 },
                 {
                     "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
                     "a": {
-                        'type': 'mc',
+                        'type': '1c',
                         'suiv': 4,
                         'a': ['Yes 🚀', 'Go 🥸']
                     }
@@ -88,33 +90,16 @@
                 {
                     "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
                     "a": {
-                        'type': 'mc',
+                        'type': '1c',
                         'suiv': 5,
-                        'a': ['Yes 🚀', 'Go 🥸']
-                    }
-                },
-                {
-                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
-                    "a": {
-                        'type': 'mc',
-                        'suiv': 6,
-                        'a': ['Yes 🚀', 'Go 🥸']
-                    }
-                },
-                {
-                    "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
-                    "a": {
-                        'type': 'mc',
-                        'suiv': 7,
                         'a': ['Yes 🚀', 'Go 🥸']
                     }
                 },
                 {
                     "q": "Quelle note attribuerais-tu à cet échange ?",
                     "a": {
+                        'type': '5s',
                         'suiv': 'end',
-                        'type': 'mc',
-                        'a': ["The end, pour l'instant"]
                     }
                 },
             ]

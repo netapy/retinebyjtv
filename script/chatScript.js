@@ -22,20 +22,23 @@ function receiveMsg(content) {
         document.querySelectorAll(".msgBot:last-child")[0].style.transform = "scale(1)";
     }, 1);
 
-    if (answs["type"] == "mc") {
-
+    if (answs["type"] == "1c") {
+        let col = answerLength(answs['a']);
         for (aa in answs['a']) {
-            inputt = inputt.concat("<div class='col-6 p-2'><div class='userBtnInput' data-no='[#id#]' onclick='userSend(this.innerHTML, this.dataset.no)'>[#cont#]</div></div>".replace("[#cont#]", answs['a'][aa]).replace("[#id#]", answs['suiv']));
+            inputt = inputt.concat("<div class='" + col + " p-2'><div class='userBtnInput' data-no='[#id#]' onclick='userSend(this.innerHTML, this.dataset.no)'>[#cont#]</div></div>".replace("[#cont#]", answs['a'][aa]).replace("[#id#]", answs['suiv']));
         }
+    } else if (answs["type"] == "mc") {
+        for (aa in answs['a']) {
+            inputt = inputt.concat("<div class='col-12 p-2'><div class='userBtnInput mcqChoice' onclick='multipleChoiceBeh(this)'>[#cont#]</div></div>".replace("[#cont#]", answs['a'][aa]));
+        };
+        inputt = inputt.concat('<div class="col-12 my-3 text-center"><div class="userBtnInput ml-auto btnEnvoyer" data-no="[#id#]" onclick="validateMultipleChoice(this.dataset.no)">Envoyer</div></div>'.replace("[#id#]", answs['suiv']))
 
     } else if (answs["type"] == "cl") {
-
-        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...'></div><div data-no='[#id#]' class='col-2 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='img/icons/send-circle.svg' class='h-75'></div></div>".replace("[#id#]", answs['suiv']);
-        console.log('cl');
-
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='img/icons/send-circle.svg'></div></div>".replace("[#id#]", answs['suiv']);
 
     } else if (answs["type"] == "5s") {
-        console.log('5s');
+        inputt = '<div class="col-12 d-flex align-items-center justify-content-center"><div class="rate input" data-no="[#id#]"><input type="radio" id="star5" name="rate" value="5" onclick="starhHandle(this)" /><label for="star5" title="text">5 stars</label><input type="radio" id="star4" name="rate" value="4" onclick="starhHandle(this)" /><label for="star4" title="text">4 stars</label><input type="radio" id="star3" name="rate" value="3" onclick="starhHandle(this)" /><label for="star3" title="text">3 stars</label><input type="radio" id="star2" name="rate" value="2" onclick="starhHandle(this)" /><label for="star2" title="text">2 stars</label><input type="radio" id="star1" name="rate" value="1" onclick="starhHandle(this)" /><label for="star1" title="text">1 star</label></div></div>'.replace("[#id#]", answs['suiv']);
+
     }
 
     inputZone.insertAdjacentHTML('afterbegin', inputt);
@@ -54,19 +57,67 @@ function receiveMsg(content) {
 
 function userSend(content, suiv) {
     inputZone.innerHTML = '';
-
     let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
-
     scrollZone.scrollTop = scrollZone.scrollHeight;
-    
     feed.insertAdjacentHTML("beforeend", toAdd);
+
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
-    }, 1);
+    }, 10);
 
-
-    setTimeout(() => {
-        receiveMsg(chatContent['content'][suiv]);
-    }, 500);
-    
+    if (suiv == "end") {
+        setTimeout(() => {
+            let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", chatContent['fin']);
+            feed.insertAdjacentHTML("beforeend", toAdd);
+            document.querySelectorAll(".msgBot:last-child")[0].style.transform = "scale(1)";
+            scrollZone.scrollTop = scrollZone.scrollHeight;
+        }, 500);
+    } else {
+        setTimeout(() => {
+            receiveMsg(chatContent['content'][suiv]);
+        }, 500);
+    }
 };
+
+//other functions
+
+function multipleChoiceBeh(elem) {
+    if (elem.style.color != "white") {
+        elem.style.color = "white";
+        elem.style.backgroundColor = "#6219D8";
+    } else {
+        elem.style.color = "black";
+        elem.style.backgroundColor = "#FAF7FF";
+    };
+}
+
+function validateMultipleChoice(number) {
+    let choices = document.getElementsByClassName('mcqChoice'),
+        ibtns;
+    let rep = [];
+    for (ibtns = 0; ibtns < choices.length; ++ibtns) {
+        if (choices[ibtns].style.color == 'white') rep.push(choices[ibtns].innerHTML)
+    };
+    userSend(rep.join(", "), number);
+}
+
+function answerLength(liste) {
+    let len = "col-6"
+    for (ii in liste) {
+        if (liste[ii].length > 8) {
+            len = "col-12";
+            break;
+        };
+    };
+    return len
+}
+
+function starhHandle(star) {
+    let stars = "";
+    let ii = 0
+    while (ii < star.value) {
+        stars = stars.concat("⭐");
+        ii++
+    }
+    userSend(stars, star.parentElement.dataset.no)
+}
