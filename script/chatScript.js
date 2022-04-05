@@ -10,6 +10,7 @@ setTimeout(() => {
 let feed = document.querySelector('#messageFeed');
 let inputZone = document.querySelector('#inputZone');
 let scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+let userAnswers = [];
 
 //Fonctions gestion sondage
 function receiveMsg(content) {
@@ -54,7 +55,6 @@ function receiveMsg(content) {
 
 }
 
-
 function userSend(content, suiv) {
     inputZone.innerHTML = '';
     let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
@@ -65,6 +65,8 @@ function userSend(content, suiv) {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
     }, 10);
 
+    userAnswers.push(content);
+
     if (suiv == "end") {
         setTimeout(() => {
             let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", chatContent['fin']);
@@ -72,6 +74,20 @@ function userSend(content, suiv) {
             document.querySelectorAll(".msgBot:last-child")[0].style.transform = "scale(1)";
             scrollZone.scrollTop = scrollZone.scrollHeight;
         }, 500);
+        var xhr = new XMLHttpRequest();
+        var now = new Date();
+
+        xhr.open("POST", "jetevois.fr", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        //AJOUTER ICI TOUTE INFORMATION UTILE QUON POURRAIT RECUPERER
+        let ans = JSON.stringify({
+            time : now,
+            values: userAnswers,
+        });
+        
+        console.log(ans);
+        xhr.send(ans);
     } else {
         setTimeout(() => {
             receiveMsg(chatContent['content'][suiv]);
