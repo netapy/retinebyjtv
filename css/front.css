@@ -1,0 +1,82 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: #FAF7FF;
+}
+
+.nav-link {
+    color: black;
+}
+
+.rtnTitle {
+    font-family: Lexend Deca;
+    font-weight: bold;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.demoBtn {
+    color: white !important;
+    background-color: #6219D8;
+    border-radius: 12px;
+    transition: all .3s ease-in-out;
+}
+
+.demoBtn:hover {
+    transform: scale(1.03);
+}
+
+.violetSmButton {
+    background-color: #6219D8;
+    color: white;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    border-width: 0;
+}
+
+.violetSmButton:hover{
+    transform: scale(1.05);
+}
+
+.neuCarte {
+    border-radius: 18px;
+    background: #FAF7FF;
+    transition: all .3s ease-in-out;
+    box-shadow: 8px 8px 16px #ebe8f0,
+        -8px -8px 16px #ffffff;
+}
+
+.btn-primary {
+    background-color: #C8C5CC;
+    border-width: 0;
+    color: black;
+}
+
+.btn-primary:hover {
+    background-color: #6219D8;
+}
+
+.offreTitle {
+    font-family: Lexend Deca;
+    font-size: 1.5rem;
+    width: 100%;
+    padding: 10px;
+    background-color: #6219D8;
+    color: white;
+    border-radius: 10px;
+}
+
+.inputRtn{
+    border-width: 0px;
+    background-color: #E6E6E6;
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.g-recaptcha > * {
+    margin: auto;
+}

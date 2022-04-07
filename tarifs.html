@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, , maximum-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <title>Rétine - Tarifs</title>
+    <link rel="icon" href="img/favicon.ico" id="light-scheme-favicon" />
+    <link rel="icon" href="img/faviconBlanc.ico" id="dark-scheme-favicon" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="css/front.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container py-3">
+        <header>
+            <div class="d-flex flex-column flex-md-row align-items-center pb-1 mb-2 border-bottom justify-content-between">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <div class="p-2" style="font-family: Lexend Deca; font-size: 1.2rem; font-weight: 600;"><img src="img/favicon.ico"
+                            style="height:35px;"> Rétine</div>
+
+                </a>
+
+                <nav class="navbar navbar-expand">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon">Expand</span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav" style="color: black !important;">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active">
+                                <a class="nav-link px-3 demoBtn mr-0 mr-md-2" href="#">Demo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Fonctionnalités</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Tarifs <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="compte.html">Compte</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                <h1 class="display-4 fw-normal" style="font-family: Lexend Deca;">Les tarifs</h1>
+                <p class="fs-5 text-muted">Rétine dispose de plusieurs tarifs en fonction du besoin et de la taille du projet.</p>
+            </div>
+        </header>
+
+        <main>
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col-12 col-md-4">
+                    <div class="neuCarte mb-4 rounded-3">
+                        <h4 class="my-0 offreTitle">🙆‍♂️ Etudiant</h4>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">0€<small class="text-muted fw-light">/mo</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>5 sondages/mois</li>
+                                <li>Dashboard d'analyse</li>
+                                <li>Export des données</li>
+                            </ul>
+                            <button type="button" class="w-75 btn btn-lg btn-primary">Démarrer</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="neuCarte mb-4 rounded-3">
+                        <h4 class="my-0 offreTitle">💁‍♀️ Pro</h4>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">12€<small class="text-muted fw-light">/mo</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>50 sondages/mois</li>
+                                <li>Dashboard amélioré</li>
+                                <li>Export des données & graphs</li>
+                                <li>Analyse d'émotion</li>
+                            </ul>
+                            <button type="button" class="w-75 btn btn-lg btn-primary">Démarrer</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="neuCarte mb-4 rounded-3">
+                        <h4 class="my-0 offreTitle">🏢 Entreprise</h4>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">$35<small class="text-muted fw-light">/mo</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>♾️ sondages/mois</li>
+                                <li>Dashboard expert</li>
+                                <li>Export des données & graphs</li>
+                                <li>Analyse sémantique poussée</li>
+                            </ul>
+                            <button type="button" class="w-75 btn btn-lg btn-primary">Démarrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="display-6 text-center mb-4">Compare plans</h2>
+
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th style="width: 34%;"></th>
+                            <th style="width: 22%;">Etudiant</th>
+                            <th style="width: 22%;">Pro</th>
+                            <th style="width: 22%;">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Public</th>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Private</th>
+                            <td></td>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                        </tr>
+                    </tbody>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Permissions</th>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Sharing</th>
+                            <td></td>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Unlimited members</th>
+                            <td></td>
+                            <td>✔️</td>
+                            <td>✔️</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Extra security</th>
+                            <td></td>
+                            <td></td>
+                            <td>✔️</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="img/favicon.ico" alt="" width="24">
+                    <small class="d-block mb-3 text-muted">&copy; 2019-2022</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+
+</body>
+
+</html>

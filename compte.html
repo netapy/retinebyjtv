@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, , maximum-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <title>Rétine - Connexion</title>
+    <link rel="icon" href="img/favicon.ico" id="light-scheme-favicon" />
+    <link rel="icon" href="img/faviconBlanc.ico" id="dark-scheme-favicon" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="css/front.css" rel="stylesheet">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            document.getElementById("inscriptionRtn").submit();
+            console.log('vize');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container py-3">
+        <header>
+            <div class="d-flex flex-column flex-md-row align-items-center pb-1 mb-2 border-bottom justify-content-between">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <div class="p-2" style="font-family: Lexend Deca; font-size: 1.2rem; font-weight: 600;"><img src="img/favicon.ico"
+                            style="height:35px;"> Rétine</div>
+                </a>
+                <nav class="navbar navbar-expand">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon">Expand</span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav" style="color: black !important;">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active">
+                                <a class="nav-link px-3 demoBtn mr-0 mr-md-2" href="#">Demo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Fonctionnalités</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Tarifs <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Compte</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="container-fluid p-3">
+                <div class="row">
+                    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="p-3 py-5 w-100 text-center d-flex justify-content-center flex-column"
+                            style="background-color: white; height: fit-content; border-radius: 15px;">
+                            <h3 class="rtnTitle">Connexion & Inscription</h3>
+                            <div class="p-0 p-sm-2 my-3">
+                                <form id="inscriptionRtn" method="POST">
+                                    <div class="form-group p-1">
+                                        <input type="email" class="inputRtn" id="signupEmail" aria-describedby="emailHelp"
+                                            placeholder="Adresse e-mail...">
+                                    </div>
+                                    <button class="g-recaptcha m-2 p-2 px-3 violetSmButton" data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ"
+                                        data-callback='onSubmit'>Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center"><img class="h-50 p-5" src="img/man_phone_design.svg"
+                                style="max-width: 600px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        </footer>
+
+
+    </div>
+
+
+
+</body>
+
+</html>
