@@ -19,12 +19,6 @@
     <link href="css/front.css" rel="stylesheet">
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script>
-        function onSubmit(token) {
-            document.getElementById("inscriptionRtn").submit();
-            console.log('vize');
-        }
-    </script>
 </head>
 
 <body>
@@ -40,10 +34,10 @@
                                 <form id="inscriptionRtn" method="POST">
                                     <div class="form-group p-1">
                                         <input type="email" class="inputRtn" id="signupEmail" aria-describedby="emailHelp"
-                                            placeholder="Adresse e-mail...">
+                                            placeholder="Adresse e-mail..." style="padding:10px;">
                                     </div>
                                     <button class="g-recaptcha m-2 p-2 px-3 violetSmButton" data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ"
-                                        data-callback='onSubmit'>Submit</button>
+                                        data-callback='onSubmit' onclick="window.location.href = 'dashboard.html'">Submit</button>
                                 </form>
                             </div>
                         </div>
@@ -61,6 +55,13 @@
         </footer>
     </div>
 </body>
+<script>
+    function onSubmit(token) {
+        document.getElementById("inscriptionRtn").submit();
+        console.log('vize');
+    }
+</script>
+
 
 <script src="js/gnrl.js"></script>
 

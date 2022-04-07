@@ -17,9 +17,13 @@
     <link href="css/front.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container py-3">
-        <main>
+<body style="overflow-x: hidden;">
+    <div>
+        <div class="container">
+            <div class="text-center p-3">
+                <h1>Notre offre</h1>
+                <p>Nous proposons 3 offres selon vos usages sous forme d'abonnement sans engagement.</p>
+            </div>
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
                 <div class="col-12 col-md-4">
                     <div class="neuCarte mb-4 rounded-3">
@@ -54,7 +58,7 @@
                     <div class="neuCarte mb-4 rounded-3">
                         <h4 class="my-0 offreTitle">🏢 Entreprise</h4>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title">$35<small class="text-muted fw-light">/mo</small></h1>
+                            <h1 class="card-title pricing-card-title">35€<small class="text-muted fw-light">/mo</small></h1>
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>♾️ sondages/mois</li>
                                 <li>Dashboard expert</li>
@@ -66,101 +70,67 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <h2 class="display-6 text-center mb-4">Compare plans</h2>
+        <div class="container-fluid py-5 my-5" style="background-color: #6219D8;">
+            <div class="container p-4 m-auto my-5" style="background-color: white; max-width: 800px; border-radius: 15px;">
+                <h2 class="display-6 text-center mb-4">Comparaison des offres</h2>
+                <div class="table-responsive">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 34%;"></th>
+                                <th style="width: 22%;">Etudiant</th>
+                                <th style="width: 22%;">Pro</th>
+                                <th style="width: 22%;">Enterprise</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-start">Public</th>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-start">Private</th>
+                                <td></td>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                            </tr>
+                        </tbody>
 
-            <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
-                        <tr>
-                            <th style="width: 34%;"></th>
-                            <th style="width: 22%;">Etudiant</th>
-                            <th style="width: 22%;">Pro</th>
-                            <th style="width: 22%;">Enterprise</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row" class="text-start">Public</th>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="text-start">Private</th>
-                            <td></td>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                        </tr>
-                    </tbody>
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-start">Permissions</th>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-start">Sharing</th>
+                                <td></td>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-start">Unlimited members</th>
+                                <td></td>
+                                <td>✔️</td>
+                                <td>✔️</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-start">Extra security</th>
+                                <td></td>
+                                <td></td>
+                                <td>✔️</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <tbody>
-                        <tr>
-                            <th scope="row" class="text-start">Permissions</th>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="text-start">Sharing</th>
-                            <td></td>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="text-start">Unlimited members</th>
-                            <td></td>
-                            <td>✔️</td>
-                            <td>✔️</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="text-start">Extra security</th>
-                            <td></td>
-                            <td></td>
-                            <td>✔️</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-        </main>
-
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <img class="mb-2" src="img/favicon.ico" alt="" width="24">
-                    <small class="d-block mb-3 text-muted">&copy; 2019-2022</small>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Features</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Resources</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>About</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
+        </div>
     </div>
 </body>
 
