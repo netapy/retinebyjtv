@@ -7,6 +7,14 @@ body {
     color: black;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: Lexend Deca;
+}
+
 .rtnTitle {
     font-family: Lexend Deca;
     font-weight: bold;
@@ -36,7 +44,7 @@ body {
     border-width: 0;
 }
 
-.violetSmButton:hover{
+.violetSmButton:hover {
     transform: scale(1.05);
 }
 
@@ -68,7 +76,7 @@ body {
     border-radius: 10px;
 }
 
-.inputRtn{
+.inputRtn {
     border-width: 0px;
     background-color: #E6E6E6;
     max-width: 500px;
@@ -77,6 +85,6 @@ body {
     border-radius: 10px;
 }
 
-.g-recaptcha > * {
+.g-recaptcha>* {
     margin: auto;
 }
