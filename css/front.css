@@ -3,6 +3,10 @@ body {
     background-color: #FAF7FF;
 }
 
+main {
+    transition: all .2s ease-in-out;
+}
+
 .nav-link {
     color: black;
 }
@@ -54,6 +58,41 @@ h5 {
     transition: all .3s ease-in-out;
     box-shadow: 8px 8px 16px #ebe8f0,
         -8px -8px 16px #ffffff;
+}
+
+.neuProjet {
+    border-radius: 18px;
+    background: #FAF7FF;
+    transition: all .3s ease-in-out;
+    box-shadow: 8px 8px 16px #ebe8f0,
+        -8px -8px 16px #ffffff;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    min-height: 200px;
+}
+
+.neuProjet:hover {
+    transform: scale(1.05);
+}
+
+.neuProjetSimple {
+    border-radius: 18px;
+    background: #FAF7FF;
+    transition: all .3s ease-in-out;
+    box-shadow:  5px 5px 10px #f5f2fa,
+             -5px -5px 10px #fffcff;}
+
+.sondInfo{
+    font-size: 1rem;
+    opacity: .8;
+    padding-left:20px;
+}
+
+.canvContain{
+    margin:auto;
+    width: 90%;
+    max-height: 300px;
 }
 
 .btn-primary {
