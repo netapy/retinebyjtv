@@ -20,7 +20,13 @@
         integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
     <link href="css/front.css" rel="stylesheet">
+    <link href="css/tree.css" rel="stylesheet">
+    <link href="css/iphone.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/chatStyle.css">
 </head>
 
 <body>
@@ -38,21 +44,97 @@
     </nav>
 
     <div class="container-fluid">
-
         <main role="main" class="pt-3 px-1">
+            <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2 mb-0"><input class="nomSondageChamp" type="text" value="Projet123"></h1>
+                <!-- <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2"><button class="btn btn-sm btn-outline-secondary">Bouton</button></div>
+                </div> -->
+            </div>
+            <div id="studio" class="row p-1">
+                <div class="col-12 col-md-8 h-100 p-3">
+                    <h4>Questions</h4>
+                    <div class="w-100 h-100 rounded" style="min-height: 50vh; background-color: white;">
 
+                        <figure>
+                            <ul class="tree mx-auto p-3">
+                                <li><code>Question Initiale</code>
+                                    <ul>
+                                        <li><code>Question 2</code>
+                                            <ul>
+                                                <li><code>Question 3</code>
+                                                    <ul>
+                                                        <li><code>Question 4</code></li>
+                                                        <li><code>Question 4</code></li>
+                                                    </ul>
+                                                </li>
+                                                <li><code>Question 3</code>
+                                                    <ul>
+                                                        <li><code>Question 4</code></li>
+                                                        <li><code>Question 4</code>
+                                                            <ul>
+                                                                <li><code>Question 5</code></li>
+                                                                <li><code>Question 5</code></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </figure>
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 p-5">
+                    <div class="iphone-x m-auto">
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center"
+                            style="background-color: #FAF7FF; border-radius: 15px;">
+                            <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;">
+
+                                <!--Header-->
+                                <div style="background-color: transparent;">
+                                    <div class="py-1 px-3" style="font-family: Lexend Deca; font-size: 1.05rem; font-weight: 600;"><img src="img/favicon.ico"
+                                            style="height:30px;"> Rétine</div>
+                                </div>
+
+                                <div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth;
+                                ">
+                                    <!--Body-->
+                                    <div style="background-color: transparent;">
+                                        <div id="messageFeed" class="h-100 p-2 d-flex  flex-column justify-content-start">
+                                        </div>
+                                    </div>
+
+                                    <!--Input Zone-->
+                                    <div class="w-100">
+                                        <div id="inputZone" class="h-auto p-1 row w-100 m-auto"
+                                            style="background-color: transparent; min-height: 100px;"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </body>
 
 <script>
     Chart.register(ChartDataLabels);
-    Chart.
 </script>
 <script src="js/dash_pages.js"></script>
 <script src="js/dash.js"></script>
+<script src="script/chatScript.js"></script>
+
 <script>
-    changePage(dashProj, loadProjList)
+    //changePage(dashProj, loadProjList)
 </script>
 
 </html>

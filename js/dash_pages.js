@@ -23,7 +23,7 @@ const loadProjList = () => {
 //SONDAGE DISPLAY
 let dashSond = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"><h1 class="h2 mb-0" id="titreEtude">Les films en France</h1><div class="btn-toolbar mb-2 mb-md-0"><div class="btn-group mr-2"><button class="btn btn-sm btn-outline-secondary">⬇️ Exporter les données</button></div></div></div><div id="mesResultats" class="row p-1"></div>'
 
-let templateDataList = '<div class="neuProjetSimple p-3 text-center"><h5>##TTRQUEST##</h5><div class="canvContain"><canvas></canvas></div></div>'
+let templateDataList = '<div class="neuProjetSimple p-3 text-center"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"><canvas></canvas></div></div><button class="screenBtn" onclick="copyGraph(this.previousSibling)">📄 Copier le graphique</button></div>'
 
 const loadDataList = () => {
     document.querySelector("#titreEtude").insertAdjacentHTML("beforeend",
@@ -34,27 +34,67 @@ const loadDataList = () => {
     for (ii in sondageTest["data"]) {
         let elem = document.createElement("div");
         elem.classList = "col-12 col-lg-6 p-3";
-        elem.innerHTML = templateDataList.replace("##TTRQUEST##", sondageTest["data"][ii]["q"]).replace("##REPQ##", JSON.stringify(sondageTest["data"][ii]["d"]));
-        if (['mc','1c','cl'].includes(sondageTest["data"][ii]["t"])) {
+        elem.innerHTML = templateDataList.replace("##TTRQUEST##", sondageTest["data"][ii]["q"]).replace("##REPQ##", JSON.stringify(sondageTest["data"][ii]["d"])).replace("##REPS##", sondageTest["data"][ii]["r"]).replace("##id##", "capt");
+        if (['mc', '1c', 'cl'].includes(sondageTest["data"][ii]["t"])) {
             new Chart(elem.querySelector('canvas'), {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(sondageTest["data"][ii]["d"]),
                     datasets: [{
-                        label: '# of Votes',
+                        label: sondageTest["data"][ii]["t"], //REMPLACER PAR UNITé
                         data: Object.values(sondageTest["data"][ii]["d"]),
                         backgroundColor: chartColors,
                     }]
                 },
                 options: {
-                    responsive:true,
-                    maintainAspectRatio:false,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             display: false
                         },
                         datalabels: {
+                            color: 'black',
+                            labels: {
+                                title: {
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                            },
                             formatter: (val, ctx) => (ctx.chart.data.labels[ctx.dataIndex])
+                        }
+                    }
+                }
+            });
+        } else if (['num'].includes(sondageTest["data"][ii]["t"])) {
+            new Chart(elem.querySelector('canvas'), {
+                type: 'bar',
+                data: {
+                    labels: ['Minimum', 'Quartile 1', 'Moyenne', 'Quartile 2', 'Maximum', 'Écart type'],
+                    datasets: [{
+                        label: sondageTest["data"][ii]["t"], //REMPLACER PAR UNITé
+                        data: Object.values(sondageTest["data"][ii]["d"]),
+                        backgroundColor: numChartColors,
+                    }]
+                },
+                options: {
+                    scales: scaleParam,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            color: 'black',
+                            labels: {
+                                title: {
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                            }
                         }
                     }
                 }
