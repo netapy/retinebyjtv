@@ -72,13 +72,6 @@ let userProjects = [{
     "nbRep": 124
 }, ];
 
-let chartDic = {
-    "1c": "",
-    "mc": "",
-    "cl": "",
-    "num": "",
-    "5s": ""
-};
 
 let chartColors = ['#2a00ac', '#7332e6', '#b768ff', '#f2a5fe', '#b7c0c6', '#848c92', '#545c61', '#283034'];
 
@@ -121,13 +114,11 @@ function copyGraph(c) {
                     )
                 ])
                 .then(function () {
-                    swal({
-                        title: 'Graphique copié !',
-                        text: 'ctrl + v pour le coller n\importe où.',
-                        icon: 'success',
-                        button: "Ok",
-                        timer: 1e4
-                    })
+                    Swal.fire(
+                        'Graphique copié !',
+                        'ctrl + v pour le coller n\importe où.',
+                        'success'
+                    );
                 });
         })
     });

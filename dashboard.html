@@ -15,7 +15,7 @@
     <title>Rétine - Connexion</title>
     <link rel="icon" href="img/favicon.ico" id="light-scheme-favicon" />
     <link rel="icon" href="img/faviconBlanc.ico" id="dark-scheme-favicon" />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
         integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
@@ -52,14 +52,14 @@
                 </div> -->
             </div>
             <div id="studio" class="row p-1">
-                <div class="col-12 col-md-8 h-100 p-3">
+                <div class="col-12 col-lg-8 h-100 p-3">
                     <h4>Questions</h4>
-                    <div class="w-100 h-100 rounded" style="min-height: 50vh; background-color: white;">
+                    <div class="w-100 h-100 rounded" style="min-height: 50vh; background-color: white; overflow-x: auto;">
 
                         <figure>
-                            <ul class="tree mx-auto p-3">
-                                <li><code>Question Initiale</code>
-                                    <ul>
+                            <ul id="theTree" class="tree mx-auto p-3">
+                                <li><code id="firstQ" style="background-color: #19d87f; color: white; border-width: 0;">👍 Début du chat</code></li>
+                                    <!-- <ul>
                                         <li><code>Question 2</code>
                                             <ul>
                                                 <li><code>Question 3</code>
@@ -81,14 +81,14 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </li>
                             </ul>
                         </figure>
 
                     </div>
                 </div>
-                <div class="col-12 col-md-4 p-5">
+                <div class="col-12 col-lg-4 p-5">
                     <div class="iphone-x m-auto">
                         <div class="w-100 h-100 d-flex align-items-center justify-content-center"
                             style="background-color: #FAF7FF; border-radius: 15px;">
@@ -96,8 +96,8 @@
 
                                 <!--Header-->
                                 <div style="background-color: transparent;">
-                                    <div class="py-1 px-3" style="font-family: Lexend Deca; font-size: 1.05rem; font-weight: 600;"><img src="img/favicon.ico"
-                                            style="height:30px;"> Rétine</div>
+                                    <div class="py-1 px-3" style="font-family: Lexend Deca; font-size: 1.05rem; font-weight: 600;"><img
+                                            src="img/favicon.ico" style="height:30px;"> Rétine</div>
                                 </div>
 
                                 <div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth;
@@ -132,6 +132,8 @@
 <script src="js/dash_pages.js"></script>
 <script src="js/dash.js"></script>
 <script src="script/chatScript.js"></script>
+<script src="js/tree.js"></script>
+<script>updateCells();</script>
 
 <script>
     //changePage(dashProj, loadProjList)

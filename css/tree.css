@@ -1,5 +1,7 @@
 /* It's supposed to look like a tree diagram */
-.tree, .tree ul, .tree li {
+.tree,
+.tree ul,
+.tree li {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -10,74 +12,139 @@
     margin: 0 0 1em;
     text-align: center;
 }
-.tree, .tree ul {
+
+.tree,
+.tree ul {
     display: table;
 }
+
 .tree ul {
-  width: 100%;
+    width: 100%;
 }
-    .tree li {
-        display: table-cell;
-        padding: .5em 0;
-        vertical-align: top;
-    }
-        /* _________ */
-        .tree li:before {
-            outline: solid 1px #666;
-            content: "";
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-        .tree li:first-child:before {left: 50%;}
-        .tree li:last-child:before {right: 50%;}
 
-        .tree code, .tree span {
-            border: solid .1em #666;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 0 .2em .5em;
-            padding: .2em .5em;
-            position: relative;
-        }
-        /* If the tree represents DOM structure */
-        .tree code {
-            font-family: Raleway;
-            padding: 10px 20px;
-            background-color: white;
-            color: #6219D8;
-            z-index: 99;
-            transition: all .2s ease-in-out;
-        }
-        .tree code:hover {
-            cursor: pointer;
-            transform: scale(1.05);
-        }
+.tree li {
+    display: table-cell;
+    padding: .5em 0;
+    vertical-align: top;
+}
 
-            /* | */
-            .tree ul:before,
-            .tree code:before,
-            .tree span:before {
-                outline: solid 1px #666;
-                content: "";
-                height: .5em;
-                left: 50%;
-                position: absolute;
-            }
-            .tree ul:before {
-                top: -.5em;
-            }
-            .tree code:before,
-            .tree span:before {
-                top: -.55em;
-            }
+/* _________ */
+.tree li:before {
+    outline: solid 1px #666;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.tree li:first-child:before {
+    left: 50%;
+}
+
+.tree li:last-child:before {
+    right: 50%;
+}
+
+.tree code,
+.tree span {
+    border: solid .1em #666;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 .2em .5em;
+    padding: .2em .5em;
+    position: relative;
+}
+
+/* If the tree represents DOM structure */
+.tree code {
+    font-family: Raleway;
+    padding: 10px 20px;
+    background-color: white;
+    color: #6219D8;
+    z-index: 99;
+    transition: all .2s ease-in-out;
+}
+
+.tree code:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+/* | */
+.tree ul:before,
+.tree code:before,
+.tree span:before {
+    outline: solid 1px #666;
+    content: "";
+    height: .5em;
+    left: 50%;
+    position: absolute;
+}
+
+.tree ul:before {
+    top: -.5em;
+}
+
+.tree code:before,
+.tree span:before {
+    top: -.55em;
+}
 
 /* The root node doesn't connect upwards */
-.tree > li {margin-top: 0;}
-    .tree > li:before,
-    .tree > li:after,
-    .tree > li > code:before,
-    .tree > li > span:before {
-      outline: none;
-    }
+.tree>li {
+    margin-top: 0;
+}
+
+.tree>li:before,
+.tree>li:after,
+.tree>li>code:before,
+.tree>li>span:before {
+    outline: none;
+}
+
+.outlineQ {
+    border-style: dashed !important;
+    color: grey !important;
+    border-color: grey !important;
+}
+
+.fieldQ {
+    border-radius: 10px;
+    width: 100%;
+    padding: 15px;
+    background-color: #80808017;
+    margin: .4rem 0rem;
+    border-width: 0;}
+
+.fieldQlil {
+    border-radius: 5px;
+    width: 80%;
+    padding: 10px;
+    background-color: #80808010;
+    margin-bottom: .5rem;
+    border-width: 0;
+}
+
+.crossRem{
+    padding: 5px;
+    cursor: pointer;
+}
+
+.fieldQlilnum {
+    background-color: #F4F4F4;
+    border-width: 0px;
+    border-radius: 5px;
+    padding: 8px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    max-width: 100px;
+}
+
+#ansWriteZone {
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-left: 9px;
+    border-left-style: outset;
+}
