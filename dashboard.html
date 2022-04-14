@@ -58,8 +58,7 @@
 
                         <figure>
                             <ul id="theTree" class="tree mx-auto p-3">
-                                <li><code id="firstQ" style="background-color: #19d87f; color: white; border-width: 0;">👍 Début du chat</code></li>
-                                    <!-- <ul>
+                                <!-- <ul>
                                         <li><code>Question 2</code>
                                             <ul>
                                                 <li><code>Question 3</code>
@@ -133,7 +132,10 @@
 <script src="js/dash.js"></script>
 <script src="script/chatScript.js"></script>
 <script src="js/tree.js"></script>
-<script>updateCells();</script>
+<script>
+    updateCells();
+    reiniTialisationChat(sondageEnCreation);
+</script>
 
 <script>
     //changePage(dashProj, loadProjList)

@@ -1,12 +1,25 @@
-let sondageEnCreation = [];
+let sondageEnCreation = {
+    "content": [{
+        "q": "Bienvenue dans ce sondage ! 🤗 ",
+        "a": {
+            'type': '1c',
+            'a': ['Démarrer 🚀']
+        }
+    }, ]
+};
 
 const updateCells = () => {
     let theTree = document.querySelector("#theTree")
-    theTree.innerHTML = '<li><code id="firstQ" style="background-color: #19d87f; color: white; border-width: 0;">🙋 Début de la discussion</code></li>';
+    theTree.innerHTML = "";
 
-    for (ii in sondageEnCreation) {
-        let sonQuestionNode = "<ul><li><code data-qorder='0' onclick='createCell(this)'>" + sondageEnCreation[ii]['q'] + "</code></li></ul>";
-        document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
+    for (ii in sondageEnCreation['content']) {
+        if (ii == 0) {
+            let sonQuestionNode = "<li><code data-qorder='0' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
+            document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
+        } else {
+            let sonQuestionNode = "<ul><li><code data-qorder='0' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
+        }
     };
     document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", "<ul><li><code class='outlineQ' data-qorder='0' onclick='createCell(this)'>➕ Nouvelle question</code></li></ul>");
 }
@@ -41,9 +54,13 @@ const createCell = (elem) => {
             }
         }
     }).then((res) => {
-        console.log(res.value);
-        sondageEnCreation.push(res.value[0]);
-        updateCells();
+        if (res.isDismissed == true) {
+            console.log("abort creation")
+        } else {
+            sondageEnCreation['content'].push(res.value[0]);
+            updateCells();
+            reiniTialisationChat(sondageEnCreation);
+        }
     });
 };
 

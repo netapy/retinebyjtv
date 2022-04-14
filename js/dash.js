@@ -126,27 +126,26 @@ function copyGraph(c) {
 
 
 var testChatParams = {
-    "deb": {
-        "q": "<p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p><p>J'aimerais tes poser quelques questions 😊</p>",
-        "a": {
-            'type': '1c',
-            'suiv': 0,
-            'a': ['Démarrer 🚀']
-        }
-    },
-    "fin": "<p>Merci d'avoir répondu à ce sondage !</p><p>On espère te revoir bientôt 😊</p>",
     "content": [{
-            "q": "Quelle est ta couleur préférée ? ",
+            "q": "<p>Bonjour bienvenue dans cette courte démo de sondage Rétine !</p><p>J'aimerais tes poser quelques questions 😊</p> ",
             "a": {
                 'type': '1c',
                 'suiv': 1,
+                'a': ['Démarrer 🚀']
+            }
+        },
+        {
+            "q": "Quelle est ta couleur préférée ? ",
+            "a": {
+                'type': '1c',
+                'suiv': 2,
                 'a': ['Vert 🟢', 'Bleu 🔵', 'Jaune 🟡', 'Rouge 🔴']
             }
         },
         {
             "q": "Comment tu t'appelles ?",
             "a": {
-                'suiv': 2,
+                'suiv': 3,
                 'type': 'cl',
             }
         },
@@ -154,17 +153,15 @@ var testChatParams = {
             "q": "Quels films as-tu vu récemment ? ",
             "a": {
                 'type': 'mc',
-                'suiv': 3,
-                'a': ['Pirate des caraibes', 'Terminator', 'Amélie Poulain', 'Hercules Poirot',
-                    'Ratatouille'
-                ]
+                'suiv': 4,
+                'a': ['Pirate des caraibes', 'Terminator', 'Amélie Poulain', 'Hercules Poirot', 'Ratatouille']
             }
         },
         {
             "q": "Combien de films en moyenne regardes-tu chaque semaine ?",
             "a": {
                 'type': 'num',
-                'suiv': 4,
+                'suiv': 5,
                 'a': [0, 2042]
             }
         },
@@ -172,7 +169,7 @@ var testChatParams = {
             "q": "Une petite question test comme ça pour voir la longueur du sondage et tester le scroll ?",
             "a": {
                 'type': '1c',
-                'suiv': 5,
+                'suiv': 6,
                 'a': ['Yes 🚀', 'Go 🥸']
             }
         },
@@ -180,8 +177,16 @@ var testChatParams = {
             "q": "Quelle note attribuerais-tu à cet échange ?",
             "a": {
                 'type': '5s',
+                'suiv': 7,
+            }
+        },
+        {
+            "q": "<p>Merci d'avoir répondu à ce sondage !</p><p>On espère te revoir bientôt 😊</p>",
+            "a": {
+                'type': 'fin',
                 'suiv': 'end',
             }
         },
+
     ]
 }
