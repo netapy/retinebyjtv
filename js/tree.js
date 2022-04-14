@@ -5,6 +5,11 @@ let sondageEnCreation = {
             'type': '1c',
             'a': ['Démarrer 🚀']
         }
+    }, {
+        "q": "Merci pour votre participation ! ",
+        "a": {
+            'type': 'fin',
+        }
     }, ]
 };
 
@@ -14,22 +19,42 @@ const updateCells = () => {
 
     for (ii in sondageEnCreation['content']) {
         if (ii == 0) {
-            let sonQuestionNode = "<li><code data-qorder='0' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
+            let sonQuestionNode = "<li><code data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
             document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
         } else {
-            let sonQuestionNode = "<ul><li><code data-qorder='0' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            let sonQuestionNode = "<ul><li><code data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
             document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
         }
     };
-    document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", "<ul><li><code class='outlineQ' data-qorder='0' onclick='createCell(this)'>➕ Nouvelle question</code></li></ul>");
+    document.querySelectorAll('code')[document.querySelectorAll('code').length - 2].insertAdjacentHTML("afterend", "<ul><li><code class='outlineQ' data-qorder='new' onclick='createCell(this)'>➕ Nouvelle question</code></li></ul>");
 }
 
 const createCell = (elem) => {
+    let qModel;
+    let popupHeader;
+    if (elem.dataset.qorder == "new") {
+        qModel = {
+            "q": "",
+            "a": {
+                'a': "",
+                'type': "",
+            }
+        };
+        popupHeader = "Nouvelle question ✨";
+    } else {
+        qModel = {
+            "q": sondageEnCreation['content'][elem.dataset.qorder]["q"],
+            "a": {
+                'a': sondageEnCreation['content'][elem.dataset.qorder]["a"]["a"],
+                'type': sondageEnCreation['content'][elem.dataset.qorder]["a"]["type"],
+            }
+        };
+        popupHeader = "Modifier la question ✏️";
+    }
     Swal.fire({
-        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">Nouvelle question ✨</h4><div><input id="outQuestion" class="fieldQ" type="text" placeholder="Comment est votre blanquette ?"></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]"><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div><div><select class="fieldQ" name="qtype" id="qtypefield2"><option value="" selected disabled>Choisir la suite</option><option value="1">Une autre question</option><option value="end">Fin du sondage</option></select></div></div>',
+        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><input id="outQuestion" class="fieldQ" type="text" placeholder="Comment est votre blanquette ?" value="' + qModel['q'] + '"></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]" value=' + qModel['a']['type'] + '><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
         preConfirm: () => {
             let qtype = document.querySelector("#qtypefield").value;
-            let qFollow = document.querySelector("#qtypefield2").value
             let qA;
             if (qtype == "1c" || qtype == "mc") {
                 qA = [...document.querySelectorAll(".fieldQlil")].map((e) => e.value).filter(Boolean);
@@ -47,7 +72,7 @@ const createCell = (elem) => {
                 }
             }
 
-            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0) || qFollow == '') {
+            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0)) {
                 return false;
             } else {
                 return [repFinal, elem];
@@ -57,7 +82,11 @@ const createCell = (elem) => {
         if (res.isDismissed == true) {
             console.log("abort creation")
         } else {
-            sondageEnCreation['content'].push(res.value[0]);
+            if (elem.dataset.qorder == "new") {
+                sondageEnCreation['content'].splice(sondageEnCreation['content'].length - 1, 0, res.value[0]);
+            } else {
+                sondageEnCreation['content'].splice(elem.dataset.qorder, 1, res.value[0]);
+            }
             updateCells();
             reiniTialisationChat(sondageEnCreation);
         }

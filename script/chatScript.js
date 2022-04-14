@@ -18,7 +18,7 @@ const reiniTialisationChat = (cont) => {
 //Fonctions gestion sondage
 function receiveMsg(content) {
     console.log(content)
-    let qIndex = sondageEnCreation['content'].indexOf(content);
+    let qIndex = chatContent['content'].indexOf(content);
     let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", content['q']);
     let answs = content['a'];
     let inputt = '';
@@ -45,9 +45,11 @@ function receiveMsg(content) {
     } else if (answs["type"] == "5s") {
         inputt = '<div class="col-12 d-flex align-items-center justify-content-center"><div class="rate input" data-no="[#id#]"><input type="radio" id="star5" name="rate" value="5" onclick="starhHandle(this)" /><label for="star5" title="text">5 stars</label><input type="radio" id="star4" name="rate" value="4" onclick="starhHandle(this)" /><label for="star4" title="text">4 stars</label><input type="radio" id="star3" name="rate" value="3" onclick="starhHandle(this)" /><label for="star3" title="text">3 stars</label><input type="radio" id="star2" name="rate" value="2" onclick="starhHandle(this)" /><label for="star2" title="text">2 stars</label><input type="radio" id="star1" name="rate" value="1" onclick="starhHandle(this)" /><label for="star1" title="text">1 star</label></div></div>'.replace("[#id#]", qIndex);
     } else if (answs["type"] == "fin") {
+        console.log('finito');
         setTimeout(() => {
+            feed.insertAdjacentHTML("beforeend", '<div class="p-4"><lottie-player src="https://assets5.lottiefiles.com/packages/lf20_wsdetkrm.json" background="transparent"  speed="1"  style="width: 100%;" autoplay></lottie-player></div>');
             scrollZone.scrollTop = scrollZone.scrollHeight;
-        }, 500);
+        }, 100);
         var xhr = new XMLHttpRequest();
         var now = new Date();
         //TODO remplacer url par la bonne
@@ -60,6 +62,7 @@ function receiveMsg(content) {
         });
         console.log(ans);
         xhr.send(ans);
+
 
     }
 
@@ -85,18 +88,13 @@ function userSend(content, suiv) {
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
     }, 10);
-
     userAnswers.push(content);
 
-    if (parseInt(suiv) + 1 == chatContent['content'].length) {
-        console.log('finito')
-    } else {
-        setTimeout(() => {
-            console.log(suiv)
-            console.log(chatContent)
-            receiveMsg(chatContent['content'][parseInt(suiv) + 1]);
-        }, 500);
-    }
+    setTimeout(() => {
+        console.log(chatContent)
+        receiveMsg(chatContent['content'][parseInt(suiv) + 1]);
+    }, 500);
+
 };
 
 //other functions

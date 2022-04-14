@@ -45,6 +45,16 @@
         </div>
 
     </div>
+
+
+
+    <script>
+        window.onresize = function () {
+            document.body.height = window.innerHeight;
+        }
+        window.onresize();
+    </script>
+
     <script>
         var testChatParams = {
             "content": [{
@@ -57,7 +67,7 @@
                 {
                     "q": "Quelle est ta couleur préférée ? ",
                     "a": {
-                        'suiv': 2,
+                        'type': '1c',
                         'a': ['Vert 🟢', 'Bleu 🔵', 'Jaune 🟡', 'Rouge 🔴']
                     }
                 },
@@ -102,14 +112,7 @@
                 },
 
             ]
-        }
-    </script>
-
-    <script>
-        window.onresize = function () {
-            document.body.height = window.innerHeight;
-        }
-        window.onresize();
+        };
     </script>
 
     <script src="script/chatScript.js"></script>
