@@ -22,7 +22,7 @@ const updateCells = () => {
             let sonQuestionNode = "<li><code data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
             document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
         } else {
-            let sonQuestionNode = "<ul><li><code data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            let sonQuestionNode = "<ul><li><code ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
             document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
         }
     };
@@ -32,6 +32,7 @@ const updateCells = () => {
 const createCell = (elem) => {
     let qModel;
     let popupHeader;
+    let suppronoff = false;
     if (elem.dataset.qorder == "new") {
         qModel = {
             "q": "",
@@ -50,6 +51,9 @@ const createCell = (elem) => {
             }
         };
         popupHeader = "Modifier la question ✏️";
+        if (elem.dataset.qorder != "0" && elem.dataset.qorder != (sondageEnCreation['content'].length - 1).toString()) {
+            suppronoff = true;
+        }
     }
     Swal.fire({
         html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]"><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
@@ -62,12 +66,15 @@ const createCell = (elem) => {
                 for (ii in qModel['a']['a']) {
                     e.querySelector('#ansWriteZone').insertAdjacentHTML("beforeend", inputQForm.replace("value=''", "value='" + qModel['a']['a'][ii] + "'").replace('</', "<span class='crossRem' onClick=\"this.parentElement.remove()\">❌</span></"))
                 }
+            } else if (qModel['a']['type'] == "cl") {
+                e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']];
+                e.querySelector('#nbCaracLimit').value = qModel['a']['a'][0];
             } else if (qModel['a']['type'] == "num") {
                 e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']];
                 e.querySelector('#nbMin').value = qModel['a']['a'][0];
                 e.querySelector('#nbMax').value = qModel['a']['a'][1];
             } else if (qModel['a']['type'] == "fin") {
-                e.querySelector("#qtypefield").insertAdjacentHTML('beforeend','<option value="fin" selected>Fin</option>');
+                e.querySelector("#qtypefield").insertAdjacentHTML('beforeend', '<option value="fin" selected>Fin</option>');
                 e.querySelector("#qtypefield").disabled = true;
             };
 
@@ -77,7 +84,9 @@ const createCell = (elem) => {
             let qA;
             if (qtype == "1c" || qtype == "mc") {
                 qA = [...document.querySelectorAll(".fieldQlil")].map((e) => e.value).filter(Boolean);
-            } else if (qtype == "cl" || qtype == "5s") {
+            } else if (qtype == "cl") {
+                qA = [document.querySelector('#nbCaracLimit').value];
+            } else if (qtype == "5s") {
                 qA = "no";
             } else if (qtype == "num") {
                 qA = [document.querySelector('#nbMin').value, document.querySelector('#nbMax').value];
@@ -96,10 +105,20 @@ const createCell = (elem) => {
             } else {
                 return [repFinal, elem];
             }
-        }
+        },
+        confirmButtonText: 'Enregistrer',
+        showDenyButton: suppronoff,
+        denyButtonText: `Supprimer`,
+        denyButtonColor: "#616163",
+        reverseButtons: true
     }).then((res) => {
         if (res.isDismissed == true) {
-            console.log("abort creation")
+            console.log("abort creation");
+        } else if (res.isDenied == true) {
+            console.log("delete question !!!");
+            sondageEnCreation['content'].splice(elem.dataset.qorder, 1);
+            updateCells();
+            reiniTialisationChat(sondageEnCreation);
         } else {
             if (elem.dataset.qorder == "new") {
                 sondageEnCreation['content'].splice(sondageEnCreation['content'].length - 1, 0, res.value[0]);
@@ -128,7 +147,37 @@ let inputQForm = "<div><input type='text' class='fieldQlil' onKeyUp='newFieldon(
 let dicQFields = {
     "1c": "<h5>Les réponses</h5>" + inputQForm,
     "mc": "<h5>Les réponses</h5>" + inputQForm,
-    "cl": '<label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100">',
+    "cl": '<div><label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100"></div><div><p>💡 Rétine analysera automatiquement le sentiment dégagé par chacune des réponses pour établir des statistiques visibles sur votre dashboard des résultats.</p></div>',
     "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24">',
     "5s": "<div>L'utilisateur pourra donner une note de 1 à 5.</div>",
 };
+
+function allowDrop(ev) {
+    ev.preventDefault();
+    ev.target.style.backgroundColor = "#DEDBE1";
+
+};
+
+function dragLeave(ev) {
+    ev.preventDefault();
+    ev.target.style = "";
+};
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.dataset.qorder);
+};
+
+function drop(ev) {
+    ev.preventDefault();
+
+    arraymove(sondageEnCreation['content'], parseInt(ev.dataTransfer.getData("text")), parseInt(ev.target.dataset.qorder));
+
+    updateCells();
+    reiniTialisationChat(sondageEnCreation);
+};
+
+function arraymove(arr, fromIndex, toIndex) {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
