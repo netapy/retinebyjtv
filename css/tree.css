@@ -61,9 +61,17 @@
     font-family: Raleway;
     padding: 10px 20px;
     background-color: white;
-    color: #6219D8;
+    color: #3b3b3b;
     z-index: 99;
     transition: all .2s ease-in-out;
+    border-width: 2px;
+    border-color: #7575757b;
+}
+
+.firstQ {
+    color: #ffffff !important;
+    background-color: #6219d8 !important;
+    border-width: 0px !important;
 }
 
 .tree code:hover {
@@ -105,8 +113,9 @@
 
 .outlineQ {
     border-style: dashed !important;
-    color: grey !important;
-    border-color: grey !important;
+    border-width: 1.5px !important;
+    color: #535353 !important;
+    border-color: #b6b6b6 !important;
 }
 
 .fieldQ {

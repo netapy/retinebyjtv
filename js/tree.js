@@ -6,7 +6,7 @@ let sondageEnCreation = {
             'a': ['Démarrer 🚀']
         }
     }, {
-        "q": "Merci pour votre participation ! ",
+        "q": "Merci pour votre participation ! 🎉",
         "a": {
             'type': 'fin',
         }
@@ -19,10 +19,10 @@ const updateCells = () => {
 
     for (ii in sondageEnCreation['content']) {
         if (ii == 0) {
-            let sonQuestionNode = "<li><code data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
+            let sonQuestionNode = "<li><code class='firstQ' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
             document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
         } else {
-            let sonQuestionNode = "<ul><li><code ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            let sonQuestionNode = "<ul><li><code style='"+dicColorCells[sondageEnCreation['content'][ii]['a']['type']]+"' ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
             document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
         }
     };
@@ -160,7 +160,7 @@ function allowDrop(ev) {
 
 function dragLeave(ev) {
     ev.preventDefault();
-    ev.target.style = "";
+    ev.target.style.backgroundColor = "";
 };
 
 function drag(ev) {
@@ -180,4 +180,13 @@ function arraymove(arr, fromIndex, toIndex) {
     var element = arr[fromIndex];
     arr.splice(fromIndex, 1);
     arr.splice(toIndex, 0, element);
+}
+
+let dicColorCells = {
+    "1c":"border-color: #8792FDb0",
+    "mc":"border-color: #6219D8b0",
+    "cl":"border-color: #7aad89b0",
+    "num":"border-color: #FF5964b0",
+    "5s":"border-color: #FBB13Cb0",
+    "fin":"background-color: #2FCC72;color:white; border-width:0;"
 }
