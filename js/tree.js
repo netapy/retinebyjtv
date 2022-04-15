@@ -190,3 +190,16 @@ let dicColorCells = {
     "5s":"border-color: #FBB13Cb0",
     "fin":"background-color: #2FCC72;color:white; border-width:0;"
 }
+
+let dicSuiteCible = {
+    "conn":"à qui je vais envoyer le lien du sondage.",
+    "inco" :"ciblés par Rétine sur les réseaux sociaux."
+};
+
+const validateSondage = () => {
+    Swal.fire(
+        'Le sondage est publié!',
+        '(c\'est faux)',
+        'success'
+      );
+};

@@ -1,3 +1,18 @@
+#studio {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.cellZone {
+    border-radius: 20px;
+    min-height: 45vh;
+    background-color: white;
+    overflow-x: auto;
+    border: #e0e0e0 2px solid;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
 /* It's supposed to look like a tree diagram */
 .tree,
 .tree ul,
@@ -59,6 +74,7 @@
 /* If the tree represents DOM structure */
 .tree code {
     font-family: Raleway;
+    font-size: .9rem;
     padding: 10px 20px;
     background-color: white;
     color: #3b3b3b;
@@ -124,7 +140,8 @@
     padding: 15px;
     background-color: #80808017;
     margin: .4rem 0rem;
-    border-width: 0;}
+    border-width: 0;
+}
 
 .fieldQlil {
     border-radius: 5px;
@@ -135,7 +152,7 @@
     border-width: 0;
 }
 
-.crossRem{
+.crossRem {
     padding: 5px;
     cursor: pointer;
 }

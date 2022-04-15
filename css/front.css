@@ -3,6 +3,10 @@ body {
     background-color: #FAF7FF;
 }
 
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
+
 main {
     transition: all .2s ease-in-out;
 }
@@ -37,6 +41,7 @@ h5 {
 .demoBtn:hover {
     transform: scale(1.03);
 }
+
 
 .violetSmButton {
     background-color: #6219D8;
