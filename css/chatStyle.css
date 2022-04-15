@@ -16,6 +16,7 @@ p {
     max-width: 90%;
     transform: scale(.80);
     transition: all .2s ease-out;
+    white-space: pre-wrap;
 }
 
 .msgUser {

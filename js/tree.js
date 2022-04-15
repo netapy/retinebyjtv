@@ -36,7 +36,7 @@ const createCell = (elem) => {
         qModel = {
             "q": "",
             "a": {
-                'a': "",
+                'a': " ",
                 'type': "",
             }
         };
@@ -52,7 +52,26 @@ const createCell = (elem) => {
         popupHeader = "Modifier la question ✏️";
     }
     Swal.fire({
-        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><input id="outQuestion" class="fieldQ" type="text" placeholder="Comment est votre blanquette ?" value="' + qModel['q'] + '"></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]" value=' + qModel['a']['type'] + '><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
+        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]"><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
+        didRender: (e) => {
+            e.querySelector('#outQuestion').value = qModel['q'];
+            e.querySelector("#qtypefield").value = qModel['a']['type'];
+
+            if (qModel['a']['type'] == "1c" || qModel['a']['type'] == "mc") {
+                e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']].replace(inputQForm, "");
+                for (ii in qModel['a']['a']) {
+                    e.querySelector('#ansWriteZone').insertAdjacentHTML("beforeend", inputQForm.replace("value=''", "value='" + qModel['a']['a'][ii] + "'").replace('</', "<span class='crossRem' onClick=\"this.parentElement.remove()\">❌</span></"))
+                }
+            } else if (qModel['a']['type'] == "num") {
+                e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']];
+                e.querySelector('#nbMin').value = qModel['a']['a'][0];
+                e.querySelector('#nbMax').value = qModel['a']['a'][1];
+            } else if (qModel['a']['type'] == "fin") {
+                e.querySelector("#qtypefield").insertAdjacentHTML('beforeend','<option value="fin" selected>Fin</option>');
+                e.querySelector("#qtypefield").disabled = true;
+            };
+
+        },
         preConfirm: () => {
             let qtype = document.querySelector("#qtypefield").value;
             let qA;
@@ -104,7 +123,7 @@ const newFieldon = (e, input) => {
     }
 };
 
-let inputQForm = "<div><input type='text' class='fieldQlil' onKeyUp='newFieldon(event,this)'></div>";
+let inputQForm = "<div><input type='text' class='fieldQlil' onKeyUp='newFieldon(event,this)' value=''></div>";
 
 let dicQFields = {
     "1c": "<h5>Les réponses</h5>" + inputQForm,
