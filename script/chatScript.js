@@ -17,7 +17,7 @@ const reiniTialisationChat = (cont) => {
 
 //Fonctions gestion sondage
 function receiveMsg(content) {
-    console.log(content)
+    //console.log(content)
     let qIndex = chatContent['content'].indexOf(content);
     let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", content['q']);
     let answs = content['a'];

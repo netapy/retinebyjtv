@@ -22,7 +22,7 @@ const updateCells = () => {
             let sonQuestionNode = "<li><code class='firstQ' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
             document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
         } else {
-            let sonQuestionNode = "<ul><li><code style='"+dicColorCells[sondageEnCreation['content'][ii]['a']['type']]+"' ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            let sonQuestionNode = "<ul><li><code style='" + dicColorCells[sondageEnCreation['content'][ii]['a']['type']] + "' ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
             document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
         }
     };
@@ -100,7 +100,7 @@ const createCell = (elem) => {
                 }
             }
 
-            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0)) {
+            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0) || verifCoherenceChiffre()) {
                 return false;
             } else {
                 return [repFinal, elem];
@@ -148,7 +148,7 @@ let dicQFields = {
     "1c": "<h5>Les réponses</h5>" + inputQForm,
     "mc": "<h5>Les réponses</h5>" + inputQForm,
     "cl": '<div><label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100"></div><div><p>💡 Rétine analysera automatiquement le sentiment dégagé par chacune des réponses pour établir des statistiques visibles sur votre dashboard des résultats.</p></div>',
-    "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24">',
+    "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'">',
     "5s": "<div>L'utilisateur pourra donner une note de 1 à 5.</div>",
 };
 
@@ -182,18 +182,28 @@ function arraymove(arr, fromIndex, toIndex) {
     arr.splice(toIndex, 0, element);
 }
 
+function verifCoherenceChiffre() {
+    let vmin = parseInt(document.getElementById("nbMin").value);
+    let vmax = parseInt(document.getElementById("nbMax").value);
+    if (vmin >= vmax) {
+        return true;
+    } else {
+        return false;
+    };
+}
+
 let dicColorCells = {
-    "1c":"border-color: #8792FDb0",
-    "mc":"border-color: #6219D8b0",
-    "cl":"border-color: #7aad89b0",
-    "num":"border-color: #FF5964b0",
-    "5s":"border-color: #FBB13Cb0",
-    "fin":"background-color: #2FCC72;color:white; border-width:0;"
+    "1c": "border-color: #8792FDb0",
+    "mc": "border-color: #6219D8b0",
+    "cl": "border-color: #7aad89b0",
+    "num": "border-color: #FF5964b0",
+    "5s": "border-color: #FBB13Cb0",
+    "fin": "background-color: #2FCC72;color:white; border-width:0;"
 }
 
 let dicSuiteCible = {
-    "conn":"à qui je vais envoyer le lien du sondage.",
-    "inco" :"ciblés par Rétine sur les réseaux sociaux."
+    "conn": "à qui je vais envoyer le lien du sondage.",
+    "inco": "ciblés par Rétine sur les réseaux sociaux."
 };
 
 const validateSondage = () => {
@@ -201,5 +211,5 @@ const validateSondage = () => {
         'Le sondage est publié!',
         '(c\'est faux)',
         'success'
-      );
+    );
 };

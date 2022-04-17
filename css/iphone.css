@@ -7,9 +7,10 @@
     box-shadow: 0px 0px 0px 3px #414141, 0px 0px 0px 3px #414141, 0px 0px 0px 12px #414141;
     padding: 0px 3px;
     padding-top: 25px;
+    background-color: #FAF7FF;
 }
 
-.iphone-x > * {
+.iphone-x>* {
     font-size: .7rem !important;
 }
 

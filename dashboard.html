@@ -24,31 +24,75 @@
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.3.1/dist/js/shepherd.min.js"></script>
     <link href="css/front.css" rel="stylesheet">
     <link href="css/tree.css" rel="stylesheet">
     <link href="css/iphone.css" rel="stylesheet">
     <link rel="stylesheet" href="css/chatStyle.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.3.1/dist/css/shepherd.css" />
 </head>
 
-<body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0" style="background-color: #6219D8 !important;">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-            <div class="p-2" style="font-family: Lexend Deca; font-size: 1.2rem; font-weight: 600;"><img src="img/faviconBlanc.ico"
-                    style="height:35px;"> Rétine</div>
-        </a>
-        <input class="form-control form-control-dark w-50" type="text" placeholder="Rechercher" aria-label="Rechercher">
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Deconnexion</a>
-            </li>
-        </ul>
+<body id="body-pd" class="m-auto">
+    <nav id="header" class="navbar sticky-top flex-md-nowrap p-0" style="position: absolute; top:12px">
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: black;"></i> </div>
     </nav>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+                    <div class="p-2" style="font-family: Lexend Deca; color: white; font-size: 1.2rem; font-weight: 600;">
+                        <img src="img/faviconBlanc.ico" style="height:25px;"> Rétine
+                    </div>
+                </a>
+                <hr class="pl-5">
+                <div class="nav_list">
+                    <a href="#" class="nav_link" onclick="changePage(dashProj, loadProjList)"> <i class='bx bx-paint nav_icon'></i> <span
+                            class="nav_name">Créer</span> </a>
+                    <a href="#" class="nav_link active" onclick="changePage(dashProj, loadProjList)"> <i class='bx bx-grid-alt nav_icon'></i> <span
+                            class="nav_name">Dashboard</span> </a>
+                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Contacts</span> </a>
+                </div>
 
+            </div>
+            <div><a href="#" class="nav_link"> <i class='bx bxs-user-account nav_icon'></i> <span class="nav_name">Mon compte</span> </a><a href="#"
+                    class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Déconnexion</span> </a></div>
+        </nav>
+    </div>
     <div class="container-fluid">
-        <main role="main" class="pt-3 px-1">
+        <main role="main" class="pt-3 px-1 d-flex flex-column align-items-center" style="min-height: 100vh;">
             <div id="studio" class="row p-1">
-                <div class="col-12 col-lg-4 p-3 text-center">
-                    <h4 class="mb-4">🙋 Vue utilisateur</h4>
+                <div class="col-12 col-lg-8 p-3 text-center">
+                    <h4 class="mb-4">🛠️ Espace création</h4>
+                    <div class="cellZone w-100">
+                        <figure>
+                            <ul id="theTree" class="tree mx-auto p-3">
+                            </ul>
+                        </figure>
+                    </div>
+                    <hr class="w-75 mt-4">
+                    <div class="row w-100 m-auto">
+                        <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;">
+                            <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column"
+                                style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;">
+                                <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible"
+                                        onchange="document.querySelector('#suiteCible').innerHTML = dicSuiteCible[this.value]"
+                                        style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;">
+                                        <option value="conn">connaissances</option>
+                                        <option value="inco">inconnus</option>
+                                    </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;">
+                            <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()"
+                                style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;">
+                                <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="creaUserView" class="col-12 col-lg-4 p-3 text-center">
+                    <h4 style="margin-bottom: 36px;">🙋 Vue utilisateur</h4>
                     <div class="iphone-x mx-auto my-4">
                         <div class="w-100 h-100 d-flex align-items-center justify-content-center"
                             style="background-color: #FAF7FF; border-radius: 15px;">
@@ -83,34 +127,6 @@
                             Réinitialiser</button></div>
                 </div>
 
-                <div class="col-12 col-lg-8 p-3 text-center">
-                    <h4 class="mb-4">🛠️ Espace création</h4>
-                    <div class="cellZone w-100">
-                        <figure>
-                            <ul id="theTree" class="tree mx-auto p-3">
-                            </ul>
-                        </figure>
-                    </div>
-                    <hr class="w-75 mt-4">
-                    <div class="row w-100 m-auto">
-                        <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;">
-                            <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column"
-                                style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;">
-                                <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible" onchange="document.querySelector('#suiteCible').innerHTML = dicSuiteCible[this.value]"
-                                        style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;">
-                                        <option value="conn">connaissances</option>
-                                        <option value="inco">inconnus</option>
-                                    </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;">
-                            <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()"
-                                style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;">
-                                <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
@@ -123,6 +139,7 @@
 <script src="js/dash.js"></script>
 <script src="script/chatScript.js"></script>
 <script src="js/tree.js"></script>
+<script src="js/tour.js"></script>
 <script>
     updateCells();
     reiniTialisationChat(sondageEnCreation);
