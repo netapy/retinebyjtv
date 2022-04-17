@@ -1,7 +1,7 @@
-let feed = document.querySelector('#messageFeed');
-let inputZone = document.querySelector('#inputZone');
-let scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
-let userAnswers = [];
+let feed,
+    inputZone,
+    scrollZone,
+    userAnswers
 
 const reiniTialisationChat = (cont) => {
     //DEMO PURPOSE

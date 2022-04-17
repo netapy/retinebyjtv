@@ -194,15 +194,8 @@ const showNavbar = (toggleId, navId, bodyId, headerId) => {
         bodypd = document.getElementById(bodyId),
         headerpd = document.getElementById(headerId)
 
-    // Validate that all variables exist
-    console.log(toggle)
-    console.log(nav)
-    console.log(bodypd)
-    console.log(headerpd)
-    
     if (toggle && nav && bodypd && headerpd) {
         toggle.addEventListener('click', () => {
-            console.log("egg");
             // show navbar
             nav.classList.toggle('show')
             // change icon

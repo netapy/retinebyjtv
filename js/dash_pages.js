@@ -9,9 +9,9 @@ function changePage(destinationHTML, loadingFun) {
 }
 
 //PROJECTS OVERVIEW
-let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"><h1 class="h2">Sondages</h1></div><div id="mesSondages" class="row p-3"><div class="col-12 col-sm-6 col-lg-3  mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;">Créer un<br>nouveau projet</div></div></div>';
+let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"><h1 class="h2">Sondages</h1></div><div id="mesSondages" class="row p-3"><div class="col-12 col-sm-6 col-lg-4  mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;" onclick="changePage(creationStudioInterface, loadCreator);">Créer un<br>nouveau projet</div></div></div>';
 
-let templateUserProj = '<div class="col-12 col-sm-6 col-lg-3 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column" onclick="changePage(dashSond,loadDataList)"><h3 class="p-3 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP## réponses</div></div></div></div>';
+let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column" onclick="changePage(dashSond,loadDataList)"><h3 class="p-3 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP## réponses</div></div></div></div>';
 
 const loadProjList = () => {
     let zoneProjs = document.querySelector("#mesSondages");
@@ -105,3 +105,18 @@ const loadDataList = () => {
         zoneProjs.insertAdjacentElement("beforeend", elem);
     };
 };
+
+
+//CREATEUR DISPLAY
+
+let creationStudioInterface = '<div id="studio" class="row p-1"> <div class="col-12 col-lg-8 p-3 text-center"> <h4 class="mb-4">🛠️ Espace création</h4> <div class="cellZone w-100"> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row w-100 m-auto"> <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible" onchange="document.querySelector(\'#suiteCible\').innerHTML=dicSuiteCible[this.value]" style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;"> <option value="conn">connaissances</option> <option value="inco">inconnus</option> </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <h4 style="margin-bottom: 36px;">🙋 Vue utilisateur</h4> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div style="background-color: transparent;"> <div class="py-1 px-3" style="font-family: Lexend Deca; font-size: 1.05rem; font-weight: 600;"><img src="img/favicon.ico" style="height:30px;"> Rétine</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
+
+const loadCreator = () => {
+    feed = document.querySelector('#messageFeed');
+    inputZone = document.querySelector('#inputZone');
+    scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+    userAnswers = [];
+
+    updateCells();
+    reiniTialisationChat(sondageEnCreation);
+}
