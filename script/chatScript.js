@@ -5,6 +5,10 @@ let feed,
 
 const reiniTialisationChat = (cont) => {
     //DEMO PURPOSE
+    feed = document.querySelector('#messageFeed');
+    inputZone = document.querySelector('#inputZone');
+    scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+
     chatContent = cont;
     feed.innerHTML = "";
     inputZone.innerHTML = "";
