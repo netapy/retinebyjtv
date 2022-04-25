@@ -30,6 +30,12 @@ h5 {
     text-align: center;
 }
 
+.shySubTitle{
+    opacity: .75;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 .demoBtn {
     color: white !important;
     background-color: #6219D8;
@@ -123,10 +129,10 @@ h5 {
 
 .inputRtn {
     border-width: 0px;
-    background-color: #E6E6E6;
+    background-color: #f1f1f1;
     max-width: 500px;
     margin: auto;
-    padding: 10px;
+    padding: 25px 15px;
     border-radius: 10px;
 }
 

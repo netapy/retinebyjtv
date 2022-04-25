@@ -25,19 +25,66 @@
             <div class="container-fluid p-3">
                 <div class="row">
                     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="p-3 py-5 w-100 text-center d-flex justify-content-center flex-column"
+                        <div class="p-5 w-100 text-left d-flex justify-content-center flex-column"
                             style="background-color: white; height: fit-content; border-radius: 15px;">
-                            <h3 class="rtnTitle">Connexion & Inscription</h3>
-                            <div class="p-0 p-sm-2 my-3">
-                                <form id="inscriptionRtn" method="POST">
-                                    <div class="form-group p-1">
-                                        <input type="email" class="inputRtn" id="signupEmail" aria-describedby="emailHelp"
-                                            placeholder="Adresse e-mail..." style="padding:10px;">
+
+                            <div id='ecranConnex' style="display: none;">
+
+                                <h2 class="rtnTitle mb-3" style="text-align: left; font-size: 2rem;">Connexion<br><span class="shySubTitle">Pour
+                                        accéder à
+                                        votre Dashboard Rétine</span></h2>
+                                <div>
+                                    <form class="py-4" id="inscriptionRtn" method="POST">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control inputRtn" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                                placeholder="Adresse e-mail">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
+                                                placeholder="Mot de passe">
+                                        </div>
+                                    </form>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div style="font-size: .9rem;" onclick="xeu(1)"><a href="#" style="color: #6219D8;">Pas encore de compte ?</a></div>
+                                        <button type="submit" class="g-recaptcha p-2 px-3 violetSmButton"
+                                            data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ" data-callback='onSubmit'
+                                            onclick="window.location.href = 'dashboard.html'">Continuer 👉</button>
                                     </div>
-                                    <button class="g-recaptcha m-2 p-2 px-3 violetSmButton" data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ"
-                                        data-callback='onSubmit' onclick="window.location.href = 'dashboard.html'">Submit</button>
-                                </form>
+                                </div>
+
                             </div>
+
+                            <div id='ecranInscr'>
+
+                                <h2 class="rtnTitle mb-3" style="text-align: left; font-size: 2rem;">Inscription<br><span class="shySubTitle">Pour
+                                        créer
+                                        votre Dashboard Rétine</span></h2>
+                                <div>
+                                    <form class="py-4" id="inscriptionRtn" method="POST">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control inputRtn" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                                placeholder="Adresse e-mail">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
+                                                placeholder="Mot de passe">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
+                                                placeholder="Confirmez votre mot de passe">
+                                        </div>
+                                    </form>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div style="font-size: .9rem;" onclick="xeu(2)"><a href="#" style="color: #6219D8;">Vous avez déjà un compte ?</a>
+                                        </div>
+                                        <button type="submit" class="g-recaptcha p-2 px-3 violetSmButton"
+                                            data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ" data-callback='onSubmit'
+                                            onclick="window.location.href = 'dashboard.html'">Continuer 👉</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
@@ -57,6 +104,16 @@
     function onSubmit(token) {
         document.getElementById("inscriptionRtn").submit();
         console.log('vize');
+    }
+
+    function xeu(c) {
+        if (c == 1) {
+            document.querySelector('#ecranConnex').style.display = 'none';
+            document.querySelector('#ecranInscr').style.display = '';
+        } else {
+            document.querySelector('#ecranInscr').style.display = 'none';
+            document.querySelector('#ecranConnex').style.display = '';
+        }
     }
 </script>
 

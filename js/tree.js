@@ -183,10 +183,12 @@ function arraymove(arr, fromIndex, toIndex) {
 }
 
 function verifCoherenceChiffre() {
-    let vmin = parseInt(document.getElementById("nbMin").value);
-    let vmax = parseInt(document.getElementById("nbMax").value);
-    if (vmin >= vmax) {
-        return true;
+    if (document.getElementById("qtypefield").value == "num") {
+        let vmin = parseInt(document.getElementById("nbMin").value);
+        let vmax = parseInt(document.getElementById("nbMax").value);
+        if (vmin >= vmax) {
+            return true;
+        }
     } else {
         return false;
     };
