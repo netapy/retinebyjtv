@@ -102,6 +102,10 @@ h5 {
     padding-left: 20px;
 }
 
+.serverFeedback {
+    color:#E74C3C;
+}
+
 .canvContain {
     margin: auto;
     padding: 20px 0px;

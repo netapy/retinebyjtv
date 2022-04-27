@@ -1,5 +1,5 @@
 let sondageEnCreation = {
-    "content": [{
+    "jsonContent": [{
         "q": "Bienvenue dans ce sondage ! 🤗 ",
         "a": {
             'type': '1c',
@@ -17,12 +17,12 @@ const updateCells = () => {
     let theTree = document.querySelector("#theTree")
     theTree.innerHTML = "";
 
-    for (ii in sondageEnCreation['content']) {
+    for (ii in sondageEnCreation['jsonContent']) {
         if (ii == 0) {
-            let sonQuestionNode = "<li><code class='firstQ' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li>";
+            let sonQuestionNode = "<li><code class='firstQ' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['jsonContent'][ii]['q'] + "</code></li>";
             document.querySelector('#theTree').insertAdjacentHTML("beforeend", sonQuestionNode);
         } else {
-            let sonQuestionNode = "<ul><li><code style='" + dicColorCells[sondageEnCreation['content'][ii]['a']['type']] + "' ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['content'][ii]['q'] + "</code></li></ul>";
+            let sonQuestionNode = "<ul><li><code style='" + dicColorCells[sondageEnCreation['jsonContent'][ii]['a']['type']] + "' ondrop='drop(event)' ondragover='allowDrop(event)' ondragstart='drag(event)' ondragleave='dragLeave(event)' draggable='true' data-qorder='" + ii + "' onclick='createCell(this)'>" + sondageEnCreation['jsonContent'][ii]['q'] + "</code></li></ul>";
             document.querySelectorAll('code')[document.querySelectorAll('code').length - 1].insertAdjacentHTML("afterend", sonQuestionNode);
         }
     };
@@ -44,14 +44,14 @@ const createCell = (elem) => {
         popupHeader = "Nouvelle question ✨";
     } else {
         qModel = {
-            "q": sondageEnCreation['content'][elem.dataset.qorder]["q"],
+            "q": sondageEnCreation['jsonContent'][elem.dataset.qorder]["q"],
             "a": {
-                'a': sondageEnCreation['content'][elem.dataset.qorder]["a"]["a"],
-                'type': sondageEnCreation['content'][elem.dataset.qorder]["a"]["type"],
+                'a': sondageEnCreation['jsonContent'][elem.dataset.qorder]["a"]["a"],
+                'type': sondageEnCreation['jsonContent'][elem.dataset.qorder]["a"]["type"],
             }
         };
         popupHeader = "Modifier la question ✏️";
-        if (elem.dataset.qorder != "0" && elem.dataset.qorder != (sondageEnCreation['content'].length - 1).toString()) {
+        if (elem.dataset.qorder != "0" && elem.dataset.qorder != (sondageEnCreation['jsonContent'].length - 1).toString()) {
             suppronoff = true;
         }
     }
@@ -116,14 +116,14 @@ const createCell = (elem) => {
             console.log("abort creation");
         } else if (res.isDenied == true) {
             console.log("delete question !!!");
-            sondageEnCreation['content'].splice(elem.dataset.qorder, 1);
+            sondageEnCreation['jsonContent'].splice(elem.dataset.qorder, 1);
             updateCells();
             reiniTialisationChat(sondageEnCreation);
         } else {
             if (elem.dataset.qorder == "new") {
-                sondageEnCreation['content'].splice(sondageEnCreation['content'].length - 1, 0, res.value[0]);
+                sondageEnCreation['jsonContent'].splice(sondageEnCreation['jsonContent'].length - 1, 0, res.value[0]);
             } else {
-                sondageEnCreation['content'].splice(elem.dataset.qorder, 1, res.value[0]);
+                sondageEnCreation['jsonContent'].splice(elem.dataset.qorder, 1, res.value[0]);
             }
             updateCells();
             reiniTialisationChat(sondageEnCreation);
@@ -170,7 +170,7 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
 
-    arraymove(sondageEnCreation['content'], parseInt(ev.dataTransfer.getData("text")), parseInt(ev.target.dataset.qorder));
+    arraymove(sondageEnCreation['jsonContent'], parseInt(ev.dataTransfer.getData("text")), parseInt(ev.target.dataset.qorder));
 
     updateCells();
     reiniTialisationChat(sondageEnCreation);
@@ -209,9 +209,34 @@ let dicSuiteCible = {
 };
 
 const validateSondage = () => {
-    Swal.fire(
-        'Le sondage est publié!',
-        '(c\'est faux)',
-        'success'
-    );
+    var myHeaders = new Headers();
+    let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
+    myHeaders.append("Authorization", "Token d68c1fd60f47f59d5e3c5f5f393d143ae8c28e4e");
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "nom_proj": "Sondage1",
+        "jsonContent": contenuSondage,
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000/sondages/", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            console.log(result)
+            Swal.fire(
+                'Le sondage est publié!',
+                '(c\'est faux)',
+                'success'
+            );
+        })
+        .catch(error => console.log('error', error));
+
+
 };

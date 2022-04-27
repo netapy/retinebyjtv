@@ -10,12 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
-    <title>Rétine - Connexion</title>
+    <title>Rétine - Connexion/Inscription</title>
     <link rel="icon" href="img/favicon.ico" id="light-scheme-favicon" />
     <link rel="icon" href="img/faviconBlanc.ico" id="dark-scheme-favicon" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="css/front.css" rel="stylesheet">
-
+    <script src="js/c.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
@@ -28,58 +28,54 @@
                         <div class="p-5 w-100 text-left d-flex justify-content-center flex-column"
                             style="background-color: white; height: fit-content; border-radius: 15px;">
 
-                            <div id='ecranConnex' style="display: none;">
+                            <div id='ecranConnex' style="display: '';">
 
-                                <h2 class="rtnTitle mb-3" style="text-align: left; font-size: 2rem;">Connexion<br><span class="shySubTitle">Pour
-                                        accéder à
-                                        votre Dashboard Rétine</span></h2>
-                                <div>
-                                    <form class="py-4" id="inscriptionRtn" method="POST">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control inputRtn" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                placeholder="Adresse e-mail">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
-                                                placeholder="Mot de passe">
-                                        </div>
-                                    </form>
+                                <h2 class="rtnTitle mb-3" style="text-align: left; font-size: 2rem;">Connexion<br>
+                                    <span class="shySubTitle">Pour accéder à votre Dashboard Rétine</span>
+                                </h2>
+                                <div class="py-4">
+                                    <div class="form-group">
+                                        <input type="email" class="form-control inputRtn" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            placeholder="Adresse e-mail">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control inputRtn" id="exampleInputPassword1" placeholder="Mot de passe">
+                                    </div>
+                                    <div class="serverFeedback text-center py-3 mb-1"></div>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <div style="font-size: .9rem;" onclick="xeu(1)"><a href="#" style="color: #6219D8;">Pas encore de compte ?</a></div>
-                                        <button type="submit" class="g-recaptcha p-2 px-3 violetSmButton"
-                                            data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ" data-callback='onSubmit'
-                                            onclick="window.location.href = 'dashboard.html'">Continuer 👉</button>
+                                        <div style="font-size: .9rem;" onclick="xeu(1)"><a href="#" style="color: #6219D8;">Pas encore de compte
+                                                ?</a>
+                                        </div>
+                                        <button class="violetSmButton" onclick="co();">Continuer 👉</button>
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div id='ecranInscr'>
+                            <div id='ecranInscr' style="display: none;">
 
                                 <h2 class="rtnTitle mb-3" style="text-align: left; font-size: 2rem;">Inscription<br><span class="shySubTitle">Pour
                                         créer
                                         votre Dashboard Rétine</span></h2>
-                                <div>
-                                    <form class="py-4" id="inscriptionRtn" method="POST">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control inputRtn" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                placeholder="Adresse e-mail">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
-                                                placeholder="Mot de passe">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control inputRtn" id="exampleInputPassword1"
-                                                placeholder="Confirmez votre mot de passe">
-                                        </div>
-                                    </form>
+                                <div class="py-4">
+                                    <div class="form-group">
+                                        <input type="email" class="form-control inputRtn" id="exampleInputEmail2" aria-describedby="emailHelp"
+                                            placeholder="Adresse e-mail">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control inputRtn" id="exampleInputPassword21" placeholder="Mot de passe">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control inputRtn" id="exampleInputPassword22"
+                                            placeholder="Confirmez votre mot de passe">
+                                    </div>
+                                    <div class="serverFeedback text-center py-3 mb-1"></div>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <div style="font-size: .9rem;" onclick="xeu(2)"><a href="#" style="color: #6219D8;">Vous avez déjà un compte ?</a>
+                                        <div style="font-size: .9rem;" onclick="xeu(2)">
+                                            <a href="#" style="color: #6219D8;"> Vous avez déjà un compte ?</a>
                                         </div>
-                                        <button type="submit" class="g-recaptcha p-2 px-3 violetSmButton"
-                                            data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ" data-callback='onSubmit'
-                                            onclick="window.location.href = 'dashboard.html'">Continuer 👉</button>
+                                        <button class="g-recaptcha violetSmButton" data-sitekey="6LcialMfAAAAAP2GP2KhgzndBWekSuso3mCcZewQ"
+                                            data-callback='onSubmit' data-action='submit'>Continuer👉</button>
                                     </div>
                                 </div>
 
@@ -88,8 +84,9 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <div class="w-100 h-100 d-flex align-items-center justify-content-center"><img class="h-50 p-5" src="img/man_phone_design.svg"
-                                style="max-width: 600px;"></div>
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+                            <img class="h-50 p-5" src="img/man_phone_design.svg" style="max-width: 600px;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,11 +99,11 @@
 </body>
 <script>
     function onSubmit(token) {
-        document.getElementById("inscriptionRtn").submit();
-        console.log('vize');
-    }
+        ins();
+    };
 
     function xeu(c) {
+        serErrHandl('');
         if (c == 1) {
             document.querySelector('#ecranConnex').style.display = 'none';
             document.querySelector('#ecranInscr').style.display = '';
@@ -114,10 +111,10 @@
             document.querySelector('#ecranInscr').style.display = 'none';
             document.querySelector('#ecranConnex').style.display = '';
         }
-    }
+    };
 </script>
 
-
 <script src="js/gnrl.js"></script>
+<script src="script/aut.js"></script>
 
 </html>

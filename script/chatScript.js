@@ -15,14 +15,14 @@ const reiniTialisationChat = (cont) => {
     userAnswers = [];
     //Initialisation 
     setTimeout(() => {
-        receiveMsg(chatContent['content'][0]);
+        receiveMsg(chatContent['jsonContent'][0]);
     }, 500);
 }
 
 //Fonctions gestion sondage
 function receiveMsg(content) {
     //console.log(content)
-    let qIndex = chatContent['content'].indexOf(content);
+    let qIndex = chatContent['jsonContent'].indexOf(content);
     let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", content['q']);
     let answs = content['a'];
     let inputt = '';
@@ -43,9 +43,9 @@ function receiveMsg(content) {
         };
         inputt = inputt.concat('<div class="col-12 my-3 text-center"><div class="userBtnInput ml-auto btnEnvoyer" data-no="[#id#]" onclick="validateMultipleChoice(this.dataset.no)">Envoyer</div></div>'.replace("[#id#]", qIndex))
     } else if (answs["type"] == "cl") {
-        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replace("[#id#]", qIndex);
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replace("[#id#]", qIndex);
     } else if (answs["type"] == "num") {
-        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-2 m-auto' style='height:fit-content'>-</div><div class='col-8 p-2'><input id='inputUser' class='w-100 h-100 userFieldInput form-range' type='range' min='[#min#]' max='[#max#]' oninput='this.parentElement.previousElementSibling.innerHTML = this.value'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='img/icons/send-circle.svg'></div></div>".replace("[#id#]", qIndex).replace("[#min#]", answs['a'][0]).replace("[#max#]", answs['a'][1]);
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-2 m-auto' style='height:fit-content'>-</div><div class='col-8 p-2'><input id='inputUser' class='w-100 h-100 userFieldInput form-range' type='range' min='[#min#]' max='[#max#]' oninput='this.parentElement.previousElementSibling.innerHTML = this.value'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='/img/icons/send-circle.svg'></div></div>".replace("[#id#]", qIndex).replace("[#min#]", answs['a'][0]).replace("[#max#]", answs['a'][1]);
     } else if (answs["type"] == "5s") {
         inputt = '<div class="col-12 d-flex align-items-center justify-content-center"><div class="rate input" data-no="[#id#]"><input type="radio" id="star5" name="rate" value="5" onclick="starhHandle(this)" /><label for="star5" title="text">5 stars</label><input type="radio" id="star4" name="rate" value="4" onclick="starhHandle(this)" /><label for="star4" title="text">4 stars</label><input type="radio" id="star3" name="rate" value="3" onclick="starhHandle(this)" /><label for="star3" title="text">3 stars</label><input type="radio" id="star2" name="rate" value="2" onclick="starhHandle(this)" /><label for="star2" title="text">2 stars</label><input type="radio" id="star1" name="rate" value="1" onclick="starhHandle(this)" /><label for="star1" title="text">1 star</label></div></div>'.replace("[#id#]", qIndex);
     } else if (answs["type"] == "fin") {
@@ -96,7 +96,7 @@ function userSend(content, suiv) {
 
     setTimeout(() => {
         console.log(chatContent)
-        receiveMsg(chatContent['content'][parseInt(suiv) + 1]);
+        receiveMsg(chatContent['jsonContent'][parseInt(suiv) + 1]);
     }, 500);
 
 };

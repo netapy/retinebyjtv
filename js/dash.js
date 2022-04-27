@@ -210,7 +210,6 @@ const showNavbar = (toggleId, navId, bodyId, headerId) => {
 
 showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header');
 
-/*===== LINK ACTIVE =====*/
 const linkColor = document.querySelectorAll('.nav_link')
 
 function colorLink() {
@@ -221,4 +220,22 @@ function colorLink() {
 }
 linkColor.forEach(l => l.addEventListener('click', colorLink))
 
-// Your code to run since DOM is loaded and ready
+async function queryRtn(link) {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    return fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000" + link, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            return result
+        })
+        .catch(error => {
+            return error
+        });
+}
