@@ -15,6 +15,7 @@
     <link rel="icon" href="/img/favicon.ico" id="light-scheme-favicon" />
     <link rel="icon" href="/img/faviconBlanc.ico" id="dark-scheme-favicon" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 
 <body style=" font-family: 'Raleway', sans-serif;height: 100vh;overflow: hidden;background-color: #FAF7FF;">
@@ -66,15 +67,17 @@
             redirect: 'follow'
         };
 
-        fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000/sondages/" + scode + "/", requestOptions)
+        fetch("https://retinereq.jetevois.fr:8000/sondages/" + scode + "/", requestOptions)
             .then(response => response.text())
             .then(result => {
-                console.log(result);
                 testChatParams = JSON.parse(result);
                 testChatParams['jsonContent'] = JSON.parse(testChatParams['jsonContent']);
                 reiniTialisationChat(testChatParams);
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                console.log('error', error);
+                document.querySelector('#messageFeed').insertAdjacentHTML("beforeend", '<div class="p-4 endAnim"><lottie-player src="https://assets1.lottiefiles.com/packages/lf20_rmedmpzu.json" background="transparent"  speed="1"  style="width: 100%;" autoplay loop></lottie-player></div>');
+            });
     </script>
     <script src="/script/chatScript.js"></script>
 </body>

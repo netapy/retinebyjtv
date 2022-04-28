@@ -21,7 +21,6 @@ const reiniTialisationChat = (cont) => {
 
 //Fonctions gestion sondage
 function receiveMsg(content) {
-    //console.log(content)
     let qIndex = chatContent['jsonContent'].indexOf(content);
     let toAdd = "<div class='msgBot'><p>###</p></div>".replace("###", content['q']);
     let answs = content['a'];
@@ -49,25 +48,42 @@ function receiveMsg(content) {
     } else if (answs["type"] == "5s") {
         inputt = '<div class="col-12 d-flex align-items-center justify-content-center"><div class="rate input" data-no="[#id#]"><input type="radio" id="star5" name="rate" value="5" onclick="starhHandle(this)" /><label for="star5" title="text">5 stars</label><input type="radio" id="star4" name="rate" value="4" onclick="starhHandle(this)" /><label for="star4" title="text">4 stars</label><input type="radio" id="star3" name="rate" value="3" onclick="starhHandle(this)" /><label for="star3" title="text">3 stars</label><input type="radio" id="star2" name="rate" value="2" onclick="starhHandle(this)" /><label for="star2" title="text">2 stars</label><input type="radio" id="star1" name="rate" value="1" onclick="starhHandle(this)" /><label for="star1" title="text">1 star</label></div></div>'.replace("[#id#]", qIndex);
     } else if (answs["type"] == "fin") {
-        console.log('finito');
-        setTimeout(() => {
-            feed.insertAdjacentHTML("beforeend", '<div class="p-4"><lottie-player src="https://assets5.lottiefiles.com/packages/lf20_wsdetkrm.json" background="transparent"  speed="1"  style="width: 100%;" autoplay></lottie-player></div>');
-            scrollZone.scrollTop = scrollZone.scrollHeight;
-        }, 100);
-        var xhr = new XMLHttpRequest();
-        var now = new Date();
-        //TODO remplacer url par la bonne
-        xhr.open("POST", "jetevois.fr", true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        //TODO ajouter autres infos navigateurs
-        let ans = JSON.stringify({
-            time: now,
-            values: userAnswers,
-        });
-        console.log(ans);
-        xhr.send(ans);
+        if (scode != "demo") {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
+            var raw = JSON.stringify({
+                "client_info": JSON.stringify(navigator.userAgentData),
+                "jsonContent": JSON.stringify(userAnswers)
+            });
 
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch("https://retinereq.jetevois.fr:8000/rep/" + scode + "/", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    console.log(result);
+                    setTimeout(() => {
+                        feed.insertAdjacentHTML("beforeend", '<div class="p-4 endAnim"><lottie-player src="https://assets5.lottiefiles.com/packages/lf20_wsdetkrm.json" background="transparent"  speed="1"  style="width: 100%;" autoplay></lottie-player></div>');
+                        scrollZone.scrollTop = scrollZone.scrollHeight;
+                    }, 100);
+
+                })
+                .catch(error => {
+                    console.log('error', error)
+                    feed.insertAdjacentHTML("beforeend", "<div class='m-auto p-3 text-center'>Une erreur est survenue. Vérifiez que vous êtes bien connectés à internet .</div>")
+                });
+        } else {
+            setTimeout(() => {
+                feed.insertAdjacentHTML("beforeend", '<div class="p-4 endAnim"><lottie-player src="https://assets5.lottiefiles.com/packages/lf20_wsdetkrm.json" background="transparent"  speed="1"  style="width: 100%;" autoplay></lottie-player></div>');
+                scrollZone.scrollTop = scrollZone.scrollHeight;
+            }, 100);
+        }
     }
 
     inputZone.insertAdjacentHTML('afterbegin', inputt);
@@ -83,7 +99,7 @@ function receiveMsg(content) {
 
 }
 
-function userSend(content, suiv) {
+function userSend(content, numQ) {
     inputZone.innerHTML = '';
     let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
     scrollZone.scrollTop = scrollZone.scrollHeight;
@@ -92,11 +108,14 @@ function userSend(content, suiv) {
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
     }, 10);
-    userAnswers.push(content);
+    userAnswers.push({
+        "n": numQ,
+        "type": chatContent['jsonContent'][numQ]["a"]["type"],
+        "answ": content
+    });
 
     setTimeout(() => {
-        console.log(chatContent)
-        receiveMsg(chatContent['jsonContent'][parseInt(suiv) + 1]);
+        receiveMsg(chatContent['jsonContent'][parseInt(numQ) + 1]);
     }, 500);
 
 };

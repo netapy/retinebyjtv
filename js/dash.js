@@ -185,9 +185,6 @@ var testChatParams = {
 };
 
 
-
-
-
 const showNavbar = (toggleId, navId, bodyId, headerId) => {
     const toggle = document.getElementById(toggleId),
         nav = document.getElementById(navId),
@@ -230,7 +227,7 @@ async function queryRtn(link) {
         redirect: 'follow'
     };
 
-    return fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000" + link, requestOptions)
+    return fetch("https://retinereq.jetevois.fr:8000" + link, requestOptions)
         .then(response => response.text())
         .then(result => {
             return result

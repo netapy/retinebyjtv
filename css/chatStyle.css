@@ -6,6 +6,11 @@ p {
         display: none;
 }
 
+.endAnim {
+    max-width: 15rem;
+    margin: auto;
+}
+
 .msgBot {
     background-color: #dedbe1;
     padding: 10px 15px;

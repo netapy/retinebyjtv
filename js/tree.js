@@ -226,7 +226,7 @@ const validateSondage = () => {
         redirect: 'follow'
     };
 
-    fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000/sondages/", requestOptions)
+    fetch("https://retinereq.jetevois.fr:8000/sondages/", requestOptions)
         .then(response => response.text())
         .then(result => {
             console.log(result)

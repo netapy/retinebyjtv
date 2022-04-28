@@ -18,7 +18,7 @@ function co() {
             redirect: 'follow'
         };
 
-        fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000/authenticate/", requestOptions)
+        fetch("https://retinereq.jetevois.fr:8000/authenticate/", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log(result);
@@ -56,7 +56,7 @@ function ins() {
             redirect: 'follow'
         };
 
-        fetch("http://ec2-13-38-8-225.eu-west-3.compute.amazonaws.com:8000/auth/registration/", requestOptions)
+        fetch("https://retinereq.jetevois.fr:8000/auth/registration/", requestOptions)
             .then(response => response.text())
             .then(result => {
                 if (Object.keys(JSON.parse(result))[0] == 'non_field_errors') {
