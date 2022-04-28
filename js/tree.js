@@ -232,7 +232,7 @@ const validateSondage = () => {
             console.log(result)
             Swal.fire(
                 'Le sondage est publié!',
-                '(c\'est faux)',
+                'https://retine.jetevois.fr/sondage#'+JSON.parse(result)["id"],
                 'success'
             );
         })

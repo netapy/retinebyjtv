@@ -44,7 +44,7 @@ function ins() {
         myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify({
-            "username": document.querySelector('#exampleInputEmail2').value,
+            "email": document.querySelector('#exampleInputEmail2').value,
             "password1": document.querySelector('#exampleInputPassword21').value,
             "password2": document.querySelector('#exampleInputPassword22').value
         });
