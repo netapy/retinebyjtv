@@ -13,7 +13,7 @@
     <title>Rétine - Connexion/Inscription</title>
     <link rel="icon" href="img/favicon.ico" id="light-scheme-favicon" />
     <link rel="icon" href="img/faviconBlanc.ico" id="dark-scheme-favicon" />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="css/front.css" rel="stylesheet">
     <script src="js/c.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -111,6 +111,14 @@
             document.querySelector('#ecranInscr').style.display = 'none';
             document.querySelector('#ecranConnex').style.display = '';
         }
+    };
+
+    if (window.location.href.split("#")[1] == "confirm") {
+        Swal.fire(
+            'Compte activé !',
+            "Vous n'avez plus qu'à vous connecter avec votre identifiant et mot-de-passe.",
+            'success'
+        );
     };
 </script>
 

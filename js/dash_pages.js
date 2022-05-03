@@ -9,7 +9,7 @@ function changePage(destinationHTML, loadingFun) {
 }
 
 //PROJECTS OVERVIEW
-let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"><h1 class="h2">Sondages</h1></div><div id="mesSondages" class="row p-3"><div class="col-12 col-sm-6 col-lg-4  mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;" onclick="changePage(creationStudioInterface, loadCreator);">Créer un<br>nouveau projet</div></div></div>';
+let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"><h1 class="h2">Sondages</h1></div><div id="mesSondages" class="row p-3 w-100"><div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;" onclick="changePage(creationStudioInterface, loadCreator);">Créer un<br>nouveau projet</div></div></div>';
 
 let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column" onclick="changePage(dashSond,loadDataList)"><h3 class="p-3 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP## réponses</div></div></div></div>';
 

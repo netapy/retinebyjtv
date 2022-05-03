@@ -211,7 +211,7 @@ let dicSuiteCible = {
 const validateSondage = () => {
     var myHeaders = new Headers();
     let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
-    myHeaders.append("Authorization", "Token d68c1fd60f47f59d5e3c5f5f393d143ae8c28e4e");
+    myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
