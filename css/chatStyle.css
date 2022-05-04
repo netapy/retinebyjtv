@@ -11,6 +11,11 @@ p {
     margin: auto;
 }
 
+#pourcentageAdv{
+    padding: 10px;
+    color: #464646;
+}
+
 .msgBot {
     background-color: #dedbe1;
     padding: 10px 15px;

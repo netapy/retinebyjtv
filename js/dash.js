@@ -235,4 +235,5 @@ async function queryRtn(link) {
         .catch(error => {
             return error
         });
-}
+};
+

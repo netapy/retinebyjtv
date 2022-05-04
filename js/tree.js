@@ -1,17 +1,4 @@
-let sondageEnCreation = {
-    "jsonContent": [{
-        "q": "Bienvenue dans ce sondage ! 🤗 ",
-        "a": {
-            'type': '1c',
-            'a': ['Démarrer 🚀']
-        }
-    }, {
-        "q": "Merci pour votre participation ! 🎉",
-        "a": {
-            'type': 'fin',
-        }
-    }, ]
-};
+var sondageEnCreation;
 
 const updateCells = () => {
     let theTree = document.querySelector("#theTree")

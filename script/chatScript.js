@@ -1,13 +1,15 @@
 let feed,
     inputZone,
     scrollZone,
-    userAnswers
+    userAnswers,
+    percentAdv
 
 const reiniTialisationChat = (cont) => {
     //DEMO PURPOSE
     feed = document.querySelector('#messageFeed');
     inputZone = document.querySelector('#inputZone');
     scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+    percentAdv = 0;
 
     chatContent = cont;
     feed.innerHTML = "";
@@ -104,7 +106,8 @@ function userSend(content, numQ) {
     let toAdd = "<div class='msgUser'>###</div>".replace("###", content);
     scrollZone.scrollTop = scrollZone.scrollHeight;
     feed.insertAdjacentHTML("beforeend", toAdd);
-
+    percentAdv = Math.round(((parseInt(numQ) + 1) / (chatContent['jsonContent'].length - 1)) * 100)
+    animateCountUp(parseInt(document.querySelector('#pourcentageAdv').innerHTML), percentAdv);
     setTimeout(() => {
         document.querySelectorAll(".msgUser:last-child")[0].style.transform = "scale(1)";
     }, 10);
@@ -161,4 +164,26 @@ function starhHandle(star) {
         ii++
     }
     userSend(stars, star.parentElement.dataset.no)
-}
+};
+
+const animationDuration = 2000;
+const frameDuration = 1000 / 60;
+const totalFrames = Math.round(animationDuration / frameDuration);
+const easeOutQuad = t => t * (2 - t);
+
+const animateCountUp = (depart, arrivee) => {
+    let frame = depart;
+    let el = document.querySelector('#pourcentageAdv');
+    const countTo = arrivee;
+    const counter = setInterval(() => {
+        frame++;
+        const progress = easeOutQuad(frame / totalFrames);
+        const currentCount = Math.round(countTo * progress);
+        if ((arrivee +1) !== currentCount && currentCount > depart) {
+            el.innerHTML = currentCount.toString() + "%";
+        }
+        if (frame === totalFrames) {
+            clearInterval(counter);
+        }
+    }, frameDuration);
+};

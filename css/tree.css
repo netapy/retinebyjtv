@@ -174,3 +174,12 @@
     padding-left: 9px;
     border-left-style: outset;
 }
+
+.creaMenu{
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
