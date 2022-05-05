@@ -227,3 +227,14 @@ const validateSondage = () => {
 
 
 };
+
+function templatebulle() {
+    Swal.fire({
+        html:"<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
+        didRender: (e) => {
+            e.querySelectorAll('.lstTemplates')[0].innerHTML = "Modèle 1";
+            
+        },
+
+    })
+};

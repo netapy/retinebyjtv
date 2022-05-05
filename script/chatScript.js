@@ -44,7 +44,7 @@ function receiveMsg(content) {
         };
         inputt = inputt.concat('<div class="col-12 my-3 text-center"><div class="userBtnInput ml-auto btnEnvoyer" data-no="[#id#]" onclick="validateMultipleChoice(this.dataset.no)">Envoyer</div></div>'.replace("[#id#]", qIndex))
     } else if (answs["type"] == "cl") {
-        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replace("[#id#]", qIndex);
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='validateChampLibre(this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replace("[#id#]", qIndex);
     } else if (answs["type"] == "num") {
         inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-2 m-auto' style='height:fit-content'>-</div><div class='col-8 p-2'><input id='inputUser' class='w-100 h-100 userFieldInput form-range' type='range' min='[#min#]' max='[#max#]' oninput='this.parentElement.previousElementSibling.innerHTML = this.value'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='/img/icons/send-circle.svg'></div></div>".replace("[#id#]", qIndex).replace("[#min#]", answs['a'][0]).replace("[#max#]", answs['a'][1]);
     } else if (answs["type"] == "5s") {
@@ -113,8 +113,8 @@ function userSend(content, numQ) {
     }, 10);
     userAnswers.push({
         "n": numQ,
-        "type": chatContent['jsonContent'][numQ]["a"]["type"],
-        "answ": content
+        "t": chatContent['jsonContent'][numQ]["a"]["type"],
+        "a": content
     });
 
     setTimeout(() => {
@@ -142,7 +142,21 @@ function validateMultipleChoice(number) {
     for (ibtns = 0; ibtns < choices.length; ++ibtns) {
         if (choices[ibtns].style.color == 'white') rep.push(choices[ibtns].innerHTML)
     };
-    userSend(rep.join(", "), number);
+    if (rep.length==0) {
+        console.log("no answer")
+    } else {
+        userSend(rep.join(", "), number);
+    }
+}
+
+function validateChampLibre(number) {
+    let choices = document.getElementsByClassName('mcqChoice');
+    let rep = document.querySelector("#inputUser").value;
+    if (rep.length == 0) {
+        console.log("no answer")
+    } else {
+        userSend(rep, number);
+    }
 }
 
 function answerLength(liste) {
