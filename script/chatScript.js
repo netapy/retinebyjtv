@@ -10,7 +10,7 @@ const reiniTialisationChat = (cont) => {
     inputZone = document.querySelector('#inputZone');
     scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
     percentAdv = 0;
-
+    document.querySelector('#pourcentageAdv').innerHTML = "0%";
     chatContent = cont;
     feed.innerHTML = "";
     inputZone.innerHTML = "";
@@ -43,7 +43,7 @@ function receiveMsg(content) {
             inputt = inputt.concat("<div class='col-12 p-2'><div class='userBtnInput mcqChoice' onclick='multipleChoiceBeh(this)'>[#cont#]</div></div>".replace("[#cont#]", answs['a'][aa]));
         };
         inputt = inputt.concat('<div class="col-12 my-3 text-center"><div class="userBtnInput ml-auto btnEnvoyer" data-no="[#id#]" onclick="validateMultipleChoice(this.dataset.no)">Envoyer</div></div>'.replace("[#id#]", qIndex))
-    } else if (answs["type"] == "cl") {
+    } else if (answs["type"] == "cl" || answs["type"] == "sent") {
         inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' ></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='validateChampLibre(this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replace("[#id#]", qIndex);
     } else if (answs["type"] == "num") {
         inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-2 m-auto' style='height:fit-content'>-</div><div class='col-8 p-2'><input id='inputUser' class='w-100 h-100 userFieldInput form-range' type='range' min='[#min#]' max='[#max#]' oninput='this.parentElement.previousElementSibling.innerHTML = this.value'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='userSend(document.querySelector(\"#inputUser\").value, this.dataset.no)'><img src='/img/icons/send-circle.svg'></div></div>".replace("[#id#]", qIndex).replace("[#min#]", answs['a'][0]).replace("[#max#]", answs['a'][1]);

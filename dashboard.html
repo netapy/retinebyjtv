@@ -36,7 +36,7 @@
 
 <body id="body-pd" class="m-auto">
     <nav id="header" class="navbar sticky-top flex-md-nowrap p-0" style="position: absolute; top:12px">
-        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: black;"></i> </div>
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
     </nav>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
@@ -47,7 +47,8 @@
                 </a>
                 <hr class="pl-5">
                 <div class="nav_list">
-                    <a href="#" id="creatorTabBtn" class="nav_link" onclick="changePage(creationStudioInterface, loadCreator);"> <i class='bx bx-paint nav_icon'></i>
+                    <a href="#" id="creatorTabBtn" class="nav_link" onclick="changePage(creationStudioInterface, loadCreator);"> <i
+                            class='bx bx-paint nav_icon'></i>
                         <span class="nav_name">Créer</span> </a>
                     <a href="#" class="nav_link active" onclick="changePage(dashProj, loadProjList);"> <i class='bx bx-grid-alt nav_icon'></i> <span
                             class="nav_name">Dashboard</span> </a>
@@ -75,7 +76,7 @@
 <script src="js/tree.js"></script>
 <script src="js/tour.js"></script>
 <script>
-    if(xxgc('rtnt')==null) window.location.href="compte.html";
+    if (xxgc('rtnt') == null) window.location.href = "compte.html";
     let scode = "demo";
     changePage(dashProj, loadProjList);
 </script>

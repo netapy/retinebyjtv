@@ -91,7 +91,7 @@ p {
     overflow:hidden;
     white-space:nowrap;
     cursor:pointer;
-    font-size:40px;
+    font-size:2rem;
     color:#ccc;
 }
 .rate:not(:checked) > label:before {
@@ -113,5 +113,5 @@ p {
 }
 
 .rate > * {
-    transition: all .3s ease-in-out;
+    transition: all .2s ease-out;
 }

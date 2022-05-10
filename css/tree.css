@@ -15,6 +15,21 @@
     padding: 12px 0px;
 }
 
+#titreSond {
+    padding: 10px;
+    margin-bottom: 1rem;
+    max-width: 72vw;
+    width: 500px;
+    border-style: none;
+    font-size: 1.4rem;
+    text-align: center;
+    border-radius: 15px;
+    background: #FAF7FF;
+    box-shadow: 10px 10px 12px #f0edf5, -10px -10px 12px #ffffff;
+    color: #6219d8;
+    font-family: 'Lexend Deca';
+}
+
 /* It's supposed to look like a tree diagram */
 .tree,
 .tree ul,
@@ -177,7 +192,7 @@
     border-left-style: outset;
 }
 
-.creaMenu{
+.creaMenu {
     padding: 10px;
     border-radius: 10px;
     display: flex;
@@ -186,7 +201,7 @@
     font-size: 1.2rem;
 }
 
-.temlateBtn{
+.temlateBtn {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -207,13 +222,16 @@
     transition-duration: 0.3s;
     -webkit-transition-property: transform;
     transition-property: transform;
-  }
-  .hvr-forward:hover, .hvr-forward:focus, .hvr-forward:active {
+}
+
+.hvr-forward:hover,
+.hvr-forward:focus,
+.hvr-forward:active {
     -webkit-transform: translateX(8px);
     transform: translateX(8px);
-  }
+}
 
-  .lstTemplates{
-      padding: 20px 10px;
-      text-align: left;
-  }
+.lstTemplates {
+    padding: 20px 10px;
+    text-align: left;
+}

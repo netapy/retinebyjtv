@@ -195,14 +195,32 @@ let dicSuiteCible = {
     "inco": "ciblés par Rétine sur les réseaux sociaux."
 };
 
+function templatebulle() {
+    Swal.fire({
+        html:"<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
+        didRender: (e) => {
+            e.querySelectorAll('.lstTemplates')[0].innerHTML = "Modèle 1";
+            
+        },
+
+    })
+};
+
 const validateSondage = () => {
+    ttrSond = document.querySelector('#titreSond')
+    if (ttrSond.value == "") {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return
+    };
+
+    console.log("Envoi du sondage");
     var myHeaders = new Headers();
     let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
     myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-        "nom_proj": "Sondage1",
+        "nom_proj": ttrSond.value,
         "jsonContent": contenuSondage,
     });
 
@@ -219,22 +237,10 @@ const validateSondage = () => {
             console.log(result)
             Swal.fire(
                 'Le sondage est publié!',
-                'https://retine.jetevois.fr/sondage#'+JSON.parse(result)["id"],
+                'retine.jetevois.fr/sondage#'+JSON.parse(result)["id"],
                 'success'
             );
         })
         .catch(error => console.log('error', error));
-
-
 };
 
-function templatebulle() {
-    Swal.fire({
-        html:"<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
-        didRender: (e) => {
-            e.querySelectorAll('.lstTemplates')[0].innerHTML = "Modèle 1";
-            
-        },
-
-    })
-};
