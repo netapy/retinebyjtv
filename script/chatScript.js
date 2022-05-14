@@ -145,7 +145,7 @@ function validateMultipleChoice(number) {
     if (rep.length==0) {
         console.log("no answer")
     } else {
-        userSend(rep.join(", "), number);
+        userSend(rep.join(" ; "), number);
     }
 }
 

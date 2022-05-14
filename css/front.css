@@ -91,11 +91,12 @@ h5 {
 }
 
 .neuProjetSimple {
-    border-radius: 18px;
-    background: #FAF7FF;
     transition: all .3s ease-in-out;
-    box-shadow: 5px 5px 10px #f5f2fa,
-        -5px -5px 10px #fffcff;
+    border-radius: 31px;
+    background: #FAF7FF;
+    box-shadow: 5px 5px 14px #e9e6ed,
+        -5px -5px 14px #ffffff;
+    margin: 10px;
 }
 
 .sondInfo {
@@ -110,7 +111,7 @@ h5 {
 
 .canvContain {
     margin: auto;
-    padding: 20px 0px;
+    padding: 30px 0px;
     width: 90%;
     max-height: 300px;
 }
@@ -421,4 +422,46 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.btnExport {
+    border-radius: 10px;
+    border-style: dashed;
+    border-color: grey;
+    background-color: transparent;
+    border-width: 1.5px;
+    width: fit-content;
+    padding: 7px;
+    margin: 5px;
+    font-size: .9rem;
+}
+
+.liveBtn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    animation: breathing 5s ease-out infinite;
+    font-size: .9rem;
+    color: #E74C3C;
+}
+
+@keyframes breathing {
+    0% {
+        -webkit-transform: scale(0.97);
+        -ms-transform: scale(0.97);
+        transform: scale(0.97);
+    }
+
+    50% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+
+    100% {
+        -webkit-transform: scale(0.97);
+        -ms-transform: scale(0.97);
+        transform: scale(0.97);
+    }
+
 }

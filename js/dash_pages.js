@@ -28,13 +28,13 @@ const loadProjList = async () => {
     userProjects = JSON.parse(userProjects);
     for (ii in userProjects) {
         zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length));
-    }
+    };
 };
 
 //SONDAGE DISPLAY
-let dashSond = '<div id="headerBar" class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-around w-100 px-5 py-2 mb-3 mt-5" style="position:relative;"></div><div id="mesResultats" class="row p-1"></div>'
+let dashSond = '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></div><div id="mesResultats" class="row p-1"></div>'
 
-let templateDataList = '<div class="neuProjetSimple p-4 text-center"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"><canvas></canvas></div></div><button class="screenBtn" onclick="copyGraph(this.previousSibling)">📄 Copier le graphique</button></div>'
+let templateDataList = '<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="50"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"><canvas></canvas></div></div><button class="screenBtn" onclick="copyGraph(this.previousSibling)">📄 Copier le graphique</button></div>'
 
 const loadDataList = async (num) => {
     document.querySelector("#header-toggle").parentElement.insertAdjacentHTML('beforeEnd', '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>')
@@ -46,10 +46,15 @@ const loadDataList = async (num) => {
     let zoneProjs = document.querySelector("#mesResultats");
 
     //Création du header
-    document.querySelector("#headerBar").innerHTML = '<h1 class="h2 mb-0" id="titreEtude">##NOMPROJ##</h1><div> </div>'.replace("##NOMPROJ##", projectInfo["nom_proj"])
+    document.querySelector("#headerBar").innerHTML = '<h1 class="mt-3 mb-5" id="titreEtude" style="font-size:3rem;">##NOMPROJ##</h1><div class="border-bottom w-75 mx-auto mb-3"></div>'.replace("##NOMPROJ##", projectInfo["nom_proj"])
+
+    //LIVE REFRESH A INCLURE PLUS TARD
+    let liveBtn = '<div class="liveBtn">🔴 Données en direct</div>'
+    document.body.insertAdjacentHTML("beforeend",liveBtn)
 
     //Création de la barre d'outils
-    let htmlToolBar = "<div class='col-12 col-lg-12 p-3'><div class='neuProjetSimple p-4 text-center'><div class='row'><div class='col-4'>Supprimer le sondage</div><div class='col-4'>Exporter les données</div><div class='col-4'>Exporter les données</div></div></div></div>";
+    let htmlToolBar = "<div class='col-12 col-lg-12 px-3'><button class='btnExport p-1 px-3 hvr-float' onclick='alert(\"Export des données\")'><i class='bx bx-export px-1'></i>Exporter les données</button><button class='btnExport p-1 px-3 hvr-float' onclick='delSondRtn(" + num.toString() + ")'><i class='bx bx-trash px-1'></i>Supprimer le sondage</button></div>";
+
     document.querySelector("#mesResultats").insertAdjacentHTML("afterbegin", htmlToolBar)
 
     //Création graph réponses
@@ -74,16 +79,6 @@ const loadDataList = async (num) => {
                 legend: {
                     display: false
                 }
-            },
-            datalabels: {
-                color: 'black',
-                labels: {
-                    title: {
-                        font: {
-                            weight: 'bold'
-                        }
-                    },
-                }
             }
         }
     });
@@ -96,9 +91,14 @@ const loadDataList = async (num) => {
         } else {
             let elem = document.createElement("div");
             elem.classList = "col-12 col-lg-6 p-3";
-            elem.innerHTML = templateDataList.replace("##TTRQUEST##", projectQuestions[ii]["q"]).replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["data"][ii]["d"].length);
+            elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString()+ ". " + projectQuestions[ii]["q"]).replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["data"][ii]["d"].length);
             if (['mc', '1c'].includes(sondageData["data"][ii]["t"])) {
-                let uniqueLabels = [...new Set(sondageData["data"][ii]["d"])];
+                let uniqueLabels;
+                if (sondageData["data"][ii]["t"] == 'mc') {
+                    uniqueLabels = sondageData["data"][ii]["d"].map(x => x.split(' ; ')).flat();
+                } else {
+                    uniqueLabels = [...new Set(sondageData["data"][ii]["d"])];
+                }
                 new Chart(elem.querySelector('canvas'), {
                     type: 'pie',
                     data: {
@@ -190,12 +190,13 @@ const loadDataList = async (num) => {
             zoneProjs.insertAdjacentElement("beforeend", elem);
         }
     };
+    AOS.init();
 };
 
 
 //CREATEUR DISPLAY
 
-let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du sondage"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100"> <div class="temlateBtn hvr-forward" onclick="templatebulle()">📚 Charger un modèle</div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row w-100"> <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible" onchange="document.querySelector(\'#suiteCible\').innerHTML=dicSuiteCible[this.value]" style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;"> <option value="conn">connaissances</option> <option value="inco">inconnus</option> </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
+let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100"> <div class="temlateBtn hvr-forward" onclick="templatebulle()">📚 Charger un modèle</div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row w-100"> <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible" onchange="document.querySelector(\'#suiteCible\').innerHTML=dicSuiteCible[this.value]" style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;"> <option value="conn">connaissances</option> <option value="inco">inconnus</option> </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
 
 const loadCreator = () => {
     sondageEnCreation = {

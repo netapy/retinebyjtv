@@ -156,6 +156,45 @@ async function queryRtn(link) {
         });
 };
 
+async function delSondRtn(num) {
+    Swal.fire({
+        title: 'Supprimer le sondage?',
+        text: "Vous ne pourrez plus revenir en arrière.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Supprimer le sondage',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
+
+            var requestOptions = {
+                method: 'DELETE',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            return fetch("https://retinereq.jetevois.fr:8000/sondages/" + num + "/", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    Swal.fire(
+                        'Sondage supprimé',
+                        'Votre sondage ainsi que les réponses ont été supprimés.',
+                        'success'
+                    );
+                    changePage(dashProj, loadProjList);
+                    return result
+                })
+                .catch(error => {
+                    return error
+                });
+        }
+    })
+};
+
 function shareBtn(e) {
     navigator.clipboard.writeText("retine.jetevois.fr/sondage#" + e.toString()).then(function () {
         Swal.fire(
