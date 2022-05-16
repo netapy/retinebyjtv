@@ -71,6 +71,7 @@ const loadDataList = async (num) => {
                 data: champDeDates.map(el => countOccurrences(sondageData['time'], el)),
                 tension: 0.2,
                 backgroundColor: '#6219D8',
+                borderRadius: 5,
             }]
         },
         options: {
@@ -80,6 +81,9 @@ const loadDataList = async (num) => {
             plugins: {
                 legend: {
                     display: false
+                },
+                datalabels: {
+                    color: 'white',
                 }
             }
         }
@@ -115,14 +119,16 @@ const loadDataList = async (num) => {
                             },
                             datalabels: {
                                 color: 'black',
-                                labels: {
-                                    title: {
-                                        font: {
-                                            weight: 'bold'
-                                        }
-                                    },
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = ctx.chart.data.labels[ctx.dataIndex] + "\n" + (value * 100 / sum).toFixed(1) + "%";
+                                    return percentage;
                                 },
-                                formatter: (val, ctx) => (ctx.chart.data.labels[ctx.dataIndex])
+                                textAlign: "center",
                             }
                         }
                     }
@@ -164,7 +170,7 @@ const loadDataList = async (num) => {
                 let uniqueLabels = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"];
                 let dataMc = sondageData["data"][ii]["d"]['detail'];
 
-                starHtml = '<div class="starContain py-3"><div class="mb-3">Note moyenne de ##STARS##</div><div class="stars"> <svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg> <div class="cover" style="width: ##PERCENT##%;"></div></div></div>'.replace("##PERCENT##", 100 - (sondageData["data"][ii]["d"]["main"] * 100) / 5).replace("##STARS##", sondageData["data"][ii]["d"]["main"]);
+                starHtml = '<div class="starContain py-5"><div class="mb-3">Note moyenne de ##STARS##</div><div class="stars"> <svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg> <div class="cover" style="width: ##PERCENT##%;"></div></div></div>'.replace("##PERCENT##", 100 - (sondageData["data"][ii]["d"]["main"] * 100) / 5).replace("##STARS##", sondageData["data"][ii]["d"]["main"]);
 
                 const toggleCanv = (btn) => {
                     if (btn.target.dataset.state == "simple") {
@@ -174,12 +180,14 @@ const loadDataList = async (num) => {
                         console.log(dataMc);
                         elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
                         new Chart(elem.querySelector("canvas"), {
+                            plugins: [ChartDataLabels],
                             type: 'bar',
                             data: {
                                 labels: uniqueLabels,
                                 datasets: [{
                                     data: Object.values(dataMc),
                                     backgroundColor: "#6219D8",
+                                    borderRadius: 5,
                                 }]
                             },
                             options: {
@@ -192,6 +200,9 @@ const loadDataList = async (num) => {
                                         display: false,
                                         reversed: true
                                     },
+                                    datalabels: {
+                                        color: 'white',
+                                    }
                                 }
                             }
                         });
@@ -211,42 +222,81 @@ const loadDataList = async (num) => {
 
 
             } else if (['num'].includes(sondageData["data"][ii]["t"])) {
-                if (1 == 1) {
-                    console.log("ef");
-                } else {
-                    elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
-                    new Chart(elem.querySelector('canvas'), {
-                        type: 'bar',
-                        data: {
-                            labels: ['Minimum', 'Quartile 1', 'Moyenne', 'Quartile 2', 'Maximum', 'Écart type'],
-                            datasets: [{
-                                label: [sondageData["data"][ii]["t"]], //REMPLACER PAR UNITé
-                                data: Object.values(sondageData["data"][ii]["d"]),
-                                backgroundColor: numChartColors,
-                            }]
-                        },
-                        options: {
-                            scales: scaleParam,
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
+                let dataNum = sondageData["data"][ii]["d"];
+                elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
+                new Chart(elem.querySelector("canvas"), {
+                    plugins: [ChartDataLabels],
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(dataNum["detail"]),
+                        datasets: [{
+                            label: "Répartition",
+                            data: Object.values(dataNum["detail"]),
+                            backgroundColor: "#6219D8",
+                            borderRadius: 5,
+                        }, {
+                            label: "Moyenne",
+                            data: [{
+                                x: dataNum["main"],
+                                y: Math.max.apply(Math, Object.values(dataNum["detail"])) + 1
+                            }],
+                            backgroundColor: "#2FCC72",
+                            type: 'bar',
+                            xAxisID: 'x1',
+                            maxBarThickness: 5,
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                display: false,
+                                grid: {
+                                    drawOnChartArea: false,
                                 },
-                                datalabels: {
-                                    color: 'black',
-                                    labels: {
-                                        title: {
-                                            font: {
-                                                weight: 'bold'
-                                            }
-                                        },
-                                    }
+                            },
+                            x: {
+                                display: true,
+                                position: 'bottom',
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            },
+                            x1: {
+                                type: 'linear',
+                                display: false,
+                                position: 'bottom',
+                                min: parseInt(Object.keys(dataNum["detail"]).at(0).split(",").at(0).replace('.0', '').replace(/\D/g, '')),
+                                max: parseInt(Object.keys(dataNum["detail"]).at(-1).split(",").at(-1).replace('.0', '').replace(/\D/g, '')),
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            },
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    padding: 10,
+                                }
+                            },
+                            tooltip: {
+                                filter: function (tooltipItem) {
+                                    return tooltipItem.datasetIndex === 0;
+                                }
+                            },
+                            datalabels: {
+                                color: 'white',
+                                formatter: function (value, context) {
+                                    console.log(context)
+                                    return value;
                                 }
                             }
                         }
-                    });
-                }
+                    }
+                });
+
             };
             zoneProjs.insertAdjacentElement("beforeend", elem);
         }
