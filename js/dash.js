@@ -1,58 +1,3 @@
-let sondageTest = {
-    "nomProj": "Les films en France",
-    "projColor": "#6219D8",
-    "creaDate": "08-02-2022",
-    "projId": "256853",
-    "nbRep": 250,
-    "data": [{
-            "q": "Quel est votre film préféré ?",
-            "t": "mc",
-            "r": 120,
-            "d": {
-                'Ratatouille': 52,
-                'James Bond': 32,
-                'blabla': 12
-            },
-        },
-        {
-            "q": "Quel est votre budget cinéma mensuel ?",
-            "t": "num",
-            "r": 120,
-            "d": {
-                'min': 5,
-                'q1': 28,
-                'mean': 76,
-                'q3': 110,
-                'max': 120,
-                "std": 20
-            },
-        },
-        {
-            "q": "Quelle note ?",
-            "t": "num",
-            "r": 90,
-            "d": {
-                'min': 8,
-                'q1': 14,
-                'mean': 54,
-                'q3': 60,
-                'max': 90,
-                "std": 20
-            },
-        },
-        {
-            "q": "Décrivez votre séance de cinéma",
-            "t": "cl",
-            "r": 120,
-            "d": {
-                'Positif': 52,
-                'Negatif': 12
-            },
-        },
-    ],
-};
-
-
 let chartColors = ['#2a00ac', '#7332e6', '#b768ff', '#f2a5fe', '#b7c0c6', '#848c92', '#545c61', '#283034'];
 
 let numChartColors = [
@@ -215,3 +160,4 @@ var getDaysArray = function (s, e) {
     }
     return a;
 };
+

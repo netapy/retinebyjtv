@@ -34,7 +34,7 @@ const loadProjList = async () => {
 //SONDAGE DISPLAY
 let dashSond = '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></div><div id="mesResultats" class="row p-1"></div>'
 
-let templateDataList = '<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="50"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"><canvas></canvas></div></div><button class="screenBtn" onclick="copyGraph(this.previousSibling)">📄 Copier le graphique</button></div>'
+let templateDataList = '<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="50"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"></div></div><button class="screenBtn" onclick="copyGraph(this.previousSibling)">📄 Copier le graphique</button></div>'
 
 const loadDataList = async (num) => {
     document.querySelector("#header-toggle").parentElement.insertAdjacentHTML('beforeEnd', '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>')
@@ -50,7 +50,7 @@ const loadDataList = async (num) => {
 
     //LIVE REFRESH A INCLURE PLUS TARD
     let liveBtn = '<div class="liveBtn">🔴 Données en direct</div>'
-    document.body.insertAdjacentHTML("beforeend",liveBtn)
+    document.body.insertAdjacentHTML("beforeend", liveBtn)
 
     //Création de la barre d'outils
     let htmlToolBar = "<div class='col-12 col-lg-12 px-3'><button class='btnExport p-1 px-3 hvr-float' onclick='alert(\"Export des données\")'><i class='bx bx-export px-1'></i>Exporter les données</button><button class='btnExport p-1 px-3 hvr-float' onclick='delSondRtn(" + num.toString() + ")'><i class='bx bx-trash px-1'></i>Supprimer le sondage</button></div>";
@@ -61,7 +61,9 @@ const loadDataList = async (num) => {
     let elemTimeRep = document.createElement("div");
     elemTimeRep.classList = "col-12 col-lg-12 p-3";
     elemTimeRep.innerHTML = templateDataList.replace("##TTRQUEST##", "Evolution du nombre de réponses").replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["time"].length).replace("##id##", "capt");
+    elemTimeRep.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
     new Chart(elemTimeRep.querySelector('canvas'), {
+        plugins: [ChartDataLabels],
         type: 'bar',
         data: {
             labels: champDeDates,
@@ -84,27 +86,23 @@ const loadDataList = async (num) => {
     });
     zoneProjs.insertAdjacentElement("beforeend", elemTimeRep);
 
-
     for (ii in sondageData["data"]) {
         if (projectQuestions[ii]["a"]["type"] == "1c" && projectQuestions[ii]["a"]["a"].length == 1) {
             null
         } else {
             let elem = document.createElement("div");
             elem.classList = "col-12 col-lg-6 p-3";
-            elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString()+ ". " + projectQuestions[ii]["q"]).replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["data"][ii]["d"].length);
+            elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString() + ". " + projectQuestions[ii]["q"]).replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["data"][ii]['nbrep']);
             if (['mc', '1c'].includes(sondageData["data"][ii]["t"])) {
-                let uniqueLabels;
-                if (sondageData["data"][ii]["t"] == 'mc') {
-                    uniqueLabels = sondageData["data"][ii]["d"].map(x => x.split(' ; ')).flat();
-                } else {
-                    uniqueLabels = [...new Set(sondageData["data"][ii]["d"])];
-                }
+                let dataMc = sondageData["data"][ii]["d"];
+
+                elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
                 new Chart(elem.querySelector('canvas'), {
                     type: 'pie',
                     data: {
-                        labels: uniqueLabels,
+                        labels: dataMc,
                         datasets: [{
-                            data: uniqueLabels.map(el => countOccurrences(sondageData["data"][ii]["d"], el)),
+                            data: dataMc,
                             backgroundColor: chartColors,
                         }]
                     },
@@ -130,15 +128,39 @@ const loadDataList = async (num) => {
                     }
                 });
             } else if (['cl'].includes(sondageData["data"][ii]["t"])) {
-                elem.querySelector('canvas').innerHTML = sondageData["data"][ii]["d"];
+                elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
+                var config = {
+                    type: 'wordCloud',
+                    data: {
+                        labels: Object.keys(sondageData["data"][ii]["d"]),
+                        datasets: [{
+                            label: "",
+                            color:'#6219D8',
+                            //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
+                            data: Object.values(sondageData["data"][ii]["d"]).map((d) => 10 + d * 5),
+                        }, ],
+                    },
+                    options: {
+                        plugins:{
+                            legend:{
+                                display:false
+                            }
+                        }
+                    },
+                };
+                var ctx = elem.querySelector('canvas').getContext('2d');
+                new ChartWordCloud.WordCloudChart(ctx, config);
+
             } else if (['5s'].includes(sondageData["data"][ii]["t"])) {
                 let uniqueLabels = ["⭐⭐⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐", "⭐⭐", "⭐"];
+                let dataMc = sondageData["data"][ii]["d"]['detail'];
+
+                elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
                 new Chart(elem.querySelector('canvas'), {
-                    type: 'bar',
+                    type: 'line',
                     data: {
-                        labels: uniqueLabels,
                         datasets: [{
-                            data: uniqueLabels.map(el => countOccurrences(sondageData["data"][ii]["d"], el)),
+                            data: dataMc,
                             backgroundColor: "#6219D8",
                         }]
                     },
@@ -155,37 +177,42 @@ const loadDataList = async (num) => {
                     }
                 });
             } else if (['num'].includes(sondageData["data"][ii]["t"])) {
-                new Chart(elem.querySelector('canvas'), {
-                    type: 'bar',
-                    data: {
-                        labels: ['Minimum', 'Quartile 1', 'Moyenne', 'Quartile 2', 'Maximum', 'Écart type'],
-                        datasets: [{
-                            label: sondageData["data"][ii]["t"], //REMPLACER PAR UNITé
-                            data: Object.values(sondageData["data"][ii]["d"]),
-                            backgroundColor: numChartColors,
-                        }]
-                    },
-                    options: {
-                        scales: scaleParam,
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            datalabels: {
-                                color: 'black',
-                                labels: {
-                                    title: {
-                                        font: {
-                                            weight: 'bold'
-                                        }
-                                    },
+                if (1 == 1) {
+                    console.log("ef");
+                } else {
+                    elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
+                    new Chart(elem.querySelector('canvas'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Minimum', 'Quartile 1', 'Moyenne', 'Quartile 2', 'Maximum', 'Écart type'],
+                            datasets: [{
+                                label: [sondageData["data"][ii]["t"]], //REMPLACER PAR UNITé
+                                data: Object.values(sondageData["data"][ii]["d"]),
+                                backgroundColor: numChartColors,
+                            }]
+                        },
+                        options: {
+                            scales: scaleParam,
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    labels: {
+                                        title: {
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        },
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             };
             zoneProjs.insertAdjacentElement("beforeend", elem);
         }
