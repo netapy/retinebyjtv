@@ -3,7 +3,10 @@ let userProjects
 
 //functions
 function changePage(destinationHTML, loadingFun, sondageNum = 0) {
-    if (document.querySelectorAll(".bx-arrow-back").length > 0) document.querySelectorAll(".bx-arrow-back")[0].remove();
+    if (document.querySelectorAll(".bx-arrow-back").length > 0) {
+        document.querySelectorAll(".bx-arrow-back")[0].remove();
+        document.querySelectorAll(".liveBtn")[0].remove();
+    }
     let theMain = document.querySelector("main")
     theMain.style.opacity = 0;
     setTimeout(() => {
@@ -134,37 +137,91 @@ const loadDataList = async (num) => {
                     }
                 });
             } else if (['cl'].includes(sondageData["data"][ii]["t"])) {
-                elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
-                var config = {
-                    type: 'wordCloud',
-                    data: {
-                        labels: Object.keys(sondageData["data"][ii]["d"]),
-                        datasets: [{
-                            label: "",
-                            color: '#6219D8',
-                            //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
-                            data: Object.values(sondageData["data"][ii]["d"]).map((d) => 10 + d * 5),
-                        }, ],
-                    },
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: false
+                let sentimentHtml = '<div id="gauge3" class="w-100 gauge-container three" style="max-width:200px;"><span class="label"></span></div><div class="starContain py-2 px-3 text-left m-auto" style="font-size:.8rem; opacity:.9; border-radius:10px">💡 Sentiment moyen calculé par Rétine à l\'aide d\'algorithmes d\'intelligence artificielle.</div>'
+                let dataCl = sondageData["data"][ii]["d"];
+                elem.querySelector('.canvContain').innerHTML = sentimentHtml;
+
+                const toggleCanv = (btn) => {
+                    if (btn.target.dataset.state == "simple") {
+                        elem.querySelector('.canvContain').innerHTML = sentimentHtml;
+                        setTimeout(() => {
+                            let gauge32 = Gauge(
+                                document.getElementById("gauge3"), {
+                                    max: 100,
+                                    value: 0,
+                                    color: function (value) {
+                                        if (value < 60) {
+                                            return "#6219D8";
+                                        } else if (value < 25) {
+                                            return "#E74C3C";
+                                        } else {
+                                            return "#2FCC72";
+                                        }
+                                    },
+                                    label: function (value) {
+                                        if (value < 10) {
+                                            return "😡\n" + Math.round(value)
+                                        } else if (value < 25) {
+                                            return "😕\n" + Math.round(value)
+                                        } else if (value < 50) {
+                                            return "😐\n" + Math.round(value)
+                                        } else if (value < 75) {
+                                            return "🙂\n" + Math.round(value)
+                                        } else if (value <= 100) {
+                                            return "😃\n" + Math.round(value)
+                                        }
+                                    },
+                                }
+                            );
+                            setTimeout(() => {
+                                gauge32.setValueAnimated(dataCl["sentMoy"]*100, 1.5);
+                            }, 100);    
+                        }, 1);
+
+                        btn.target.dataset.state = "detail";
+                    } else {
+                        elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
+                        new ChartWordCloud.WordCloudChart(elem.querySelector('canvas').getContext('2d'), {
+                            type: 'wordCloud',
+                            data: {
+                                labels: Object.keys(dataCl['nuage']),
+                                datasets: [{
+                                    label: "",
+                                    color: '#6219D8',
+                                    //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
+                                    data: Object.values(dataCl["nuage"]).map((d) => 15 + d * 5),
+                                }, ],
                             },
-                            tooltips: {
-                                mode: 'label',
-                                callbacks: {
-                                    label: function (tooltipItem, data) {
-                                        var indice = tooltipItem.index;
-                                        return data.labels[indice] + ': ' + data.datasets[0].data[indice] + '';
-                                    }
+                            options: {
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltips: {
+                                        mode: 'label',
+                                        callbacks: {
+                                            label: function (tooltipItem, data) {
+                                                var indice = tooltipItem.index;
+                                                return data.labels[indice] + ': ' + data.datasets[0].data[indice] + '';
+                                            }
+                                        }
+                                    },
                                 }
                             },
-                        }
-                    },
-                };
-                var ctx = elem.querySelector('canvas').getContext('2d');
-                new ChartWordCloud.WordCloudChart(ctx, config);
+                        });
+                        btn.target.dataset.state = "simple";
+                    }
+                }
+
+
+                let btnDetail = document.createElement("button");
+                btnDetail.innerHTML = "➕ Détails";
+                btnDetail.className = "screenBtn";
+                btnDetail.dataset.state = "simple";
+                btnDetail.addEventListener("click", toggleCanv, false);
+                elem.querySelector('.screenBtn').insertAdjacentElement('afterend', btnDetail);
+
+                btnDetail.click();
 
             } else if (['5s'].includes(sondageData["data"][ii]["t"])) {
                 let uniqueLabels = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"];
@@ -177,7 +234,6 @@ const loadDataList = async (num) => {
                         elem.querySelector('.canvContain').innerHTML = starHtml;
                         btn.target.dataset.state = "detail";
                     } else {
-                        console.log(dataMc);
                         elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
                         new Chart(elem.querySelector("canvas"), {
                             plugins: [ChartDataLabels],
@@ -185,7 +241,7 @@ const loadDataList = async (num) => {
                             data: {
                                 labels: uniqueLabels,
                                 datasets: [{
-                                    data: Object.values(dataMc),
+                                    data: [dataMc['1'], dataMc['2'], dataMc['3'], dataMc['4'], dataMc['5']],
                                     backgroundColor: "#6219D8",
                                     borderRadius: 5,
                                 }]
@@ -224,16 +280,28 @@ const loadDataList = async (num) => {
             } else if (['num'].includes(sondageData["data"][ii]["t"])) {
                 let dataNum = sondageData["data"][ii]["d"];
                 elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
+                elem.querySelector("h5").insertAdjacentHTML("beforeend", "<span style='font-size:1rem;opacity:.6;'>(en " + projectQuestions[ii]["a"]["a"][2] + ")</span>")
                 new Chart(elem.querySelector("canvas"), {
                     plugins: [ChartDataLabels],
                     type: 'bar',
                     data: {
-                        labels: Object.keys(dataNum["detail"]),
+                        labels: Object.keys(dataNum["detail"]).map(x => x.replaceAll(".0", "")),
                         datasets: [{
                             label: "Répartition",
                             data: Object.values(dataNum["detail"]),
                             backgroundColor: "#6219D8",
                             borderRadius: 5,
+                            datalabels: {
+                                display: true,
+                                color: 'white',
+                                formatter: function (value, context) {
+                                    if (value == 0) {
+                                        return ""
+                                    } else {
+                                        return value
+                                    }
+                                }
+                            }
                         }, {
                             label: "Moyenne",
                             data: [{
@@ -243,7 +311,15 @@ const loadDataList = async (num) => {
                             backgroundColor: "#2FCC72",
                             type: 'bar',
                             xAxisID: 'x1',
-                            maxBarThickness: 5,
+                            maxBarThickness: 8,
+                            datalabels: {
+                                display: true,
+                                color: 'black',
+                                textAlign: "center",
+                                formatter: function (value, context) {
+                                    return "Moyenne\n" + context.dataset.data[0].x.toString();
+                                }
+                            }
                         }]
                     },
                     options: {
@@ -276,7 +352,7 @@ const loadDataList = async (num) => {
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: true,
+                                display: false,
                                 labels: {
                                     padding: 10,
                                 }
@@ -287,11 +363,7 @@ const loadDataList = async (num) => {
                                 }
                             },
                             datalabels: {
-                                color: 'white',
-                                formatter: function (value, context) {
-                                    console.log(context)
-                                    return value;
-                                }
+                                display: false,
                             }
                         }
                     }
@@ -307,7 +379,7 @@ const loadDataList = async (num) => {
 
 //CREATEUR DISPLAY
 
-let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100"> <div class="temlateBtn hvr-forward" onclick="templatebulle()">📚 Charger un modèle</div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row w-100"> <div class="col-12 col-md-8 py-2 pr-1 pl-0" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div>🔎 Je souhaite cibler des <select name="Ciblage" id="defCible" onchange="document.querySelector(\'#suiteCible\').innerHTML=dicSuiteCible[this.value]" style="background: #6219d800; border: 0;text-decoration: underline; color: #6219D8;"> <option value="conn">connaissances</option> <option value="inco">inconnus</option> </select> <span id="suiteCible">à qui je vais envoyer le lien du sondage.</span></div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
+let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100"><div class="dureeEstim">⏲️ Durée estimée : <span id=""></span></div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row w-100"> <div class="col-12 col-md-8 py-2 pr-1 pl-0 hvr-float" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div class="temlateBtn" onclick="templatebulle()">📚 Charger un modèle...</div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0 hvr-float" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
 
 const loadCreator = () => {
     sondageEnCreation = {

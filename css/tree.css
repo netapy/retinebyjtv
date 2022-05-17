@@ -99,6 +99,7 @@
     transition: all .2s ease-in-out;
     border-width: 2px;
     border-color: #7575757b;
+    max-width: 420px;
 }
 
 .firstQ {
@@ -124,7 +125,7 @@
 }
 
 .tree ul:before {
-    top: -.5em;
+    top: -.4em;
 }
 
 .tree code:before,
@@ -149,6 +150,7 @@
     border-width: 1.5px !important;
     color: #535353 !important;
     border-color: #b6b6b6 !important;
+    margin-bottom: 0px !important;
 }
 
 .fieldQ {
@@ -202,13 +204,10 @@
 }
 
 .temlateBtn {
-    position: absolute;
-    top: 0px;
-    left: 0px;
     padding: 8px;
     cursor: pointer;
     opacity: .8;
-    font-size: .8rem;
+    font-size: 1.2rem;
 }
 
 /* Forward */

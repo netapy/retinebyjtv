@@ -76,7 +76,7 @@ const createCell = (elem) => {
             } else if (qtype == "5s") {
                 qA = "no";
             } else if (qtype == "num") {
-                qA = [document.querySelector('#nbMin').value, document.querySelector('#nbMax').value];
+                qA = [document.querySelector('#nbMin').value, document.querySelector('#nbMax').value, document.querySelector('#uniteeChoice').value];
             };
             let repFinal = {
                 "q": document.querySelector("#outQuestion").value,
@@ -135,7 +135,7 @@ let dicQFields = {
     "1c": "<h5>Les réponses</h5>" + inputQForm,
     "mc": "<h5>Les réponses</h5>" + inputQForm,
     "cl": '<div><label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100"></div><div><p>💡 Rétine analysera automatiquement le sentiment dégagé par chacune des réponses pour établir des statistiques visibles sur votre dashboard des résultats.</p></div>',
-    "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'">',
+    "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="unitee">Unitée </label><input class="fieldQlilnum" list="unitees" id="uniteeChoice" name="choixUnitee" maxlength="6"><datalist id="unitees"> <option value="$"> <option value="€"><option value="Kg"><option value="g"></datalist>',
     "5s": "<div>L'utilisateur pourra donner une note de 1 à 5.</div>",
 };
 
@@ -190,17 +190,12 @@ let dicColorCells = {
     "fin": "background-color: #2FCC72;color:white; border-width:0;"
 }
 
-let dicSuiteCible = {
-    "conn": "à qui je vais envoyer le lien du sondage.",
-    "inco": "ciblés par Rétine sur les réseaux sociaux."
-};
-
 function templatebulle() {
     Swal.fire({
-        html:"<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
+        html: "<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
         didRender: (e) => {
             e.querySelectorAll('.lstTemplates')[0].innerHTML = "Modèle 1";
-            
+
         },
 
     })
@@ -209,7 +204,10 @@ function templatebulle() {
 const validateSondage = () => {
     ttrSond = document.querySelector('#titreSond')
     if (ttrSond.value == "") {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
         return
     };
 
@@ -237,10 +235,9 @@ const validateSondage = () => {
             console.log(result)
             Swal.fire(
                 'Le sondage est publié!',
-                'retine.jetevois.fr/sondage#'+JSON.parse(result)["id"],
+                'retine.jetevois.fr/sondage#' + JSON.parse(result)["id"],
                 'success'
             );
         })
         .catch(error => console.log('error', error));
 };
-

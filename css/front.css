@@ -502,5 +502,24 @@ svg {
     fill: gold;
 }
 
+/* ------- Alternate Style ------- */
+.gauge-container.three {
+}
+.gauge-container.three > .gauge .dial {
+  stroke: #F0EEF4;
+  stroke-width: 6;
+}
+.gauge-container.three > .gauge .value {
+  stroke-width: 6;
+}
+.gauge-container.three > .gauge .value-text {
+  fill: #6219D8;
+} 
 
-
+.dureeEstim{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 10px;
+    font-size: .8rem;
+}
