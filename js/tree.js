@@ -14,6 +14,13 @@ const updateCells = () => {
         }
     };
     document.querySelectorAll('code')[document.querySelectorAll('code').length - 2].insertAdjacentHTML("afterend", "<ul><li><code class='outlineQ' data-qorder='new' onclick='createCell(this)'>➕ Nouvelle question</code></li></ul>");
+
+    let dureeEstim = sondageEnCreation['jsonContent'].length * 8 - 10;
+    if (dureeEstim > 60) {
+        document.querySelector("#tempsEstim").innerHTML = Math.floor(dureeEstim/60).toString() + " min, " + (dureeEstim % 60).toString() + " sec";
+    } else {
+        document.querySelector("#tempsEstim").innerHTML = dureeEstim.toString() + " secondes"
+    }
 }
 
 const createCell = (elem) => {

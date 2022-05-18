@@ -1,13 +1,4 @@
-let chartColors = ['#2a00ac', '#7332e6', '#b768ff', '#f2a5fe', '#b7c0c6', '#848c92', '#545c61', '#283034'];
-
-let numChartColors = [
-    '#99A1A6E6',
-    '#6219D8E6',
-    '#6219D8E6',
-    '#6219D8E6',
-    '#99A1A6E6',
-    '#99A1A6E6',
-];
+let chartColors = ['#23BE6E4D', '#7798AB4D', '#6219D84D', '#DB54614D', '#42BFDD4D', '#E7BB734D', '#F08CAE4D', '#A297154D', '#4C4C474D', '#F588514D'];
 
 scaleParam = {
     x: {
@@ -26,6 +17,7 @@ scaleParam = {
         ticks: {
             stepSize: 1,
             beginAtZero: true,
+            maxTicksLimit:5,
         }
     }
 };
@@ -160,4 +152,3 @@ var getDaysArray = function (s, e) {
     }
     return a;
 };
-
