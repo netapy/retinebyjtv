@@ -418,6 +418,26 @@ const loadCreator = async (num) => {
     reiniTialisationChat(sondageEnCreation);
     if (num != 'new') {
         document.querySelector("#titreSond").value = sondageEnCreation["nom_proj"];
-        document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75"></div>');
+        document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75; color: grey;"></div>');
+    };
+}
+
+
+//TEMPLATE DISPLAY
+let templateBaseHtml = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3"><h1 class="h2 py-2">Modèles de sondages</h1></div><div id="lesTemplates" class="row p-3 w-100" style="max-width:1100px;"></div>';
+
+const loadTemplates = async () => {
+    let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
+    let categories = [...new Set(rtnTemplates.map(x => x['category']))];
+    for (ii in categories) {
+        let templateCat = '<div class="col-12 mb-4 border-bottom"><h2>XXX</h2></div>'.replace("XXX", categories[ii]);
+        document.querySelector("#lesTemplates").insertAdjacentHTML("beforeend", templateCat)
+        let templateFiltered = rtnTemplates.filter(x => x['category'] == categories[ii])
+        for (iii in templateFiltered) {
+            let templatehtml =
+                '<div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="200px;"onclick="console.log(this);"></div></div>'
+                .replace("XXX", categories[ii]);
+            document.querySelector("#lesTemplates").insertAdjacentHTML("beforeend", templatehtml)
+        }
     };
 }

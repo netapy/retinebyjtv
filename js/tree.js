@@ -295,7 +295,7 @@ const firtValidateSondage = () => {
         .then(result => {
             idSondageRtn = JSON.parse(result)["id"];
             let s = new Date().toLocaleString();
-            document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75">Enregistré à ' + s.split(', ')[1] + '</div>');
+            document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75; color: grey;">Enregistré à ' + s.split(', ')[1] + '</div>');
         })
         .catch(error => console.log('error', error));
 };
