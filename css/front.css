@@ -418,15 +418,14 @@ a {
 
 .threeDot {
     position: absolute;
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
     right: 0px;
-    margin: 14px;
-    margin-top: 16px;
+    margin: 15px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-}
+    justify-content: center;}
 
 .btnExport {
     border-radius: 10px;
