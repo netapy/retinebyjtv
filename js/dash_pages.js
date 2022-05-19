@@ -3,10 +3,9 @@ let userProjects
 
 //functions
 function changePage(destinationHTML, loadingFun, sondageNum = 0) {
-    if (document.querySelectorAll(".bx-arrow-back").length > 0) {
-        document.querySelectorAll(".bx-arrow-back")[0].remove();
-        document.querySelectorAll(".liveBtn")[0].remove();
-    }
+    if (document.querySelectorAll(".bx-arrow-back").length > 0) document.querySelectorAll(".bx-arrow-back")[0].remove();
+    if (document.querySelectorAll(".liveBtn").length > 0) document.querySelectorAll(".liveBtn")[0].remove();
+
     let theMain = document.querySelector("main")
     theMain.style.opacity = 0;
     setTimeout(() => {
@@ -23,14 +22,18 @@ function changePage(destinationHTML, loadingFun, sondageNum = 0) {
 //PROJECTS OVERVIEW
 let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3"><div></div><h1 class="h2 py-2">Dashboard des sondages</h1></div><div id="mesSondages" class="row p-3 w-100" style="max-width:1100px;"><div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;" onclick="creatorTabBtn.click();">Créer un<br>nouveau projet</div></div></div>';
 
-let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column hvr-float" onclick="changePage(dashSond,loadDataList,##IDPROJ##)"><div class="threeDot hvr-bounce-in" onclick="shareBtn(\'##IDPROJ##\');window.event.stopPropagation();"><img class="w-100" src="/img/icons/share.svg"></div><h3 class="p-3 pr-5 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP## réponses</div></div></div></div>';
+let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column hvr-float" onclick="##FUNCTION##"><div class="threeDot hvr-bounce-in" onclick="shareBtn(\'##IDPROJ##\');window.event.stopPropagation();"><img class="w-100" src="/img/icons/share.svg"></div><h3 class="p-3 pr-5 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP##</div></div></div></div>';
 
 const loadProjList = async () => {
     let zoneProjs = document.querySelector("#mesSondages");
-    userProjects = await queryRtn('/sondages/');
+    userProjects = await queryRtn('/sondages/edit/');
     userProjects = JSON.parse(userProjects);
     for (ii in userProjects) {
-        zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length));
+        if (userProjects[ii]['reponse'].length == 0 && userProjects[ii]['priv'] == true) {
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "grey").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', "Brouillon").replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]['id'] + ")"));
+        } else {
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length.toString() + " réponses").replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]['id'] + ")").replaceAll('##IDPROJ##', userProjects[ii]['id']));
+        }
     };
 };
 
@@ -51,7 +54,7 @@ const loadDataList = async (num) => {
     //Création du header
     document.querySelector("#headerBar").innerHTML = '<h1 class="mt-3 mb-4" id="titreEtude" style="font-size:3rem;">##NOMPROJ##</h1>'.replace("##NOMPROJ##", projectInfo["nom_proj"])
 
-    //LIVE REFRESH A INCLURE PLUS TARD
+    //TODO LIVE REFRESH A INCLURE PLUS TARD
     let liveBtn = '<div class="liveBtn">🔴 Données en direct</div>'
     document.body.insertAdjacentHTML("beforeend", liveBtn)
 
@@ -137,7 +140,7 @@ const loadDataList = async (num) => {
                     }
                 });
             } else if (['cl'].includes(sondageData["data"][ii]["t"])) {
-                let sentimentHtml = '<div id="gauge3" class="w-100 gauge-container three" style="max-width:200px;"><span class="label"></span></div><div class="starContain py-2 px-3 text-left m-auto" style="font-size:.8rem; opacity:.9; border-radius:10px">💡 Score de sentiment moyen calculé par Rétine à l\'aide d\'intelligences artificielles. (0 = très négatif, 100 = très positif).</div>'
+                let sentimentHtml = '<div id="gauge2" class="w-100 gauge-container three" style="max-width:200px;"><span class="label"></span></div><div class="starContain py-2 px-3 text-left m-auto" style="font-size:.8rem; opacity:.9; border-radius:10px">💡 Score de sentiment moyen calculé par Rétine à l\'aide d\'intelligences artificielles. (0 = très négatif, 100 = très positif).</div>'
                 let dataCl = sondageData["data"][ii]["d"];
                 elem.querySelector('.canvContain').innerHTML = sentimentHtml;
 
@@ -146,7 +149,7 @@ const loadDataList = async (num) => {
                         elem.querySelector('.canvContain').innerHTML = sentimentHtml;
                         setTimeout(() => {
                             let gauge32 = Gauge(
-                                document.getElementById("gauge3"), {
+                                elem.querySelector("#gauge2"), {
                                     max: 100,
                                     value: 0,
                                     color: function (value) {
@@ -189,7 +192,7 @@ const loadDataList = async (num) => {
                                     label: "",
                                     color: '#6219D8',
                                     //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
-                                    data: Object.values(dataCl["nuage"]).map((d) => 15 + d * (125 / Object.values(dataCl["nuage"]).length)),
+                                    data: Object.values(dataCl["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(dataCl["nuage"]).length, 8)),
                                 }, ],
                             },
                             options: {
@@ -379,23 +382,33 @@ const loadDataList = async (num) => {
 
 //CREATEUR DISPLAY
 
-let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100 pt-3"><div class="dureeEstim">⏲️ Durée estimée : <span id="tempsEstim"></span></div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row"> <div class="col-12 col-md-8 py-2 pr-1 pl-0 hvr-float" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div class="temlateBtn" onclick="templatebulle()">📚 Charger un modèle...</div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0 hvr-float" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
+let creationStudioInterface = '<div id="studio" class="row p-1"><div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet" onkeyup="sondageEnCreation[\'nom_proj\'] = this.value" maxlength="30"></div> <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center"> <div class="cellZone w-100 pt-3"><div class="dureeEstim">⏲️ Durée estimée : <span id="tempsEstim"></span></div> <figure> <ul id="theTree" class="tree mx-auto p-3"> </ul> </figure> </div><hr class="w-75 mt-4"> <div class="row"> <div class="col-12 col-md-8 py-2 pr-1 pl-0 hvr-float" style="height: 100px;"> <div class="h-100 px-4 d-flex text-justify justify-content-center flex-column" style="background-color: #dbd6e37d; border-radius: 10px; color: #3c3c3c; font-family: Lexend Deca;"> <div class="temlateBtn" onclick="templatebulle()">📚 Charger un modèle...</div></div></div><div class="col-12 col-md-4 py-2 pl-1 pr-0 hvr-float" style="height: 100px;"> <div class="h-100 d-flex align-items-center justify-content-center" onclick="validateSondage()" style="background-color: #6219D8; border-radius: 10px; color: white; cursor: pointer;"> <h3 class="m-0" style="line-height: 0.6;">Lancer<br><span style="font-size: .9rem;">le sondage !</span></h3> </div></div></div></div><div id="creaUserView" class="col-12 col-lg-4 p-3 text-center"> <div class="iphone-x mx-auto my-4"> <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #FAF7FF; border-radius: 15px;"> <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;"> <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;"> <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height:20px;"> Rétine</div><div id="pourcentageAdv">0%</div></div><div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth; "> <div style="background-color: transparent;"> <div id="messageFeed" class="h-100 p-2 d-flex flex-column justify-content-start"> </div></div><div class="w-100"> <div id="inputZone" class="h-auto p-1 row w-100 m-auto" style="background-color: transparent; min-height: 100px;"> </div></div></div></div></div></div><div class="mt-4 text-center"><button onclick="reiniTialisationChat(sondageEnCreation);" class="screenBtn px-4 py-2">♻️ Réinitialiser</button></div></div></div>';
 
-const loadCreator = () => {
-    sondageEnCreation = {
-        "jsonContent": [{
-            "q": "Bienvenue dans ce sondage ! 🤗 ",
-            "a": {
-                'type': '1c',
-                'a': ['Démarrer 🚀']
-            }
-        }, {
-            "q": "Merci pour votre participation ! 🎉",
-            "a": {
-                'type': 'fin',
-            }
-        }, ]
-    };
+const loadCreator = async (num) => {
+    if (num == 'new') {
+        sondageEnCreation = {
+            "nom_proj": "Brouillon",
+            "jsonContent": [{
+                "q": "Bienvenue dans ce sondage ! 🤗 ",
+                "a": {
+                    'type': '1c',
+                    'a': ['Démarrer 🚀']
+                }
+            }, {
+                "q": "Merci pour votre participation ! 🎉",
+                "a": {
+                    'type': 'fin',
+                }
+            }, ]
+        };
+        idSondageRtn = null;
+    } else {
+        let sondageData = await queryRtn('/sondages/edit/' + num.toString() + '/')
+        sondageEnCreation = JSON.parse(sondageData);
+        sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
+        idSondageRtn = num;
+    }
+    sondageEnCreationVPREV = JSON.parse(JSON.stringify(sondageEnCreation));
     feed = document.querySelector('#messageFeed');
     inputZone = document.querySelector('#inputZone');
     scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
@@ -403,4 +416,8 @@ const loadCreator = () => {
 
     updateCells();
     reiniTialisationChat(sondageEnCreation);
+    if (num != 'new') {
+        document.querySelector("#titreSond").value = sondageEnCreation["nom_proj"];
+        document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75"></div>');
+    };
 }

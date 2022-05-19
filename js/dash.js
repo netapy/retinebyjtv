@@ -17,7 +17,7 @@ scaleParam = {
         ticks: {
             stepSize: 1,
             beginAtZero: true,
-            maxTicksLimit:5,
+            maxTicksLimit: 5,
         }
     }
 };
@@ -114,7 +114,7 @@ async function delSondRtn(num) {
                 redirect: 'follow'
             };
 
-            return fetch("https://retinereq.jetevois.fr:8000/sondages/" + num + "/", requestOptions)
+            return fetch("https://retinereq.jetevois.fr:8000/sondages/edit/" + num + "/", requestOptions)
                 .then(response => response.text())
                 .then(result => {
                     Swal.fire(
@@ -152,3 +152,8 @@ var getDaysArray = function (s, e) {
     }
     return a;
 };
+
+hashCode = s => s.split('').reduce((a, b) => {
+    a = ((a << 5) - a) + b.charCodeAt(0);
+    return a & a
+}, 0)

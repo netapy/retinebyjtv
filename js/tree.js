@@ -1,4 +1,6 @@
 var sondageEnCreation;
+var sondageEnCreationVPREV;
+var idSondageRtn = null;
 
 const updateCells = () => {
     let theTree = document.querySelector("#theTree")
@@ -15,9 +17,16 @@ const updateCells = () => {
     };
     document.querySelectorAll('code')[document.querySelectorAll('code').length - 2].insertAdjacentHTML("afterend", "<ul><li><code class='outlineQ' data-qorder='new' onclick='createCell(this)'>➕ Nouvelle question</code></li></ul>");
 
+    if (JSON.stringify(sondageEnCreationVPREV) != JSON.stringify(sondageEnCreation) && idSondageRtn == null) {
+        firtValidateSondage();
+    } else if (JSON.stringify(sondageEnCreationVPREV) != JSON.stringify(sondageEnCreation) && document.querySelectorAll(".liveBtn").length > 0) {
+        updateSondage();
+    }
+    sondageEnCreationVPREV = JSON.parse(JSON.stringify(sondageEnCreation));
+
     let dureeEstim = sondageEnCreation['jsonContent'].length * 8 - 10;
     if (dureeEstim > 60) {
-        document.querySelector("#tempsEstim").innerHTML = Math.floor(dureeEstim/60).toString() + " min, " + (dureeEstim % 60).toString() + " sec";
+        document.querySelector("#tempsEstim").innerHTML = Math.floor(dureeEstim / 60).toString() + " min, " + (dureeEstim % 60).toString() + " sec";
     } else {
         document.querySelector("#tempsEstim").innerHTML = dureeEstim.toString() + " secondes"
     }
@@ -109,7 +118,6 @@ const createCell = (elem) => {
         if (res.isDismissed == true) {
             console.log("abort creation");
         } else if (res.isDenied == true) {
-            console.log("delete question !!!");
             sondageEnCreation['jsonContent'].splice(elem.dataset.qorder, 1);
             updateCells();
             reiniTialisationChat(sondageEnCreation);
@@ -218,15 +226,61 @@ const validateSondage = () => {
         return
     };
 
-    console.log("Envoi du sondage");
+    Swal.fire({
+        title: 'Publier le sondage ?',
+        text: "Vous ne pourrez plus effectuer de modifications.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2FCC72',
+        cancelButtonColor: 'grey',
+        confirmButtonText: 'Publier le sondage',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var myHeaders = new Headers();
+            let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
+            myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                "nom_proj": sondageEnCreation["nom_proj"],
+                "jsonContent": contenuSondage,
+                "priv": false,
+            });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            return fetch("https://retinereq.jetevois.fr:8000/sondages/edit/" + idSondageRtn + "/", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    console.log(result)
+                    Swal.fire(
+                        'Le sondage est publié!',
+                        'retine.jetevois.fr/sondage#' + idSondageRtn,
+                        'success'
+                    );
+                    changePage(dashProj, loadProjList);
+                })
+                .catch(error => console.log('error', error));
+        }
+    })
+};
+
+const firtValidateSondage = () => {
     var myHeaders = new Headers();
     let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
     myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-        "nom_proj": ttrSond.value,
+        "nom_proj": sondageEnCreation["nom_proj"],
         "jsonContent": contenuSondage,
+        "priv": true,
     });
 
     var requestOptions = {
@@ -236,15 +290,43 @@ const validateSondage = () => {
         redirect: 'follow'
     };
 
-    fetch("https://retinereq.jetevois.fr:8000/sondages/", requestOptions)
+    fetch("https://retinereq.jetevois.fr:8000/sondages/edit/", requestOptions)
         .then(response => response.text())
         .then(result => {
-            console.log(result)
-            Swal.fire(
-                'Le sondage est publié!',
-                'retine.jetevois.fr/sondage#' + JSON.parse(result)["id"],
-                'success'
-            );
+            idSondageRtn = JSON.parse(result)["id"];
+            let s = new Date().toLocaleString();
+            document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75">Enregistré à ' + s.split(', ')[1] + '</div>');
         })
         .catch(error => console.log('error', error));
+};
+
+const updateSondage = () => {
+    var myHeaders = new Headers();
+    let contenuSondage = JSON.stringify(sondageEnCreation['jsonContent'])
+    myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "nom_proj": sondageEnCreation["nom_proj"],
+        "jsonContent": contenuSondage,
+        "priv": true,
+    });
+
+    var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("https://retinereq.jetevois.fr:8000/sondages/edit/" + idSondageRtn + "/", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            let s = new Date().toLocaleString();
+            document.querySelectorAll(".liveBtn")[0].innerHTML = "Enregistré à " + s.split(', ')[1];
+        })
+        .catch(error => {
+            console.log('error', error);
+            document.querySelectorAll(".liveBtn")[0].innerHTML = "Erreur d'enregistrement..."
+        });
 };
