@@ -22,7 +22,7 @@ function changePage(destinationHTML, loadingFun, sondageNum = 0) {
 //PROJECTS OVERVIEW
 let dashProj = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3"><div></div><h1 class="h2 py-2">Dashboard des sondages</h1></div><div id="mesSondages" class="row p-3 w-100" style="max-width:1100px;"><div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="height: 200px;" onclick="creatorTabBtn.click();">Créer un<br>nouveau projet</div></div></div>';
 
-let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column hvr-float" onclick="##FUNCTION##"><div class="threeDot hvr-bounce-in" onclick="shareBtn(\'##IDPROJ##\');window.event.stopPropagation();"><img class="w-100" src="/img/icons/share.svg"></div><h3 class="p-3 pr-5 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP##</div></div></div></div>';
+let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="neuProjet d-flex align-items-center justify-content-stretch flex-column hvr-float" onclick="##FUNCTION##"><div class="threeDot hvr-bounce-in" onclick="##FUNCTIONSHARE##;window.event.stopPropagation();"><img class="w-100" src="/img/icons/##ICON##"></div><h3 class="p-3 pr-5 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius:  10px  10px 0px 0px; color: white;">##NOMPROJ##</h3><div class="px-3 flex-fill d-flex justify-content-between align-items-center w-100"><div class="d-fk">##CREADATE##</div><div>##NBREP##</div></div></div></div>';
 
 const loadProjList = async () => {
     let zoneProjs = document.querySelector("#mesSondages");
@@ -30,9 +30,9 @@ const loadProjList = async () => {
     userProjects = JSON.parse(userProjects);
     for (ii in userProjects) {
         if (userProjects[ii]['reponse'].length == 0 && userProjects[ii]['priv'] == true) {
-            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "grey").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', "Brouillon").replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]['id'] + ")"));
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "grey").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', "Brouillon").replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]['id'] + ")").replace("##ICON##","delete.svg").replace("##FUNCTIONSHARE##","delSondRtn(" + userProjects[ii]['id'] + ")"));
         } else {
-            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length.toString() + " réponses").replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]['id'] + ")").replaceAll('##IDPROJ##', userProjects[ii]['id']));
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length.toString() + " réponses").replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]['id'] + ")").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace("##ICON##","share.svg").replace("##FUNCTIONSHARE##","shareBtn('" + userProjects[ii]['id'] + "')"));
         }
     };
 };
