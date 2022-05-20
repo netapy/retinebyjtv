@@ -81,7 +81,7 @@
 .tree code,
 .tree span {
     border: solid .1em #666;
-    border-radius: 5px;
+    border-radius: 14px;
     display: inline-block;
     margin: 0 .2em .5em;
     padding: .2em .5em;
@@ -230,7 +230,13 @@
     transform: translateX(8px);
 }
 
-.lstTemplates {
-    padding: 20px 10px;
-    text-align: left;
+.elemPopupTemplate{
+    font-size: 1.1rem;
+    padding: 10px;
+    margin: 4px auto;
+    margin-left: 10px;
+    border-radius: 8px;
+    background-color: #0000001b;
+    color: #212121;
+    cursor: pointer;
 }

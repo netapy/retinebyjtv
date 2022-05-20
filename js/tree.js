@@ -207,12 +207,20 @@ let dicColorCells = {
 
 function templatebulle() {
     Swal.fire({
-        html: "<div><h4>Charger un modèle de sondage 🔎</h4><div style='opacity:.8; font-size:.9rem'>Vous perdrez votre travail en cours.</div><div class='lstTemplates'></div></div>",
-        didRender: (e) => {
-            e.querySelectorAll('.lstTemplates')[0].innerHTML = "Modèle 1";
-
+        html: "<div><h4 class='my-3'>Charger un modèle de sondage 🔎</h4><div id='lstTemplates' style='max-height: 400px;overflow-y: scroll;' class='row w-100 text-left px-1'></div></div>",
+        confirmButtonText: 'Retour',
+        didRender: async (e) => {
+            let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
+            let categories = [...new Set(rtnTemplates.map(x => x['category']))];
+            for (ii in categories) {
+                let templateCat = '<div class="col-12 mb-2 mt-3 border-bottom"><h5>XXX</h5></div>'.replace("XXX", categories[ii]);
+                e.querySelector("#lstTemplates").insertAdjacentHTML("beforeend", templateCat)
+                let templateFiltered = rtnTemplates.filter(x => x['category'] == categories[ii])
+                for (iii in templateFiltered) {
+                    e.querySelector("#lstTemplates").insertAdjacentHTML("beforeend", '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'.replace("##NAME##", templateFiltered[iii]['nom_proj']).replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadTemplateInCrea, " + templateFiltered[iii]['id'] + ")"));
+                }
+            };
         },
-
     })
 };
 
@@ -279,6 +287,7 @@ const firtValidateSondage = () => {
 
     var raw = JSON.stringify({
         "nom_proj": sondageEnCreation["nom_proj"],
+        "color": purpleVariant[Math.floor(Math.random() * purpleVariant.length)],
         "jsonContent": contenuSondage,
         "priv": true,
     });

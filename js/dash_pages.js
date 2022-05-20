@@ -30,9 +30,9 @@ const loadProjList = async () => {
     userProjects = JSON.parse(userProjects);
     for (ii in userProjects) {
         if (userProjects[ii]['reponse'].length == 0 && userProjects[ii]['priv'] == true) {
-            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "grey").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', "Brouillon").replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]['id'] + ")").replace("##ICON##","delete.svg").replace("##FUNCTIONSHARE##","delSondRtn(" + userProjects[ii]['id'] + ")"));
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "grey").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', "Brouillon").replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]['id'] + ")").replace("##ICON##", "delete.svg").replace("##FUNCTIONSHARE##", "delSondRtn(" + userProjects[ii]['id'] + ")"));
         } else {
-            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', "#6219D8").replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length.toString() + " réponses").replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]['id'] + ")").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace("##ICON##","share.svg").replace("##FUNCTIONSHARE##","shareBtn('" + userProjects[ii]['id'] + "')"));
+            zoneProjs.insertAdjacentHTML('beforeend', templateUserProj.replace('##PROJCOLOR##', userProjects[ii]['color']).replace('##NOMPROJ##', userProjects[ii]['nom_proj']).replace('##CREADATE##', userProjects[ii]['crea_date'].split("T")[0]).replace('##NBREP##', userProjects[ii]['reponse'].length.toString() + " réponses").replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]['id'] + ")").replaceAll('##IDPROJ##', userProjects[ii]['id']).replace("##ICON##", "share.svg").replace("##FUNCTIONSHARE##", "shareBtn('" + userProjects[ii]['id'] + "')"));
         }
     };
 };
@@ -426,6 +426,8 @@ const loadCreator = async (num) => {
 //TEMPLATE DISPLAY
 let templateBaseHtml = '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3"><h1 class="h2 py-2">Modèles de sondages</h1></div><div id="lesTemplates" class="row p-3 w-100" style="max-width:1100px;"></div>';
 
+let templateTuilehtml = '<div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" onclick="##FUNCTION##">##NAME##</div></div>';
+
 const loadTemplates = async () => {
     let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
     let categories = [...new Set(rtnTemplates.map(x => x['category']))];
@@ -434,10 +436,23 @@ const loadTemplates = async () => {
         document.querySelector("#lesTemplates").insertAdjacentHTML("beforeend", templateCat)
         let templateFiltered = rtnTemplates.filter(x => x['category'] == categories[ii])
         for (iii in templateFiltered) {
-            let templatehtml =
-                '<div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" style="200px;"onclick="console.log(this);"></div></div>'
-                .replace("XXX", categories[ii]);
-            document.querySelector("#lesTemplates").insertAdjacentHTML("beforeend", templatehtml)
+            document.querySelector("#lesTemplates").insertAdjacentHTML("beforeend", templateTuilehtml.replace("##NAME##", templateFiltered[iii]['nom_proj']).replace("##FUNCTION##", "changePage(creationStudioInterface, loadTemplateInCrea, " + templateFiltered[iii]['id'] + ")"));
         }
     };
-}
+};
+
+const loadTemplateInCrea = async (id) => {
+    let templateData = await queryRtn("/templates/" + id.toString() + "/")
+    sondageEnCreation = JSON.parse(templateData);
+    sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
+    idSondageRtn = null;
+    sondageEnCreationVPREV = JSON.parse(JSON.stringify(sondageEnCreation));
+    feed = document.querySelector('#messageFeed');
+    inputZone = document.querySelector('#inputZone');
+    scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+    userAnswers = [];
+
+    updateCells();
+    reiniTialisationChat(sondageEnCreation);
+    document.querySelector("#titreSond").value = sondageEnCreation["nom_proj"];
+};
