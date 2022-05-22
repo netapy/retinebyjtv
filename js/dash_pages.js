@@ -371,6 +371,57 @@ const loadDataList = async (num) => {
                         }
                     }
                 });
+            } else if (['cal'].includes(sondageData["data"][ii]["t"])) {
+                //TODO : FAIRE UN TRI PLUS PRECIS EN FONCTION DE LA DONNEE DEMANDEE
+                let dataDate = sondageData["data"][ii]["d"];
+                //dataDate['dates'] = dataDate['dates'].map(el => new Date(Date.parse(el)))
+                console.log(dataDate);
+                elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
+                new Chart(elem.querySelector("canvas"), {
+                    plugins: [ChartDataLabels],
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(dataDate["dates"]).map(el => new Date(Date.parse(el))),
+                        datasets: [{
+                            data: Object.values(dataDate["dates"]),
+                            tension: 0.2,
+                            backgroundColor: '#6219D8',
+                            borderRadius: 5,
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    displayFormats: {
+                                        hour: 'HH:mm'
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    beginAtZero: true,
+                                }
+                            },
+                            y: {
+                                display: false
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            datalabels: {
+                                color: 'white',
+                            }
+                        }
+                    }
+                });
 
             };
             zoneProjs.insertAdjacentElement("beforeend", elem);
