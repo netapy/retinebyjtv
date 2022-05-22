@@ -115,3 +115,10 @@ p {
 .rate > * {
     transition: all .2s ease-out;
 }
+
+.dateField{
+    border-radius: 6px;
+    border-width: 1px;
+    padding: 5px 10px;
+    border-style: solid;
+}

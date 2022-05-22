@@ -240,3 +240,18 @@
     color: #212121;
     cursor: pointer;
 }
+
+.selectRtnVio{
+    background-color: #6219d8;
+    color: white;
+    width: 90%;
+    margin: auto;
+    padding: 10px;
+    border-width: 0px;
+    border-radius: 10px;
+}
+
+.selectRtnVio option{
+    background-color: white;
+    color: black;
+}

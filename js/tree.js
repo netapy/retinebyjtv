@@ -59,7 +59,7 @@ const createCell = (elem) => {
         }
     }
     Swal.fire({
-        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]"><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
+        html: '<div class="p-3 w-100 text-center" style="min-width:300px"><h4 class="mb-4">' + popupHeader + '</h4><div><textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea></div><h><div><select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]"><option value="" selected disabled>Choisir un type de réponse</option><option value="1c">Choix Unique</option><option value="mc">Choix Multiple</option><option value="cl">Champs libre</option><option value="num">Numéro</option><option value="cal">Date & heure</option><option value="5s">Notation</option></select></div><div id="ansWriteZone"></div></div>',
         didRender: (e) => {
             e.querySelector('#outQuestion').value = qModel['q'];
             e.querySelector("#qtypefield").value = qModel['a']['type'];
@@ -76,6 +76,10 @@ const createCell = (elem) => {
                 e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']];
                 e.querySelector('#nbMin').value = qModel['a']['a'][0];
                 e.querySelector('#nbMax').value = qModel['a']['a'][1];
+            } else if (qModel['a']['type'] == "cal") {
+                e.querySelector('#ansWriteZone').innerHTML = dicQFields[qModel['a']['type']];
+                e.querySelector("#datee").checked = qModel['a']['a'][0];
+                e.querySelector("#heuree").checked = qModel['a']['a'][1];
             } else if (qModel['a']['type'] == "fin") {
                 e.querySelector("#qtypefield").insertAdjacentHTML('beforeend', '<option value="fin" selected>Fin</option>');
                 e.querySelector("#qtypefield").disabled = true;
@@ -91,6 +95,8 @@ const createCell = (elem) => {
                 qA = [document.querySelector('#nbCaracLimit').value];
             } else if (qtype == "5s") {
                 qA = "no";
+            } else if (qtype == "cal") {
+                qA = [document.querySelector("#datee").checked, document.querySelector("#heuree").checked];
             } else if (qtype == "num") {
                 qA = [document.querySelector('#nbMin').value, document.querySelector('#nbMax').value, document.querySelector('#uniteeChoice').value];
             };
@@ -99,11 +105,11 @@ const createCell = (elem) => {
                 "a": {
                     'a': qA,
                     'type': qtype,
-                    'suiv': parseInt(elem.dataset.qorder) + 1
                 }
             }
-
-            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0) || verifCoherenceChiffre()) {
+            //verification de coherence            
+            if (repFinal['q'] == '' || repFinal['a']['type'] == '' || (['1c', 'mc'].includes(repFinal['a']['type']) && repFinal['a']['a'].length == 0) || verifCoherenceChiffre() || (repFinal['a']['type'] == "cal" && repFinal['a']['a'] == [false,false].toString())) {
+                document.querySelector('#ansWriteZone').insertAdjacentHTML("beforeend","<div class='mt-2'>Veuillez compléter l'ensemble des champs.</div>")
                 return false;
             } else {
                 return [repFinal, elem];
@@ -113,10 +119,11 @@ const createCell = (elem) => {
         showDenyButton: suppronoff,
         denyButtonText: `Supprimer`,
         denyButtonColor: "#616163",
+        confirmButtonColor: "#6219D8",
         reverseButtons: true
     }).then((res) => {
         if (res.isDismissed == true) {
-            console.log("abort creation");
+            return false;
         } else if (res.isDenied == true) {
             sondageEnCreation['jsonContent'].splice(elem.dataset.qorder, 1);
             updateCells();
@@ -151,6 +158,7 @@ let dicQFields = {
     "mc": "<h5>Les réponses</h5>" + inputQForm,
     "cl": '<div><label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100"></div><div><p>💡 Rétine analysera automatiquement le sentiment dégagé par chacune des réponses pour établir des statistiques visibles sur votre dashboard des résultats.</p></div>',
     "num": '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="unitee">Unitée </label><input class="fieldQlilnum" list="unitees" id="uniteeChoice" name="choixUnitee" maxlength="6"><datalist id="unitees"> <option value="$"> <option value="€"><option value="Kg"><option value="g"></datalist>',
+    "cal": '<div class="my-2">L\'utilisateur devra saisir : </div><input type="checkbox" id="datee" checked> <label for="datee">une date (format JJ/MM/AAAA)</label><br><input type="checkbox" id="heuree"> <label for="heuree">une heure (format HH:MM)</label> ',
     "5s": "<div>L'utilisateur pourra donner une note de 1 à 5.</div>",
 };
 
@@ -207,9 +215,11 @@ let dicColorCells = {
 
 function templatebulle() {
     Swal.fire({
-        html: "<div><h4 class='my-3'>Charger un modèle de sondage 🔎</h4><div id='lstTemplates' style='max-height: 400px;overflow-y: scroll;' class='row w-100 text-left px-1'></div></div>",
+        confirmButtonColor: "#6219D8",
+        html: "<div><h4 class='my-3'>Charger un modèle de sondage 🔎</h4> <div><select class='selectRtnVio my-2' onchange='toggleTabPopTemp(this)'><option value='tempRet'>Modèles de Rétine</option><option value='tempMe'>Mes modèles</option></select>  </div> <div id='lstTemplates' style='max-height: 400px;overflow-y: scroll;' class='row w-100 text-left px-1'></div><div id='lstMyTemplates' style='max-height: 400px;overflow-y: scroll;display:none' class='row w-100 text-left px-1'></div></div>",
         confirmButtonText: 'Retour',
         didRender: async (e) => {
+            //chargemnet templates rétine
             let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
             let categories = [...new Set(rtnTemplates.map(x => x['category']))];
             for (ii in categories) {
@@ -220,9 +230,25 @@ function templatebulle() {
                     e.querySelector("#lstTemplates").insertAdjacentHTML("beforeend", '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'.replace("##NAME##", templateFiltered[iii]['nom_proj']).replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadTemplateInCrea, " + templateFiltered[iii]['id'] + ")"));
                 }
             };
+            //chargemnet mes templates
+            let myRtnTemplates = JSON.parse(await queryRtn('/sondages/edit/'));
+            e.querySelector("#lstMyTemplates").insertAdjacentHTML("beforeend", '<div class="col-12 mb-2 mt-3 border-bottom"><h5>Mes modèles</h5></div>');
+            for (iii in myRtnTemplates) {
+                e.querySelector("#lstMyTemplates").insertAdjacentHTML("beforeend", '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'.replace("##NAME##", myRtnTemplates[iii]['nom_proj']).replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadMyTemplateInCrea, " + myRtnTemplates[iii]['id'] + ")"));
+            }
         },
     })
 };
+const toggleTabPopTemp = (elem) => {
+    if (elem.value == "tempRet") {
+        document.querySelector("#lstTemplates").style.display = '';
+        document.querySelector("#lstMyTemplates").style.display = 'none';
+    } else {
+        document.querySelector("#lstMyTemplates").style.display = '';
+        document.querySelector("#lstTemplates").style.display = 'none';
+    }
+}
+
 
 const validateSondage = () => {
     ttrSond = document.querySelector('#titreSond')

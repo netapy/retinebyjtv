@@ -456,3 +456,19 @@ const loadTemplateInCrea = async (id) => {
     reiniTialisationChat(sondageEnCreation);
     document.querySelector("#titreSond").value = sondageEnCreation["nom_proj"];
 };
+
+const loadMyTemplateInCrea = async (id) => {
+    let templateData = await queryRtn("/sondages/edit/" + id.toString() + "/")
+    sondageEnCreation = JSON.parse(templateData);
+    sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
+    idSondageRtn = null;
+    sondageEnCreationVPREV = JSON.parse(JSON.stringify(sondageEnCreation));
+    feed = document.querySelector('#messageFeed');
+    inputZone = document.querySelector('#inputZone');
+    scrollZone = document.querySelectorAll('.scrollbehavior:last-child')[0];
+    userAnswers = [];
+
+    updateCells();
+    reiniTialisationChat(sondageEnCreation);
+    document.querySelector("#titreSond").value = sondageEnCreation["nom_proj"] + " - Copie";
+};

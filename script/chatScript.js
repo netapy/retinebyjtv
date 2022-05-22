@@ -44,9 +44,19 @@ function receiveMsg(content) {
         };
         inputt = inputt.concat('<div class="col-12 my-3 text-center"><div class="userBtnInput ml-auto btnEnvoyer" data-no="[#id#]" onclick="validateMultipleChoice(this.dataset.no)">Envoyer</div></div>'.replace("[#id#]", qIndex))
     } else if (answs["type"] == "cl") {
-        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' data-no='[#id#]' maxlength='[#max#]' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' onkeyup='if (event.key === \"Enter\" || event.keyCode === 13) validateChampLibre(this.dataset.no)'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='validateChampLibre(this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replaceAll("[#id#]", qIndex).replace("[#max#]",answs['a'][0]);
+        inputt = "<div class='col-12 userBtnInput row p-2 m-auto'><div class='col-10 p-2'><input id='inputUser' data-no='[#id#]' maxlength='[#max#]' class='w-100 userFieldInput' type='text' placeholder='Dites nous tout...' onkeyup='if (event.key === \"Enter\" || event.keyCode === 13) validateChampLibre(this.dataset.no)'></div><div data-no='[#id#]' class='col-2 p-1 d-flex flex-column flex-align-center justify-content-center' onclick='validateChampLibre(this.dataset.no)'><img src='/img/icons/send-circle.svg' style='height: 3rem;'></div></div>".replaceAll("[#id#]", qIndex).replace("[#max#]", answs['a'][0]);
     } else if (answs["type"] == "num") {
         inputt = "<div class='col-12 userBtnInput py-3 m-auto d-flex flex-row justify-content-around align-items-center'><input  id='numRan' min='[#min#]' max='[#max#]' type='number' onkeyup='enforceMinMax(this)'/><div class='ml-1 mr-2'>[#unit#]</div><input id='inputUser' class='h-100 mx-1 flex-grow-1 userFieldInput form-range' type='range' min='[#min#]' max='[#max#]' oninput='document.querySelector(\"#numRan\").value = this.value'><div data-no='[#id#]' class='p-1' onclick='userSend(document.querySelector(\"#numRan\").value.toString() + \" [#unit#]\", this.dataset.no)'><img src='/img/icons/send-circle.svg' style='min-height: 35px;'></div></div>".replace("[#id#]", qIndex).replaceAll("[#min#]", answs['a'][0]).replaceAll("[#max#]", answs['a'][1]).replaceAll("[#unit#]", answs['a'][2])
+    } else if (answs["type"] == "cal") {
+        let field = "date";
+        if(answs['a'][0] && answs['a'][1]) {
+            field = "datetime-local";
+        } else if (answs['a'][0] && !answs['a'][1]) {
+            field = "date";
+        } else if (!answs['a'][0] && answs['a'][1]) {
+            field = "time";
+        }
+        inputt = "<div class='col-12 userBtnInput py-3 m-auto d-flex flex-row justify-content-around align-items-center'><input class='dateField' id='dateTime'  type='##FIELD##'><div data-no='[#id#]' class='p-1' onclick='if (document.querySelector(\".dateField\").value != \"\") userSend(document.querySelector(\"#dateTime\").value.toString(), this.dataset.no)'><img src='/img/icons/send-circle.svg' style='min-height: 35px;'></div></div>".replace("[#id#]", qIndex).replace("##FIELD##",field);
     } else if (answs["type"] == "5s") {
         inputt = '<div class="col-12 d-flex align-items-center justify-content-center"><div class="rate input" data-no="[#id#]"><input type="radio" id="star5" name="rate" value="5" onclick="starhHandle(this)" /><label for="star5" title="text">5 stars</label><input type="radio" id="star4" name="rate" value="4" onclick="starhHandle(this)" /><label for="star4" title="text">4 stars</label><input type="radio" id="star3" name="rate" value="3" onclick="starhHandle(this)" /><label for="star3" title="text">3 stars</label><input type="radio" id="star2" name="rate" value="2" onclick="starhHandle(this)" /><label for="star2" title="text">2 stars</label><input type="radio" id="star1" name="rate" value="1" onclick="starhHandle(this)" /><label for="star1" title="text">1 star</label></div></div>'.replace("[#id#]", qIndex);
     } else if (answs["type"] == "fin") {
@@ -142,7 +152,7 @@ function validateMultipleChoice(number) {
     for (ibtns = 0; ibtns < choices.length; ++ibtns) {
         if (choices[ibtns].style.color == 'white') rep.push(choices[ibtns].innerHTML)
     };
-    if (rep.length==0) {
+    if (rep.length == 0) {
         console.log("no answer")
     } else {
         userSend(rep.join(" ; "), number);
@@ -193,7 +203,7 @@ const animateCountUp = (depart, arrivee) => {
         frame++;
         const progress = easeOutQuad(frame / totalFrames);
         const currentCount = Math.round(countTo * progress);
-        if ((arrivee +1) !== currentCount && currentCount > depart) {
+        if ((arrivee + 1) !== currentCount && currentCount > depart) {
             el.innerHTML = currentCount.toString() + "%";
         }
         if (frame === totalFrames) {
@@ -204,13 +214,13 @@ const animateCountUp = (depart, arrivee) => {
 
 
 
-function enforceMinMax(el){
-    if(el.value != ""){
-      if(parseInt(el.value) < parseInt(el.min)){
-        el.value = el.min;
-      }
-      if(parseInt(el.value) > parseInt(el.max)){
-        el.value = el.max;
-      }
+function enforceMinMax(el) {
+    if (el.value != "") {
+        if (parseInt(el.value) < parseInt(el.min)) {
+            el.value = el.min;
+        }
+        if (parseInt(el.value) > parseInt(el.max)) {
+            el.value = el.max;
+        }
     }
-  }
+}
