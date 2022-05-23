@@ -43,9 +43,20 @@ let dashSond = '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></d
 let templateDataList = '<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="100"><div><h5>##TTRQUEST##</h5><div class="nbRepGraph">🧍 ##REPS## répondants</div><div class="canvContain"></div></div><div class="d-flex align-itemps-center justify-content-between "><button class="screenBtn" onclick="copyGraph(this.parentElement.previousSibling)">📄 Copier le graphique</button></div></div>'
 
 var updateChartFunList = [];
+let timeGraphRep;
+
+const updateData = async (num) => {
+    let sondageData = await queryRtn('/reps/' + num.toString() + '/');
+    sondageData = JSON.parse(sondageData);
+    let funList = Object.keys(updateChartFunList);
+    timeGraphRep(sondageData["time"]);
+    for (iii in funList) {
+        updateChartFunList[funList[iii]](sondageData["data"][funList[iii]]);
+    };
+};
 
 const loadDataList = async (num) => {
-    document.querySelector("#header-toggle").parentElement.insertAdjacentHTML('beforeEnd', '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>')
+    document.querySelector("#header-toggle").parentElement.insertAdjacentHTML('beforeEnd', '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>');
     let sondageData = JSON.parse(await queryRtn('/reps/' + num.toString() + '/'));
     let projectInfo = userProjects.find(x => x["id"] == num.toString());
     let projectQuestions = JSON.parse(projectInfo['jsonContent']);
@@ -72,7 +83,7 @@ const loadDataList = async (num) => {
     elemTimeRep.querySelector('.canvContain').innerHTML = '<canvas></canvas>';
     zoneProjs.insertAdjacentElement("beforeend", elemTimeRep);
 
-    updateChartFunList["graphTimeRep"] = (majData) => {
+    timeGraphRep = (majData) => {
         let elemTimeRep = document.querySelector("#timeRepGraph");
         elemTimeRep.querySelector("h5").innerHTML = "Evolution du nombre de réponses";
         elemTimeRep.querySelector(".nbRepGraph").innerHTML = "🧍 " + majData.length.toString() + " répondants";
@@ -112,7 +123,8 @@ const loadDataList = async (num) => {
             chartTimeRep.update();
         }
     }
-    updateChartFunList["graphTimeRep"](sondageData['time']);
+    timeGraphRep(sondageData['time']);
+
 
     for (ii in sondageData["data"]) {
         if (projectQuestions[ii]["a"]["type"] == "1c" && projectQuestions[ii]["a"]["a"].length == 1) {
@@ -120,17 +132,18 @@ const loadDataList = async (num) => {
         } else {
             let elem = document.createElement("div");
             elem.classList = "col-12 col-lg-6 p-3";
-            elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString() + ". " + projectQuestions[ii]["q"]).replace("##REPQ##", JSON.stringify(sondageData["data"][ii]["d"])).replace("##REPS##", sondageData["data"][ii]['nbrep']);
+            elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString() + ". " + projectQuestions[ii]["q"]);
+            elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + sondageData["data"][ii]["nbrep"].toString() + " répondants";
             if (['mc', '1c'].includes(sondageData["data"][ii]["t"])) {
-                let dataMc = sondageData["data"][ii]["d"];
+                let dataMc = sondageData["data"][ii];
                 elem.querySelector('.canvContain').insertAdjacentHTML('afterbegin', '<canvas></canvas>');
                 let chart = new Chart(elem.querySelector('canvas'), {
                     plugins: [ChartDataLabels],
                     type: 'doughnut',
                     data: {
-                        labels: Object.keys(dataMc),
+                        labels: Object.keys(dataMc["d"]),
                         datasets: [{
-                            data: Object.values(dataMc),
+                            data: Object.values(dataMc["d"]),
                             backgroundColor: chartColors,
                         }]
                     },
@@ -160,9 +173,10 @@ const loadDataList = async (num) => {
                 });
                 //UPDATE FUNCTION PUSHED
                 updateChartFunList[ii.toString()] = (x) => {
-                    chart.data.labels = Object.keys(x);
-                    chart.data.datasets[0].data = Object.values(x);
+                    chart.data.labels = Object.keys(x["d"]);
+                    chart.data.datasets[0].data = Object.values(x["d"]);
                     chart.update();
+                    elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
                 }
 
             } else if (['cl'].includes(sondageData["data"][ii]["t"])) {
@@ -170,7 +184,7 @@ const loadDataList = async (num) => {
                 let numQ = ii;
                 let sentimentHtml = '<canvas id ="realCanvCont"></canvas><div id="realScoreCont"><div id="gauge2" class=" mx-auto w-100 gauge-container three" style="max-width:200px;"><span class="label"></span></div><div class="starContain py-2 px-3 text-left m-auto" style="font-size:.8rem; opacity:.9; border-radius:10px">💡 Score de sentiment moyen calculé par Rétine à l\'aide d\'intelligences artificielles. (0 = très négatif, 100 = très positif).</div></div>'
                 elem.querySelector('.canvContain').insertAdjacentHTML("afterbegin", sentimentHtml);
-                let dataCl = sondageData["data"][ii]["d"];
+                let dataCl = sondageData["data"][ii];
 
                 setTimeout(() => {
                     let gauge32 = Gauge(
@@ -202,18 +216,18 @@ const loadDataList = async (num) => {
                         }
                     );
                     setTimeout(() => {
-                        gauge32.setValueAnimated(dataCl["sentMoy"] * 100, 1.5);
+                        gauge32.setValueAnimated(dataCl["d"]["sentMoy"] * 100, 1.5);
                     }, 100);
 
                     let chart = new ChartWordCloud.WordCloudChart(elem.querySelector('canvas').getContext('2d'), {
                         type: 'wordCloud',
                         data: {
-                            labels: Object.keys(dataCl['nuage']),
+                            labels: Object.keys(dataCl["d"]['nuage']),
                             datasets: [{
                                 label: "",
                                 color: '#6219D8',
                                 //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
-                                data: Object.values(dataCl["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(dataCl["nuage"]).length, 8)),
+                                data: Object.values(dataCl["d"]["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(dataCl["d"]["nuage"]).length, 8)),
                             }, ],
                         },
                         options: {
@@ -237,9 +251,10 @@ const loadDataList = async (num) => {
 
                     //UPDATE FUNCTION PUSHED
                     updateChartFunList[numQ.toString()] = (x) => {
-                        gauge32.setValueAnimated(x["sentMoy"] * 100, 1.5);
-                        chart.data.labels = Object.keys(x['nuage']);
-                        chart.data.datasets[0].data = Object.values(x["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(x["nuage"]).length, 8))
+                        gauge32.setValueAnimated(x["d"]["sentMoy"] * 100, 1.5);
+                        chart.data.labels = Object.keys(x["d"]['nuage']);
+                        chart.data.datasets[0].data = Object.values(x["d"]["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(x["d"]["nuage"]).length, 8));
+                        elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
                     }
 
                     const toggleCanv = (btn) => {
@@ -270,63 +285,67 @@ const loadDataList = async (num) => {
 
             } else if (['5s'].includes(sondageData["data"][ii]["t"])) {
                 let uniqueLabels = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"];
-                let dataMc = sondageData["data"][ii]["d"]['detail'];
+                let dataStar = sondageData["data"][ii];
+                let starHtml = '<canvas id ="realCanvCont" style="display:none;"></canvas><div class="starContain py-5"></div>';
+                let starDisplayhtml = '<div class="mb-3">Note moyenne de ##STARS##</div><div class="stars"> <svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg> <div class="cover" style="width: ##PERCENT##%;"></div></div>'
 
-                let starHtml = '<div class="starContain py-5"><div class="mb-3">Note moyenne de ##STARS##</div><div class="stars"> <svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg> <div class="cover" style="width: ##PERCENT##%;"></div></div></div>'.replace("##PERCENT##", 100 - (sondageData["data"][ii]["d"]["main"] * 100) / 5).replace("##STARS##", sondageData["data"][ii]["d"]["main"]);
+                elem.querySelector('.canvContain').innerHTML = starHtml;
 
+                elem.querySelector(".starContain").innerHTML = starDisplayhtml.replace("##PERCENT##", 100 - (dataStar["d"]["main"] * 100) / 5).replace("##STARS##", dataStar["d"]["main"]);
+
+                let chart = new Chart(elem.querySelector("#realCanvCont"), {
+                    plugins: [ChartDataLabels],
+                    type: 'bar',
+                    data: {
+                        labels: uniqueLabels,
+                        datasets: [{
+                            data: [dataStar["d"]['detail']['1'], dataStar["d"]['detail']['2'], dataStar["d"]['detail']['3'], dataStar["d"]['detail']['4'], dataStar["d"]['detail']['5']],
+                            backgroundColor: "#6219D8",
+                            borderRadius: 5,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        scales: scaleParam,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                                reversed: true
+                            },
+                            datalabels: {
+                                color: 'white',
+                            }
+                        }
+                    }
+                });
+                //UPDATE FUNCTION PUSHED
+                updateChartFunList[ii.toString()] = (x) => {
+                    elem.querySelector(".starContain").innerHTML = starDisplayhtml.replace("##PERCENT##", 100 - (x["d"]["main"] * 100) / 5).replace("##STARS##", x["d"]["main"]);
+                    chart.data.datasets[0].data = [x["d"]['detail']['1'], x["d"]['detail']['2'], x["d"]['detail']['3'], x["d"]['detail']['4'], x["d"]['detail']['5']];
+                    chart.update();
+                    elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
+                }
                 const toggleCanv = (btn) => {
                     if (btn.target.dataset.state == "simple") {
-                        elem.querySelector('.canvContain').innerHTML = starHtml;
+                        elem.querySelector(".starContain").style.display = "";
+                        elem.querySelector("canvas").style.display = "none";
                         btn.target.dataset.state = "detail";
                     } else {
-                        elem.querySelector('.canvContain').innerHTML = "<canvas></canvas>";
-                        let chart = new Chart(elem.querySelector("canvas"), {
-                            plugins: [ChartDataLabels],
-                            type: 'bar',
-                            data: {
-                                labels: uniqueLabels,
-                                datasets: [{
-                                    data: [dataMc['1'], dataMc['2'], dataMc['3'], dataMc['4'], dataMc['5']],
-                                    backgroundColor: "#6219D8",
-                                    borderRadius: 5,
-                                }]
-                            },
-                            options: {
-                                indexAxis: 'y',
-                                scales: scaleParam,
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        display: false,
-                                        reversed: true
-                                    },
-                                    datalabels: {
-                                        color: 'white',
-                                    },
-                                    deferred: deferredConfig
-                                }
-                            }
-                        });
-                        //UPDATE FUNCTION PUSHED
-                        updateChartFunList[ii.toString()] = (x) => {
-                            chart.data.datasets[0].data = [x['1'], x['2'], x['3'], x['4'], x['5']];
-                            chart.update();
-                        }
+                        elem.querySelector(".starContain").style.display = "none";
+                        elem.querySelector("canvas").style.display = "";
+                        chart.reset();
+                        chart.update();
                         btn.target.dataset.state = "simple";
                     }
                 }
-
                 let btnDetail = document.createElement("button");
                 btnDetail.innerHTML = "➕ Détails";
                 btnDetail.className = "screenBtn";
                 btnDetail.dataset.state = "yes";
-
                 btnDetail.addEventListener("click", toggleCanv, false);
-
-                elem.querySelector('.canvContain').innerHTML = starHtml;
                 elem.querySelector('.screenBtn').insertAdjacentElement('afterend', btnDetail);
-
 
             } else if (['num'].includes(sondageData["data"][ii]["t"])) {
                 let dataNum = sondageData["data"][ii]["d"];
@@ -421,15 +440,16 @@ const loadDataList = async (num) => {
                     }
                 });
                 updateChartFunList[ii.toString()] = (x) => {
-                    chart.data.labels = Object.keys(x["detail"]).map(x => x.replaceAll(".0", ""))
-                    chart.data.datasets[0].data = Object.values(x["detail"]);
+                    chart.data.labels = Object.keys(x["d"]["detail"]).map(x => x.replaceAll(".0", ""))
+                    chart.data.datasets[0].data = Object.values(x["d"]["detail"]);
                     chart.data.datasets[1].data = [{
-                        x: x["main"],
-                        y: Math.max.apply(Math, Object.values(x["detail"])) + 1
+                        x: x["d"]["main"],
+                        y: Math.max.apply(Math, Object.values(x["d"]["detail"])) + 1
                     }];
-                    chart.options.scales.x1.min = parseInt(Object.keys(x["detail"]).at(0).split(",").at(0).replace('.0', '').replace(/\D/g, ''));
-                    chart.options.scales.x1.max = parseInt(Object.keys(x["detail"]).at(-1).split(",").at(-1).replace('.0', '').replace(/\D/g, ''));
+                    chart.options.scales.x1.min = parseInt(Object.keys(x["d"]["detail"]).at(0).split(",").at(0).replace('.0', '').replace(/\D/g, ''));
+                    chart.options.scales.x1.max = parseInt(Object.keys(x["d"]["detail"]).at(-1).split(",").at(-1).replace('.0', '').replace(/\D/g, ''));
                     chart.update();
+                    elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
                 };
 
             } else if (['cal'].includes(sondageData["data"][ii]["t"])) {
@@ -487,6 +507,8 @@ const loadDataList = async (num) => {
                     chart.data.labels = Object.keys(x["dates"]).map(el => new Date(Date.parse(el)));
                     chart.data.datasets[0].data = Object.values(x["dates"]);
                     chart.update();
+                    elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
+
                 };
             };
             zoneProjs.insertAdjacentElement("beforeend", elem);
