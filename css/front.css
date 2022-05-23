@@ -502,8 +502,6 @@ svg {
 }
 
 /* ------- Alternate Style ------- */
-.gauge-container.three {
-}
 .gauge-container.three > .gauge .dial {
   stroke: #F0EEF4;
   stroke-width: 6;

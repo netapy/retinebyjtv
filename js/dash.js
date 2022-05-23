@@ -24,6 +24,12 @@ scaleParam = {
     }
 };
 
+deferredConfig = {
+    xOffset: 150,
+    yOffset: '50%',
+    delay: 500
+}
+
 function copyGraph(c) {
     html2canvas(c).then(function (canvas) {
         canvas.toBlob(function (blob) {

@@ -21,10 +21,11 @@
         referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="script/chartjs-wordCloud.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@2.0.0/dist/chartjs-plugin-deferred.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
-    <script src="script/chartjs-wordCloud.min.js"></script>
     <script src="script/svg-gauge.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@8.3.1/dist/js/shepherd.min.js"></script>
@@ -78,6 +79,8 @@
 <script src="js/tree.js"></script>
 <script src="js/tour.js"></script>
 <script>
+    Chart.register(ChartDeferred);
+    
     if (xxgc('rtnt') == null) window.location.href = "compte.html";
     let scode = "demo";
     changePage(dashProj, loadProjList);
