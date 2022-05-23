@@ -284,7 +284,7 @@ const loadDataList = async (num) => {
                 }, 1);
 
             } else if (['5s'].includes(sondageData["data"][ii]["t"])) {
-                let uniqueLabels = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"];
+                let uniqueLabels = ["⭐⭐⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐", "⭐⭐", "⭐"];
                 let dataStar = sondageData["data"][ii];
                 let starHtml = '<canvas id ="realCanvCont" style="display:none;"></canvas><div class="starContain py-5"></div>';
                 let starDisplayhtml = '<div class="mb-3">Note moyenne de ##STARS##</div><div class="stars"> <svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg><svg viewBox="0 0 576 512" width="50" title="star"> <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/> </svg> <div class="cover" style="width: ##PERCENT##%;"></div></div>'
@@ -299,7 +299,7 @@ const loadDataList = async (num) => {
                     data: {
                         labels: uniqueLabels,
                         datasets: [{
-                            data: [dataStar["d"]['detail']['1'], dataStar["d"]['detail']['2'], dataStar["d"]['detail']['3'], dataStar["d"]['detail']['4'], dataStar["d"]['detail']['5']],
+                            data: [dataStar["d"]['detail']['5'], dataStar["d"]['detail']['4'], dataStar["d"]['detail']['3'], dataStar["d"]['detail']['2'], dataStar["d"]['detail']['1']],
                             backgroundColor: "#6219D8",
                             borderRadius: 5,
                         }]
@@ -323,7 +323,7 @@ const loadDataList = async (num) => {
                 //UPDATE FUNCTION PUSHED
                 updateChartFunList[ii.toString()] = (x) => {
                     elem.querySelector(".starContain").innerHTML = starDisplayhtml.replace("##PERCENT##", 100 - (x["d"]["main"] * 100) / 5).replace("##STARS##", x["d"]["main"]);
-                    chart.data.datasets[0].data = [x["d"]['detail']['1'], x["d"]['detail']['2'], x["d"]['detail']['3'], x["d"]['detail']['4'], x["d"]['detail']['5']];
+                    chart.data.datasets[0].data = [x["d"]['detail']['5'], x["d"]['detail']['4'], x["d"]['detail']['3'], x["d"]['detail']['2'], x["d"]['detail']['1']];
                     chart.update();
                     elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
                 }
