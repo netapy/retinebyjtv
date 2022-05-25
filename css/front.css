@@ -96,7 +96,7 @@ h5 {
     background: #FAF7FF;
     box-shadow: 5px 5px 14px #e9e6ed,
         -5px -5px 14px #ffffff;
-    margin: 10px;
+     margin: 10px; 
 }
 
 .sondInfo {
@@ -425,18 +425,7 @@ a {
     margin-top: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;}
-
-.btnExport {
-    border-radius: 10px;
-    border-style: dashed;
-    border-color: grey;
-    background-color: transparent;
-    border-width: 1.5px;
-    width: fit-content;
-    padding: 7px;
-    margin: 5px;
-    font-size: .9rem;
+    justify-content: center;
 }
 
 .liveBtn {
@@ -502,21 +491,38 @@ svg {
 }
 
 /* ------- Alternate Style ------- */
-.gauge-container.three > .gauge .dial {
-  stroke: #F0EEF4;
-  stroke-width: 6;
+.gauge-container.three>.gauge .dial {
+    stroke: #F0EEF4;
+    stroke-width: 6;
 }
-.gauge-container.three > .gauge .value {
-  stroke-width: 6;
-}
-.gauge-container.three > .gauge .value-text {
-  fill: #6219D8;
-} 
 
-.dureeEstim{
+.gauge-container.three>.gauge .value {
+    stroke-width: 6;
+}
+
+.gauge-container.three>.gauge .value-text {
+    fill: #6219D8;
+}
+
+.dureeEstim {
     position: absolute;
     top: 0px;
     left: 0px;
     padding: 6px;
     font-size: .75rem;
+}
+
+.rtnFilterSelect {
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin: 0px 5px;
+}
+
+.btnDash {
+    font-size: 1.1rem;
+    border-radius: 24px;
+    border-width: 0px;
+    padding: 15px 10px;
+    height: 48%;
+    min-height: 80px;
 }

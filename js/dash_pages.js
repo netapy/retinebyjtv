@@ -26,7 +26,7 @@ let templateUserProj = '<div class="col-12 col-sm-6 col-lg-4 mb-5"><div class="p
 
 const loadProjList = async () => {
     let zoneProjs = document.querySelector("#mesSondages");
-    userProjects = await queryRtn('/sondages/edit/');
+    userProjects = await queryRtn('/sondages/edit/', "GET");
     userProjects = JSON.parse(userProjects);
     for (ii in userProjects) {
         if (userProjects[ii]['reponse'].length == 0 && userProjects[ii]['priv'] == true) {
@@ -37,7 +37,10 @@ const loadProjList = async () => {
     };
     Array.from(zoneProjs.getElementsByClassName("projetTile")).forEach((el) => {
         if (el.querySelector("h3").innerText.length > 45) {
-            fitty(el.querySelector("h3"));
+            fitty(el.querySelector("h3"), {
+                minSize: 18,
+                maxSize: 300,
+            });
         }
     });
 };
@@ -50,8 +53,8 @@ let templateDataList = '<div class="neuProjetSimple p-4 text-center" data-aos="f
 var updateChartFunList = [];
 let timeGraphRep;
 
-const updateData = async (num) => {
-    let sondageData = await queryRtn('/reps/' + num.toString() + '/');
+const updateData = async (num, filter = "") => {
+    let sondageData = await queryRtn('/reps/' + num.toString() + '/', "POST", filter);
     sondageData = JSON.parse(sondageData);
     let funList = Object.keys(updateChartFunList);
     timeGraphRep(sondageData["time"]);
@@ -59,10 +62,19 @@ const updateData = async (num) => {
         updateChartFunList[funList[iii]](sondageData["data"][funList[iii]]);
     };
 };
+const filterApply = (num) => {
+    filterOne = [document.querySelectorAll('.rtnFilterSelect')[0].value, document.querySelectorAll('.rtnFilterSelect')[1].value, document.querySelectorAll('.rtnFilterSelect')[2].value];
+    filterTwo = [document.querySelectorAll('.rtnFilterSelect')[3].value, document.querySelectorAll('.rtnFilterSelect')[4].value, document.querySelectorAll('.rtnFilterSelect')[5].value];
+    updateData(num, {
+        "fltr1": filterOne,
+        "fltr2": filterTwo
+    });
+}
 
 const loadDataList = async (num) => {
     document.querySelector("#header-toggle").parentElement.insertAdjacentHTML('beforeEnd', '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>');
-    let sondageData = JSON.parse(await queryRtn('/reps/' + num.toString() + '/'));
+    let sondageData = await queryRtn('/reps/' + num.toString() + '/', 'POST')
+    sondageData = JSON.parse(sondageData);
     let projectInfo = userProjects.find(x => x["id"] == num.toString());
     let projectQuestions = JSON.parse(projectInfo['jsonContent']);
     let zoneProjs = document.querySelector("#mesResultats");
@@ -75,9 +87,7 @@ const loadDataList = async (num) => {
     document.body.insertAdjacentHTML("beforeend", liveBtn)
 
     //Création de la barre d'outils
-    let htmlToolBar = "<div class='col-12 col-lg-12 px-3'><button class='btnExport p-1 px-3 hvr-float' onclick='alert(\"Export des données\")'><i class='bx bx-export px-1'></i>Exporter les données</button><button class='btnExport p-1 px-3 hvr-float' onclick='delSondRtn(" + num.toString() + ")'><i class='bx bx-trash px-1'></i>Supprimer le sondage</button></div>";
-
-    document.querySelector("#mesResultats").insertAdjacentHTML("afterbegin", htmlToolBar)
+    let htmlToolBar = '<div id="filtreZone" class="col-12 col-lg-8 p-3 m-0"><div class="neuProjetSimple p-4 text-center h-100 m-0" style="color:white; background-color:#6219D8;"> <h4 class="mb-3">Filtre des données</h4> <div class="align-items-center d-flex justify-content-center p-2"> <div style="font-size:1.2rem;" class="mr-3">1. </div><select class="rtnFilterSelect" ></select> <select class="rtnFilterSelect" > </select> <span><select class="rtnFilterSelect"></select></span> </div><div class="align-items-center d-flex justify-content-center p-2"> <div style="font-size:1.2rem;" class="mr-3">2. </div><select class="rtnFilterSelect" ></select> <select class="rtnFilterSelect"> <option value="==">égal à</option> <option value=">=">supérieur ou égal à</option> <option value="<=">inférieur ou égal à</option> </select> <span><select class="rtnFilterSelect" ></select></span> </div><div class="mt-3"><button onclick="filterApply(' + num.toString() + ');" style="min-width: 100px;border-radius: 10px;border-width: 0px;padding: 8px 15px;"><i class="bx bx-filter-alt pr-1"></i>Filtrer</button></div></div></div>               <div class="col-12 col-lg-4 p-3 m-0"><div class="align-items-stretch d-flex flex-lg-column flex-row h-100 justify-content-lg-between justify-content-around"><button style="background-color:#23BE6E4D;" class="btnDash hvr-float" onclick="alert(\'Export des données\')"><i class="bx bx-export pr-1"></i>Exporter les données</button><button style="background-color:#DB54614D;" class="btnDash hvr-float" onclick="delSondRtn(' + num.toString() + ')"><i class="bx bx-trash pr-1"></i>Supprimer le sondage</button></div></div>';
 
     //Création graph réponses
     let elemTimeRep = document.createElement("div");
@@ -130,11 +140,28 @@ const loadDataList = async (num) => {
     }
     timeGraphRep(sondageData['time']);
 
+    document.querySelector("#mesResultats").insertAdjacentHTML("beforeend", htmlToolBar)
+    const filtreChange = (e) => {
+        if (['num'].includes(sondageData["data"][e.srcElement.value]["t"])) {
+            e.srcElement.nextElementSibling.innerHTML = '<option value="==">égal à</option> <option value=">=">supérieur ou égal à</option> <option value="<=">inférieur ou égal à</option>';
+            e.srcElement.nextElementSibling.nextElementSibling.innerHTML = '<input class="rtnFilterSelect" type="number">';
+        } else if (['mc', '1c'].includes(sondageData["data"][e.srcElement.value]["t"])){
+            e.srcElement.nextElementSibling.innerHTML = '<option value="==">égal à</option> <option value=">=" disabled>supérieur ou égal à</option> <option value="<=" disabled>inférieur ou égal à</option>';
+            e.srcElement.nextElementSibling.nextElementSibling.innerHTML = '<select class="rtnFilterSelect" >###</select>'.replace("###", sondageData["data"][e.srcElement.value])
+        };
+    }
+    document.querySelectorAll('.rtnFilterSelect')[0].addEventListener("change", filtreChange);
+    document.querySelectorAll('.rtnFilterSelect')[3].addEventListener("change", filtreChange);
 
     for (ii in sondageData["data"]) {
         if (projectQuestions[ii]["a"]["type"] == "1c" && projectQuestions[ii]["a"]["a"].length == 1) {
             null
         } else {
+            //remplissage des filtres
+            document.querySelectorAll('.rtnFilterSelect')[0].insertAdjacentHTML("beforeend", "<option value='" + ii + "'>Question " + ii + "</option");
+            document.querySelectorAll('.rtnFilterSelect')[3].insertAdjacentHTML("beforeend", "<option value='" + ii + "'>Question " + ii + "</option");
+
+            // création de la tuile
             let elem = document.createElement("div");
             elem.classList = "col-12 col-lg-6 p-3";
             elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString() + ". " + projectQuestions[ii]["q"]);
@@ -547,7 +574,7 @@ const loadCreator = async (num) => {
         };
         idSondageRtn = null;
     } else {
-        let sondageData = await queryRtn('/sondages/edit/' + num.toString() + '/')
+        let sondageData = await queryRtn('/sondages/edit/' + num.toString() + '/', "GET")
         sondageEnCreation = JSON.parse(sondageData);
         sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
         idSondageRtn = num;
@@ -573,7 +600,7 @@ let templateBaseHtml = '<div class="d-flex justify-content-between flex-wrap fle
 let templateTuilehtml = '<div class="col-12 col-sm-6 col-lg-4 mb-4"><div class="neuProjet d-flex align-items-center justify-content-center text-center" onclick="##FUNCTION##">##NAME##</div></div>';
 
 const loadTemplates = async () => {
-    let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
+    let rtnTemplates = JSON.parse(await queryRtn('/templates/', "GET"));
     let categories = [...new Set(rtnTemplates.map(x => x['category']))];
     for (ii in categories) {
         let templateCat = '<div class="col-12 mb-4 border-bottom"><h2>XXX</h2></div>'.replace("XXX", categories[ii]);
@@ -586,7 +613,7 @@ const loadTemplates = async () => {
 };
 
 const loadTemplateInCrea = async (id) => {
-    let templateData = await queryRtn("/templates/" + id.toString() + "/")
+    let templateData = await queryRtn("/templates/" + id.toString() + "/", "GET")
     sondageEnCreation = JSON.parse(templateData);
     sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
     idSondageRtn = null;
@@ -602,7 +629,7 @@ const loadTemplateInCrea = async (id) => {
 };
 
 const loadMyTemplateInCrea = async (id) => {
-    let templateData = await queryRtn("/sondages/edit/" + id.toString() + "/")
+    let templateData = await queryRtn("/sondages/edit/" + id.toString() + "/", "GET")
     sondageEnCreation = JSON.parse(templateData);
     sondageEnCreation['jsonContent'] = JSON.parse(sondageEnCreation['jsonContent']);
     idSondageRtn = null;

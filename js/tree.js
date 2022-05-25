@@ -220,7 +220,7 @@ function templatebulle() {
         confirmButtonText: 'Retour',
         didRender: async (e) => {
             //chargemnet templates rétine
-            let rtnTemplates = JSON.parse(await queryRtn('/templates/'));
+            let rtnTemplates = JSON.parse(await queryRtn('/templates/', "GET"));
             let categories = [...new Set(rtnTemplates.map(x => x['category']))];
             for (ii in categories) {
                 let templateCat = '<div class="col-12 mb-2 mt-3 border-bottom"><h5>XXX</h5></div>'.replace("XXX", categories[ii]);
@@ -231,7 +231,7 @@ function templatebulle() {
                 }
             };
             //chargemnet mes templates
-            let myRtnTemplates = JSON.parse(await queryRtn('/sondages/edit/'));
+            let myRtnTemplates = JSON.parse(await queryRtn('/sondages/edit/', "GET"));
             e.querySelector("#lstMyTemplates").insertAdjacentHTML("beforeend", '<div class="col-12 mb-2 mt-3 border-bottom"><h5>Mes modèles</h5></div>');
             for (iii in myRtnTemplates) {
                 e.querySelector("#lstMyTemplates").insertAdjacentHTML("beforeend", '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'.replace("##NAME##", myRtnTemplates[iii]['nom_proj']).replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadMyTemplateInCrea, " + myRtnTemplates[iii]['id'] + ")"));

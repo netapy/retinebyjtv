@@ -1,6 +1,6 @@
 let chartColors = ['#23BE6E4D', '#7798AB4D', '#6219D84D', '#DB54614D', '#42BFDD4D', '#E7BB734D', '#F08CAE4D', '#A297154D', '#4C4C474D', '#F588514D'];
 
-let purpleVariant = ["#6219D8","#7579F3", "#8494FB","#734AE4","#B48CEC"]
+let purpleVariant = ["#6219D8", "#7579F3", "#8494FB", "#734AE4", "#B48CEC"]
 
 scaleParam = {
     x: {
@@ -81,15 +81,17 @@ function colorLink() {
 }
 linkColor.forEach(l => l.addEventListener('click', colorLink))
 
-async function queryRtn(link) {
+async function queryRtn(link, method, body = "") {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Token " + xxgc('rtnt'));
+    myHeaders.append("Content-Type", "application/json");
 
     var requestOptions = {
-        method: 'GET',
+        method: method,
         headers: myHeaders,
-        redirect: 'follow'
+        redirect: 'follow',
     };
+    if (method == "POST") requestOptions["body"] = JSON.stringify(body);
 
     return fetch("https://retinereq.jetevois.fr:8000" + link, requestOptions)
         .then(response => response.text())
