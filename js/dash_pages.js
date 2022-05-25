@@ -94,15 +94,17 @@ const loadProjList = async () => {
 let dashSond =
   '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></div><div id="mesResultats" class="row p-1 mx-auto" style="max-width:1100px"></div>';
 
-let templateDataList = `<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="100">
-    <div>
-        <h5>##TTRQUEST##</h5>
-        <div class="nbRepGraph">🧍 ##REPS## répondants</div>
-        <div class="canvContain"></div>
-    </div>
-    <div class="d-flex align-itemps-center justify-content-between"><button class="screenBtn" onclick="copyGraph(this.parentElement.previousSibling)">📄 Copier le graphique</button></div>
-    </div>
-    `;
+let templateDataList = 
+    `<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="100">
+      <div>
+          <h5>##TTRQUEST##</h5>
+          <div class="nbRepGraph">🧍 ##REPS## répondants</div>
+          <div class="canvContain"></div>
+      </div>
+      <div class="d-flex align-itemps-center justify-content-between">
+        <button class="screenBtn" onclick="copyGraph(this.parentElement.previousSibling.previousSibling)">📄 Copier le graphique</button>
+      </div>
+    </div>`;
 
 var updateChartFunList = [];
 let timeGraphRep;
