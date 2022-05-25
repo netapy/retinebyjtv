@@ -516,6 +516,8 @@ svg {
     border-radius: 8px;
     padding: 6px 10px;
     margin: 0px 5px;
+    min-width: 100px;
+    max-width: 180px;
 }
 
 .btnDash {

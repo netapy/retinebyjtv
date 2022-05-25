@@ -111,22 +111,33 @@ const updateData = async (num, filter = "") => {
   let sondageData = await queryRtn("/reps/" + num.toString() + "/", "POST", filter);
   sondageData = JSON.parse(sondageData);
   let funList = Object.keys(updateChartFunList);
-  timeGraphRep(sondageData["time"]);
-  for (iii in funList) {
-    updateChartFunList[funList[iii]](sondageData["data"][funList[iii]]);
+  if (sondageData["time"].length == 0) {
+    alert("Aucune données à afficher.");
+  } else {
+    timeGraphRep(sondageData["time"]);
+    for (iii in funList) {
+      updateChartFunList[funList[iii]](sondageData["data"][funList[iii]]);
+    }
   }
 };
+
 const filterApply = (num) => {
-  filterOne = [
-    document.querySelectorAll(".rtnFilterSelect")[0].value,
-    document.querySelectorAll(".rtnFilterSelect")[1].value,
-    document.querySelectorAll(".rtnFilterSelect")[2].value,
-  ];
-  filterTwo = [
-    document.querySelectorAll(".rtnFilterSelect")[3].value,
-    document.querySelectorAll(".rtnFilterSelect")[4].value,
-    document.querySelectorAll(".rtnFilterSelect")[5].value,
-  ];
+  let filterOne = "",
+    filterTwo = "";
+  if (document.querySelectorAll(".rtnFilterSelect")[0].value != "dis") {
+    filterOne = [
+      document.querySelectorAll(".rtnFilterSelect")[0].value,
+      document.querySelectorAll(".rtnFilterSelect")[1].value,
+      document.querySelectorAll(".rtnFilterSelect")[2].value,
+    ];
+  }
+  if (document.querySelectorAll(".rtnFilterSelect")[3].value != "dis") {
+    filterTwo = [
+      document.querySelectorAll(".rtnFilterSelect")[3].value,
+      document.querySelectorAll(".rtnFilterSelect")[4].value,
+      document.querySelectorAll(".rtnFilterSelect")[5].value,
+    ];
+  }
   updateData(num, {
     fltr1: filterOne,
     fltr2: filterTwo,
@@ -136,10 +147,7 @@ const filterApply = (num) => {
 const loadDataList = async (num) => {
   document
     .querySelector("#header-toggle")
-    .parentElement.insertAdjacentHTML(
-      "beforeEnd",
-      '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>'
-    );
+    .parentElement.insertAdjacentHTML("beforeEnd", '<i class="bx bx-arrow-back" id="header-toggle" onclick="changePage(dashProj, loadProjList);"></i>');
   let sondageData = await queryRtn("/reps/" + num.toString() + "/", "POST");
   sondageData = JSON.parse(sondageData);
   let projectInfo = userProjects.find((x) => x["id"] == num.toString());
@@ -147,10 +155,7 @@ const loadDataList = async (num) => {
   let zoneProjs = document.querySelector("#mesResultats");
 
   //Création du header
-  document.querySelector("#headerBar").innerHTML = '<h1 class="mt-3 mb-4" id="titreEtude" style="font-size:3rem;">##NOMPROJ##</h1>'.replace(
-    "##NOMPROJ##",
-    projectInfo["nom_proj"]
-  );
+  document.querySelector("#headerBar").innerHTML = `<h1 class="mt-3 mb-4" id="titreEtude" style="font-size:3rem;">${projectInfo["nom_proj"]}</h1>`;
 
   //TODO LIVE REFRESH A INCLURE PLUS TARD
   let liveBtn = '<div class="liveBtn">🔴 Données en direct</div>';
@@ -163,19 +168,23 @@ const loadDataList = async (num) => {
             <h4 class="mb-3">Filtre des données</h4>
             <div class="align-items-center d-flex justify-content-center p-2">
                 <div style="font-size: 1.2rem;" class="mr-3">1.</div>
-                <select class="rtnFilterSelect"></select>
-                <select class="rtnFilterSelect"> </select>
-                <span><select class="rtnFilterSelect"></select></span>
-            </div>
-            <div class="align-items-center d-flex justify-content-center p-2">
-                <div style="font-size: 1.2rem;" class="mr-3">2.</div>
-                <select class="rtnFilterSelect"></select>
-                <select class="rtnFilterSelect">
+                <select class="rtnFilterSelect"><option value="dis">Désactivé</option></select>
+                <select class="rtnFilterSelect" disabled> 
                     <option value="==">égal à</option>
                     <option value=">=">supérieur ou égal à</option>
                     <option value="<=">inférieur ou égal à</option>
                 </select>
-                <span><select class="rtnFilterSelect"></select></span>
+                <span><select class="rtnFilterSelect" disabled></select></span>
+            </div>
+            <div class="align-items-center d-flex justify-content-center p-2">
+                <div style="font-size: 1.2rem;" class="mr-3">2.</div>
+                <select class="rtnFilterSelect"><option value="dis">Désactivé</option></select>
+                <select class="rtnFilterSelect" disabled>
+                    <option value="==">égal à</option>
+                    <option value=">=">supérieur ou égal à</option>
+                    <option value="<=">inférieur ou égal à</option>
+                </select>
+                <span><select class="rtnFilterSelect" disabled></select></span>
             </div>
             <div class="mt-3">
                 <button onclick="filterApply(${num.toString()});" style="min-width: 100px; border-radius: 10px; border-width: 0px; padding: 8px 15px;"><i class="bx bx-filter-alt pr-1"></i>Filtrer</button>
@@ -243,18 +252,30 @@ const loadDataList = async (num) => {
   timeGraphRep(sondageData["time"]);
 
   document.querySelector("#mesResultats").insertAdjacentHTML("beforeend", htmlToolBar);
+
   const filtreChange = (e) => {
-    if (["num"].includes(sondageData["data"][e.srcElement.value]["t"])) {
-      e.srcElement.nextElementSibling.innerHTML =
-        '<option value="==">égal à</option> <option value=">=">supérieur ou égal à</option> <option value="<=">inférieur ou égal à</option>';
-      e.srcElement.nextElementSibling.nextElementSibling.innerHTML = '<input class="rtnFilterSelect" type="number">';
-    } else if (["mc", "1c"].includes(sondageData["data"][e.srcElement.value]["t"])) {
-      e.srcElement.nextElementSibling.innerHTML =
-        '<option value="==">égal à</option> <option value=">=" disabled>supérieur ou égal à</option> <option value="<=" disabled>inférieur ou égal à</option>';
-      e.srcElement.nextElementSibling.nextElementSibling.innerHTML = '<select class="rtnFilterSelect" >###</select>'.replace(
-        "###",
-        sondageData["data"][e.srcElement.value]
-      );
+    if (e.srcElement.value == "dis") {
+      e.srcElement.nextElementSibling.disabled = true;
+      e.srcElement.nextElementSibling.nextElementSibling.firstChild.disabled = true;
+    } else {
+      e.srcElement.nextElementSibling.disabled = false;
+      e.srcElement.nextElementSibling.nextElementSibling.firstChild.disabled = false;
+      if (["num"].includes(sondageData["data"][e.srcElement.value]["t"])) {
+        e.srcElement.nextElementSibling.innerHTML =
+          '<option value="==">égal à</option> <option value=">=">supérieur ou égal à</option> <option value="<=">inférieur ou égal à</option>';
+        e.srcElement.nextElementSibling.nextElementSibling.innerHTML = '<input class="rtnFilterSelect" type="number" style="width:100px;">';
+      } else if (["mc", "1c"].includes(sondageData["data"][e.srcElement.value]["t"])) {
+        e.srcElement.nextElementSibling.innerHTML =
+          '<option value="==">égal à</option> <option value=">=" disabled>supérieur ou égal à</option> <option value="<=" disabled>inférieur ou égal à</option>';
+        e.srcElement.nextElementSibling.nextElementSibling.innerHTML = `<select class="rtnFilterSelect" >
+        ${Object.keys(sondageData["data"][e.srcElement.value]["d"])
+          .map((x) => `<option value=${x}>${x}</option>`)
+          .join("")}</select>`;
+      } else if (["5s"].includes(sondageData["data"][e.srcElement.value]["t"])) {
+        e.srcElement.nextElementSibling.innerHTML =
+          '<option value="==">égal à</option> <option value=">=">supérieur ou égal à</option> <option value="<=">inférieur ou égal à</option>';
+        e.srcElement.nextElementSibling.nextElementSibling.innerHTML = `<select class="rtnFilterSelect"><option value="1">⭐</option><option value="2">⭐⭐</option><option value="3">⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="5">⭐⭐⭐⭐⭐</option></select>`;
+      }
     }
   };
   document.querySelectorAll(".rtnFilterSelect")[0].addEventListener("change", filtreChange);
@@ -264,19 +285,16 @@ const loadDataList = async (num) => {
     if (projectQuestions[ii]["a"]["type"] == "1c" && projectQuestions[ii]["a"]["a"].length == 1) {
       null;
     } else {
-      //remplissage des filtres
-      document
-        .querySelectorAll(".rtnFilterSelect")[0]
-        .insertAdjacentHTML("beforeend", "<option value='" + ii + "'>Question " + ii + "</option");
-      document
-        .querySelectorAll(".rtnFilterSelect")[3]
-        .insertAdjacentHTML("beforeend", "<option value='" + ii + "'>Question " + ii + "</option");
+      //remplissage des filtres avec les bonnes questions
+      document.querySelectorAll(".rtnFilterSelect")[0].insertAdjacentHTML("beforeend", `<option value='${ii}'>Question ${ii}</option`);
+      document.querySelectorAll(".rtnFilterSelect")[3].insertAdjacentHTML("beforeend", `<option value='${ii}'>Question ${ii}</option`);
 
       // création de la tuile
       let elem = document.createElement("div");
       elem.classList = "col-12 col-lg-6 p-3";
       elem.innerHTML = templateDataList.replace("##TTRQUEST##", ii.toString() + ". " + projectQuestions[ii]["q"]);
       elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + sondageData["data"][ii]["nbrep"].toString() + " répondants";
+
       if (["mc", "1c"].includes(sondageData["data"][ii]["t"])) {
         let dataMc = sondageData["data"][ii];
         elem.querySelector(".canvContain").insertAdjacentHTML("afterbegin", "<canvas></canvas>");
@@ -377,9 +395,7 @@ const loadDataList = async (num) => {
                   label: "",
                   color: "#6219D8",
                   //TODO ajouter une règle pour varier l'échelle dynamiquement en fonction de la somme des valeurs
-                  data: Object.values(dataCl["d"]["nuage"]).map(
-                    (d) => 15 + d * Math.min(125 / Object.values(dataCl["d"]["nuage"]).length, 8)
-                  ),
+                  data: Object.values(dataCl["d"]["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(dataCl["d"]["nuage"]).length, 8)),
                 },
               ],
             },
@@ -406,10 +422,10 @@ const loadDataList = async (num) => {
           updateChartFunList[numQ.toString()] = (x) => {
             gauge32.setValueAnimated(x["d"]["sentMoy"] * 100, 1.5);
             chart.data.labels = Object.keys(x["d"]["nuage"]);
-            chart.data.datasets[0].data = Object.values(x["d"]["nuage"]).map(
-              (d) => 15 + d * Math.min(125 / Object.values(x["d"]["nuage"]).length, 8)
-            );
+            chart.data.datasets[0].data = Object.values(x["d"]["nuage"]).map((d) => 15 + d * Math.min(125 / Object.values(x["d"]["nuage"]).length, 8));
             elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
+            //chart.reset();
+            chart.update();
           };
 
           const toggleCanv = (btn) => {
@@ -493,13 +509,7 @@ const loadDataList = async (num) => {
           elem.querySelector(".starContain").innerHTML = starDisplayhtml
             .replace("##PERCENT##", 100 - (x["d"]["main"] * 100) / 5)
             .replace("##STARS##", x["d"]["main"]);
-          chart.data.datasets[0].data = [
-            x["d"]["detail"]["5"],
-            x["d"]["detail"]["4"],
-            x["d"]["detail"]["3"],
-            x["d"]["detail"]["2"],
-            x["d"]["detail"]["1"],
-          ];
+          chart.data.datasets[0].data = [x["d"]["detail"]["5"], x["d"]["detail"]["4"], x["d"]["detail"]["3"], x["d"]["detail"]["2"], x["d"]["detail"]["1"]];
           chart.update();
           elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
         };
@@ -527,10 +537,7 @@ const loadDataList = async (num) => {
         elem.querySelector(".canvContain").innerHTML = "<canvas></canvas>";
         elem
           .querySelector("h5")
-          .insertAdjacentHTML(
-            "beforeend",
-            "<span style='font-size:1rem;opacity:.6;'>(en " + projectQuestions[ii]["a"]["a"][2] + ")</span>"
-          );
+          .insertAdjacentHTML("beforeend", "<span style='font-size:1rem;opacity:.6;'>(en " + projectQuestions[ii]["a"]["a"][2] + ")</span>");
         let chart = new Chart(elem.querySelector("canvas"), {
           plugins: [ChartDataLabels],
           type: "bar",
@@ -634,9 +641,7 @@ const loadDataList = async (num) => {
             },
           ];
           chart.options.scales.x1.min = parseInt(Object.keys(x["d"]["detail"]).at(0).split(",").at(0).replace(".0", "").replace(/\D/g, ""));
-          chart.options.scales.x1.max = parseInt(
-            Object.keys(x["d"]["detail"]).at(-1).split(",").at(-1).replace(".0", "").replace(/\D/g, "")
-          );
+          chart.options.scales.x1.max = parseInt(Object.keys(x["d"]["detail"]).at(-1).split(",").at(-1).replace(".0", "").replace(/\D/g, ""));
           chart.update();
           elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
         };
@@ -821,7 +826,7 @@ const loadTemplates = async () => {
 };
 
 const loadTemplateInCrea = async (id) => {
-  let templateData = await queryRtn("/templates/" + id.toString() + "/", "GET");
+  let templateData = await queryRtn(`/templates/${id.toString()}/`, "GET");
   sondageEnCreation = JSON.parse(templateData);
   sondageEnCreation["jsonContent"] = JSON.parse(sondageEnCreation["jsonContent"]);
   idSondageRtn = null;
@@ -837,7 +842,7 @@ const loadTemplateInCrea = async (id) => {
 };
 
 const loadMyTemplateInCrea = async (id) => {
-  let templateData = await queryRtn("/sondages/edit/" + id.toString() + "/", "GET");
+  let templateData = await queryRtn(`/sondages/edit/${id.toString()}/`, "GET");
   sondageEnCreation = JSON.parse(templateData);
   sondageEnCreation["jsonContent"] = JSON.parse(sondageEnCreation["jsonContent"]);
   idSondageRtn = null;
