@@ -22,7 +22,7 @@ function changePage(destinationHTML, loadingFun, sondageNum = 0) {
 //PROJECTS OVERVIEW
 let dashProj = `<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <div></div>
-        <h1 class="h2 py-2">Dashboard des sondages</h1>
+        <h1 class="h2 py-2 text-center">Dashboard des sondages</h1>
     </div>
     <div id="mesSondages" class="row p-3 w-100" style="max-width: 1100px;">
         <div class="col-12 col-sm-6 col-lg-4 mb-4">
@@ -36,7 +36,7 @@ let dashProj = `<div class="d-flex justify-content-between flex-wrap flex-md-now
 
 let templateUserProj = `<div class="col-12 col-sm-6 col-lg-4 mb-5">
         <div class="projetTile neuProjet d-flex align-items-center justify-content-stretch flex-column hvr-float" onclick="##FUNCTION##">
-            <div class="threeDot hvr-bounce-in" onclick="##FUNCTIONSHARE##;window.event.stopPropagation();"><img class="w-100" src="/img/icons/##ICON##" /></div>
+            <div class="threeDot hvr-bounce-in" onclick="##FUNCTIONSHARE##;window.event.stopPropagation();"><img class="w-100" src="img/icons/##ICON##" /></div>
             <div class="p-3 pr-5 w-100 h-75 m-0" style="background-color: ##PROJCOLOR##; border-radius: 10px 10px 0px 0px; color: white;">
                 <div><h3>##NOMPROJ##</h3></div>
             </div>
@@ -51,7 +51,7 @@ const loadProjList = async () => {
   let zoneProjs = document.querySelector("#mesSondages");
   userProjects = await queryRtn("/sondages/edit/", "GET");
   userProjects = JSON.parse(userProjects);
-  for (ii in userProjects) {
+  for (var ii = 0; ii < userProjects.length; ii++) {
     if (userProjects[ii]["reponse"].length == 0 && userProjects[ii]["priv"] == true) {
       zoneProjs.insertAdjacentHTML(
         "beforeend",
@@ -92,7 +92,7 @@ const loadProjList = async () => {
 
 //SONDAGE DISPLAY
 let dashSond =
-  '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></div><div id="mesResultats" class="row p-1 mx-auto" style="max-width:1100px"></div>';
+  '<div id="headerBar" class="text-center w-100 py-2 mb-3 mt-5"></div><div id="mesResultats" class="row p-0 p-md-1 mx-auto w-100" style="max-width:1100px"></div>';
 
 let templateDataList = 
     `<div class="neuProjetSimple p-4 text-center" data-aos="fade-up" data-aos-delay="100">
@@ -117,7 +117,7 @@ const updateData = async (num, filter = "") => {
     alert("Aucune données à afficher.");
   } else {
     timeGraphRep(sondageData["time"]);
-    for (iii in funList) {
+    for (var iii = 0; iii < funList.length; iii++) {
       updateChartFunList[funList[iii]](sondageData["data"][funList[iii]]);
     }
   }
@@ -701,8 +701,8 @@ const loadDataList = async (num) => {
           },
         });
         updateChartFunList[ii.toString()] = (x) => {
-          chart.data.labels = Object.keys(x["dates"]).map((el) => new Date(Date.parse(el)));
-          chart.data.datasets[0].data = Object.values(x["dates"]);
+          chart.data.labels = Object.keys(x["d"]["dates"]).map((el) => new Date(Date.parse(el)));
+          chart.data.datasets[0].data = Object.values(x["d"]["dates"]);
           chart.update();
           elem.querySelector(".nbRepGraph").innerHTML = "🧍 " + x["nbrep"].toString() + " répondants";
         };
@@ -717,7 +717,7 @@ const loadDataList = async (num) => {
 //CREATEUR DISPLAY
 
 let creationStudioInterface = `<div id="studio" class="row p-1">
-  <div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet" onkeyup="sondageEnCreation[\'nom_proj\'] = this.value" maxlength="100" /></div>
+  <div class="col-12 w-100 text-center py-3"><input class="mx-auto" type="text" id="titreSond" placeholder="Nom du projet" onkeyup="changementTitre(this.value)" maxlength="100" /></div>
   <div class="col-12 col-lg-8 p-3 text-center d-flex flex-column justify-content-center">
       <div class="cellZone w-100 pt-3">
           <div class="dureeEstim">⏲️ Durée estimée : <span id="tempsEstim"></span></div>
@@ -745,7 +745,7 @@ let creationStudioInterface = `<div id="studio" class="row p-1">
           <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: #faf7ff; border-radius: 15px;">
               <div class="h-100 w-100 d-flex flex-column justify-content-between m-auto" style="max-width: 500px;">
                   <div class="w-100 d-flex align-items-center justify-content-between" style="background-color: transparent;">
-                      <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/img/favicon.ico" style="height: 20px;" /> Rétine</div>
+                      <div class="p-3" style="font-family: Lexend Deca; font-size: 1rem; font-weight: 600;"><img src="/dashboard/img/favicon.ico" style="height: 20px;" /> Rétine</div>
                       <div id="pourcentageAdv">0%</div>
                   </div>
                   <div class="h-100 d-flex flex-column justify-content-between scrollbehavior" style="overflow-y: scroll; scroll-behavior: smooth;">

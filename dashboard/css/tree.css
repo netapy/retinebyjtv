@@ -172,8 +172,9 @@
 }
 
 .crossRem {
-    padding: 5px;
+    padding: 10px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 .fieldQlilnum {
@@ -188,7 +189,7 @@
 
 #ansWriteZone {
     text-align: left;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     padding-left: 9px;
     border-left-style: outset;

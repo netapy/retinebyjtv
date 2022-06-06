@@ -28,18 +28,14 @@ const updateCells = () => {
 
   if (JSON.stringify(sondageEnCreationVPREV) != JSON.stringify(sondageEnCreation) && idSondageRtn == null) {
     firtValidateSondage();
-  } else if (
-    JSON.stringify(sondageEnCreationVPREV) != JSON.stringify(sondageEnCreation) &&
-    document.querySelectorAll(".liveBtn").length > 0
-  ) {
+  } else if (JSON.stringify(sondageEnCreationVPREV) != JSON.stringify(sondageEnCreation) && document.querySelectorAll(".liveBtn").length > 0) {
     updateSondage();
   }
   sondageEnCreationVPREV = JSON.parse(JSON.stringify(sondageEnCreation));
 
   let dureeEstim = sondageEnCreation["jsonContent"].length * 8 - 10;
   if (dureeEstim > 60) {
-    document.querySelector("#tempsEstim").innerHTML =
-      Math.floor(dureeEstim / 60).toString() + " min, " + (dureeEstim % 60).toString() + " sec";
+    document.querySelector("#tempsEstim").innerHTML = Math.floor(dureeEstim / 60).toString() + " min, " + (dureeEstim % 60).toString() + " sec";
   } else {
     document.querySelector("#tempsEstim").innerHTML = dureeEstim.toString() + " secondes";
   }
@@ -74,10 +70,12 @@ const createCell = (elem) => {
   Swal.fire({
     html: `<div class="p-3 w-100 text-center" style="min-width:300px">
                     <h4 class="mb-4">${popupHeader}</h4>
-                    <div><textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea></div>
+                    <div>
+                      <textarea id="outQuestion" class="fieldQ" placeholder="Comment est votre blanquette ?"></textarea>
+                    </div>
                     <h>
                     <div>
-                    <select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector(\'#ansWriteZone\').innerHTML = dicQFields[this.value]">
+                    <select class="fieldQ" name="qtype" id="qtypefield" onChange="document.querySelector('#ansWriteZone').innerHTML = dicQFields[this.value]">
                         <option value="" selected disabled>Choisir un type de réponse</option>
                         <option value="1c">Choix Unique</option>
                         <option value="mc">Choix Multiple</option>
@@ -87,7 +85,7 @@ const createCell = (elem) => {
                         <option value="5s">Notation</option>
                     </select>
                     </div>
-                    <div id="ansWriteZone"></div>
+                    <div id="ansWriteZone" class="pt-2"></div>
                 </div>`,
     didRender: (e) => {
       e.querySelector("#outQuestion").value = qModel["q"];
@@ -121,9 +119,10 @@ const createCell = (elem) => {
     },
     preConfirm: () => {
       let qtype = document.querySelector("#qtypefield").value;
-      let qA;
+      let qA, qO;
       if (qtype == "1c" || qtype == "mc") {
         qA = [...document.querySelectorAll(".fieldQlil")].map((e) => e.value).filter(Boolean);
+        qO = checkCaseAutre.checked;
       } else if (qtype == "cl") {
         qA = [document.querySelector("#nbCaracLimit").value];
       } else if (qtype == "5s") {
@@ -131,17 +130,14 @@ const createCell = (elem) => {
       } else if (qtype == "cal") {
         qA = [document.querySelector("#datee").checked, document.querySelector("#heuree").checked];
       } else if (qtype == "num") {
-        qA = [
-          document.querySelector("#nbMin").value,
-          document.querySelector("#nbMax").value,
-          document.querySelector("#uniteeChoice").value,
-        ];
+        qA = [document.querySelector("#nbMin").value, document.querySelector("#nbMax").value, document.querySelector("#uniteeChoice").value];
       }
       let repFinal = {
-        q: document.querySelector("#outQuestion").value,
+        q: document.querySelector("#outQuestion").value, // Le texte de la question
         a: {
-          a: qA,
-          type: qtype,
+          a: qA, //Les réponses
+          o: qO, //Les paramètres
+          type: qtype, //Le type de question
         },
       };
       //verification de coherence
@@ -152,9 +148,7 @@ const createCell = (elem) => {
         verifCoherenceChiffre() ||
         (repFinal["a"]["type"] == "cal" && repFinal["a"]["a"] == [false, false].toString())
       ) {
-        document
-          .querySelector("#ansWriteZone")
-          .insertAdjacentHTML("beforeend", "<div class='mt-2'>Veuillez compléter l'ensemble des champs.</div>");
+        document.querySelector("#ansWriteZone").insertAdjacentHTML("beforeend", "<div class='mt-2'>Veuillez compléter l'ensemble des champs.</div>");
         return false;
       } else {
         return [repFinal, elem];
@@ -191,10 +185,7 @@ const newFieldon = (e, input) => {
     document.querySelectorAll(".fieldQlil")[document.querySelectorAll(".fieldQlil").length - 1].value != "" &&
     document.querySelectorAll(".fieldQlil").length < 9
   ) {
-    input.parentElement.insertAdjacentHTML(
-      "afterend",
-      inputQForm.replace("</", "<span class='crossRem' onClick=\"this.parentElement.remove()\">❌</span></")
-    );
+    input.parentElement.insertAdjacentHTML("afterend", inputQForm.replace("</", "<span class='crossRem' onClick=\"this.parentElement.remove()\">❌</span></"));
   }
   if (e.keyCode == 13) {
     document.querySelectorAll(".fieldQlil")[document.querySelectorAll(".fieldQlil").length - 1].focus();
@@ -202,10 +193,15 @@ const newFieldon = (e, input) => {
 };
 
 let inputQForm = "<div><input type='text' class='fieldQlil' onKeyUp='newFieldon(event,this)' value=''></div>";
-
 let dicQFields = {
-  "1c": "<h5>Les réponses</h5>" + inputQForm,
-  mc: "<h5>Les réponses</h5>" + inputQForm,
+  "1c":
+    "<h5>Les réponses</h5>" +
+    inputQForm +
+    '<div class="my-2"><input class="mr-2" type="checkbox" value="" id="checkCaseAutre"><label for="checkCaseAutre">Ajouter une case "autre"</label></div>',
+  mc:
+    "<h5>Les réponses</h5>" +
+    inputQForm +
+    '<div class="my-2"><input class="mr-2" type="checkbox" value="" id="checkCaseAutre"><label for="checkCaseAutre">Ajouter une case "autre"</label></div>',
   cl: '<div><label for="nbCaracLimit">Limite de caractères </label><input class="fieldQlilnum" type="number" id="nbCaracLimit" name="nbCaracLimit" min="1" max="140" value="100"></div><div><p>💡 Rétine analysera automatiquement le sentiment dégagé par chacune des réponses pour établir des statistiques visibles sur votre dashboard des résultats.</p></div>',
   num: '<label for="nbMin">Minimum </label><input class="fieldQlilnum" type="number" id="nbMin" name="nbMin" value="0" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="nbMax">Maximum </label><input class="fieldQlilnum" type="number" id="nbMax" name="nbMax" value="24" onchange="verifCoherenceChiffre() ? this.style.backgroundColor = \'#ff00004a\' : this.style.backgroundColor = \'\'"><br><label for="unitee">Unitée </label><input class="fieldQlilnum" list="unitees" id="uniteeChoice" name="choixUnitee" maxlength="6"><datalist id="unitees"> <option value="$"> <option value="€"><option value="Kg"><option value="g"></datalist>',
   cal: '<div class="my-2">L\'utilisateur devra saisir : </div><input type="checkbox" id="datee" checked> <label for="datee">une date (format JJ/MM/AAAA)</label><br><input type="checkbox" id="heuree"> <label for="heuree">une heure (format HH:MM)</label> ',
@@ -259,6 +255,7 @@ let dicColorCells = {
   cl: "border-color: #7aad89b0",
   num: "border-color: #FF5964b0",
   "5s": "border-color: #FBB13Cb0",
+  cal: "border-color: #B0EAFF",
   fin: "background-color: #2FCC72;color:white; border-width:0;",
 };
 
@@ -280,28 +277,19 @@ function templatebulle() {
             "beforeend",
             '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'
               .replace("##NAME##", templateFiltered[iii]["nom_proj"])
-              .replace(
-                "##FUNCTION##",
-                "Swal.close();changePage(creationStudioInterface, loadTemplateInCrea, " + templateFiltered[iii]["id"] + ")"
-              )
+              .replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadTemplateInCrea, " + templateFiltered[iii]["id"] + ")")
           );
         }
       }
       //chargemnet mes templates
       let myRtnTemplates = JSON.parse(await queryRtn("/sondages/edit/", "GET"));
-      e.querySelector("#lstMyTemplates").insertAdjacentHTML(
-        "beforeend",
-        '<div class="col-12 mb-2 mt-3 border-bottom"><h5>Mes modèles</h5></div>'
-      );
+      e.querySelector("#lstMyTemplates").insertAdjacentHTML("beforeend", '<div class="col-12 mb-2 mt-3 border-bottom"><h5>Mes modèles</h5></div>');
       for (iii in myRtnTemplates) {
         e.querySelector("#lstMyTemplates").insertAdjacentHTML(
           "beforeend",
           '<div class="col-12"><div class="elemPopupTemplate" onclick="##FUNCTION##">##NAME##</div></div>'
             .replace("##NAME##", myRtnTemplates[iii]["nom_proj"])
-            .replace(
-              "##FUNCTION##",
-              "Swal.close();changePage(creationStudioInterface, loadMyTemplateInCrea, " + myRtnTemplates[iii]["id"] + ")"
-            )
+            .replace("##FUNCTION##", "Swal.close();changePage(creationStudioInterface, loadMyTemplateInCrea, " + myRtnTemplates[iii]["id"] + ")")
         );
       }
     },
@@ -315,6 +303,16 @@ const toggleTabPopTemp = (elem) => {
     document.querySelector("#lstMyTemplates").style.display = "";
     document.querySelector("#lstTemplates").style.display = "none";
   }
+};
+
+var _changeInterval = null;
+const changementTitre = (value) => {
+  clearInterval(_changeInterval);
+  _changeInterval = setInterval(function () {
+    sondageEnCreation["nom_proj"] = value;
+    updateCells();
+    clearInterval(_changeInterval);
+  }, 2000);
 };
 
 const validateSondage = () => {
@@ -393,10 +391,7 @@ const firtValidateSondage = () => {
     .then((result) => {
       idSondageRtn = JSON.parse(result)["id"];
       let s = new Date().toLocaleString();
-      document.body.insertAdjacentHTML(
-        "beforeend",
-        '<div class="liveBtn" style="opacity:.75; color: grey;">Enregistré à ' + s.split(", ")[1] + "</div>"
-      );
+      document.body.insertAdjacentHTML("beforeend", '<div class="liveBtn" style="opacity:.75; color: grey;">Enregistré à ' + s.split(", ")[1] + "</div>");
     })
     .catch((error) => console.log("error", error));
 };

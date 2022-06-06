@@ -1,7 +1,3 @@
-body {
-    font-family: 'Raleway', sans-serif;
-    background-color: #FAF7FF;
-}
 
 input:focus,
 textarea:focus,
@@ -207,9 +203,11 @@ h5 {
 body {
     position: relative;
     margin: var(--header-height) 0 0 0;
-    padding: 0 1rem;
+    padding: 0 .5rem;
     font-size: var(--normal-font-size);
-    transition: .5s
+    transition: .5s;
+    font-family: 'Raleway', sans-serif;
+    background-color: #FAF7FF;
 }
 
 a {
