@@ -61,8 +61,8 @@ const loadProjList = async () => {
           .replace("##NOMPROJ##", userProjects[ii]["nom_proj"])
           .replace("##CREADATE##", userProjects[ii]["crea_date"].split("T")[0])
           .replace("##NBREP##", "Brouillon")
-          .replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]["id"] + ")")
           .replace("##ICON##", "delete.svg")
+          .replace("##FUNCTION##", "changePage(creationStudioInterface, loadCreator, " + userProjects[ii]["id"] + ")")
           .replace("##FUNCTIONSHARE##", "delSondRtn(" + userProjects[ii]["id"] + ")")
       );
     } else {
@@ -73,9 +73,9 @@ const loadProjList = async () => {
           .replace("##NOMPROJ##", userProjects[ii]["nom_proj"])
           .replace("##CREADATE##", userProjects[ii]["crea_date"].split("T")[0])
           .replace("##NBREP##", userProjects[ii]["reponse"].length.toString() + " réponses")
-          .replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]["id"] + ")")
           .replaceAll("##IDPROJ##", userProjects[ii]["id"])
           .replace("##ICON##", "share.svg")
+          .replace("##FUNCTION##", "changePage(dashSond, loadDataList, " + userProjects[ii]["id"] + ")")
           .replace("##FUNCTIONSHARE##", "shareBtn('" + userProjects[ii]["id"] + "')")
       );
     }
