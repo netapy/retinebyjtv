@@ -68,6 +68,7 @@ const showNavbar = (toggleId, navId, bodyId, headerId) => {
         })
     }
 };
+
 showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header');
 
 const linkColor = document.querySelectorAll('.nav_link')
@@ -142,15 +143,16 @@ async function delSondRtn(num) {
 };
 
 function shareBtn(e) {
-    navigator.clipboard.writeText("retine.io/sondage#" + e.toString()).then(function () {
+    navigator.clipboard.writeText("retine.jetevois.fr/sondage#" + e.toString()).then(function () {
         Swal.fire(
             'Lien du sondage copié !',
-            "retine.io/sondage#" + e.toString(),
+            "retine.jetevois.fr/sondage#" + e.toString(),
             'success'
         );
     }, function () {
         console.log("error")
     });
+
 };
 
 const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
