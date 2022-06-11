@@ -195,7 +195,7 @@ const loadDataList = async (num) => {
         </div>
         <div class="col-12 col-lg-4 p-3 m-0">
         <div class="align-items-stretch d-flex flex-lg-column flex-row h-100 justify-content-lg-between justify-content-around">
-            <button style="background-color: #23be6e4d;" class="btnDash hvr-float" onclick="alert('Export des données')"><i class="bx bx-export pr-1"></i>Exporter les données</button>
+            <button style="background-color: #23be6e4d;" class="btnDash hvr-float" onclick="dlData(${num.toString()})"><i class="bx bx-export pr-1"></i>Exporter les données</button>
             <button style="background-color: #db54614d;" class="btnDash hvr-float" onclick="delSondRtn(${num.toString()})"><i class="bx bx-trash pr-1"></i>Supprimer le sondage</button>
         </div>
     </div>`;
