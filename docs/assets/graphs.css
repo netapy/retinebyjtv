@@ -10,6 +10,7 @@
 .nbRepGraph {
     font-size: .8rem;
     opacity: .9;
+    display:inline-block;
 }
 
 .canvContain {
