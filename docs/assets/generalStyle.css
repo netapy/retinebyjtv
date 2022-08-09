@@ -2,7 +2,8 @@ h1,
 h2,
 h3,
 h4,
-h5 {
+h5,
+h6 {
   outline: none;
   font-family: Lexend;
 }
@@ -76,7 +77,9 @@ h5 {
   -webkit-transition-property: transform;
   transition-property: transform;
 }
-.hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
+.hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
   -webkit-transform: scale(1.1);
   transform: scale(1.03);
 }
