@@ -2,7 +2,9 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/assets/favicon.ico" />
+    <link rel="icon" href="/assets/favicon.ico" id="light-scheme-favicon" />
+    <link rel="icon" href="/assets/faviconBlanc.ico" id="dark-scheme-favicon" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
@@ -31,8 +33,7 @@
     />
     <meta property="twitter:image" content="/assets/banner-min.png" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300&display=swap" rel="stylesheet" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DFN4YJVCW6"></script>
@@ -45,16 +46,33 @@
 
       gtag("config", "G-DFN4YJVCW6");
     </script>
-    <script type="module" crossorigin src="/assets/index.15e91018.js"></script>
-    <link rel="stylesheet" href="/assets/index.6d926119.css">
+    <script type="module" crossorigin src="/assets/index.2b8247b9.js"></script>
+    <link rel="stylesheet" href="/assets/index.ecfc7b79.css">
   </head>
   <body style="margin: 0px; padding: 0px">
     <div id="app"></div>
     
   </body>
   <style>
-    body{
-      font-family: 'Lexend Deca', sans-serif;
+    body {
+      font-family: "Lexend Deca", sans-serif;
     }
   </style>
+  <script>
+    matcher = window.matchMedia("(prefers-color-scheme: dark)");
+    matcher.addListener(onUpdate);
+    lightSchemeIcon = document.querySelector("link#light-scheme-favicon");
+    darkSchemeIcon = document.querySelector("link#dark-scheme-favicon");
+
+    function onUpdate() {
+      if (matcher.matches) {
+        lightSchemeIcon.remove();
+        document.head.append(darkSchemeIcon);
+      } else {
+        document.head.append(lightSchemeIcon);
+        darkSchemeIcon.remove();
+      }
+    }
+    onUpdate();
+  </script>
 </html>
