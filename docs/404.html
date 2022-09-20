@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/assets/favicon.ico" id="light-scheme-favicon" />
+    <link rel="icon" href="/assets/faviconBlanc.ico" id="dark-scheme-favicon" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>Rétine - Votre compagnon de la mesure d'opinion</title>
+    <meta name="title" content="Rétine - Votre compagnon de la mesure d'opinion" />
+    <meta
+      name="description"
+      content="Développez votre activité en utilisant notre outil de sondage innovant afin de mesurer l'opinion de vos clients, employés et partenaires."
+    />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://retine.io/" />
+    <meta property="og:title" content="Rétine - Votre compagnon de la mesure d'opinion" />
+    <meta
+      property="og:description"
+      content="Développez votre activité en utilisant notre outil de sondage innovant afin de mesurer l'opinion de vos clients, employés et partenaires."
+    />
+    <meta property="og:image" content="/assets/banner-min.png" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://retine.io/" />
+    <meta property="twitter:title" content="Rétine - Votre compagnon de la mesure d'opinion" />
+    <meta
+      property="twitter:description"
+      content="Développez votre activité en utilisant notre outil de sondage innovant afin de mesurer l'opinion de vos clients, employés et partenaires."
+    />
+    <meta property="twitter:image" content="/assets/banner-min.png" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300&display=swap" rel="stylesheet" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DFN4YJVCW6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-DFN4YJVCW6");
+    </script>
+    <script type="module" crossorigin src="/assets/index.dfc8121b.js"></script>
+    <link rel="stylesheet" href="/assets/index.2e79778b.css">
+  </head>
+  <body style="margin: 0px; padding: 0px">
+    <div id="app"></div>
+    
+  </body>
+  <style>
+    body {
+      font-family: "Lexend Deca", sans-serif;
+    }
+  </style>
+  <script>
+    matcher = window.matchMedia("(prefers-color-scheme: dark)");
+    matcher.addListener(onUpdate);
+    lightSchemeIcon = document.querySelector("link#light-scheme-favicon");
+    darkSchemeIcon = document.querySelector("link#dark-scheme-favicon");
+
+    function onUpdate() {
+      if (matcher.matches) {
+        lightSchemeIcon.remove();
+        document.head.append(darkSchemeIcon);
+      } else {
+        document.head.append(lightSchemeIcon);
+        darkSchemeIcon.remove();
+      }
+    }
+    onUpdate();
+  </script>
+</html>
